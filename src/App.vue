@@ -1,27 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <router-view></router-view>
+  <van-tabbar route>
+    <van-tabbar-item icon="smile" replace to="/moment">动态</van-tabbar-item>
+    <van-tabbar-item icon="chat" replace to="/chat">聊天</van-tabbar-item>
+    <van-tabbar-item icon="manager" replace to="/my">我的</van-tabbar-item>
+  </van-tabbar>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import { defineComponent } from "vue"
 
 export default defineComponent({
-  name: "App",
-  components: {
-    HelloWorld,
-  },
-});
+  name: "App"
+})
 </script>
 
 <style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import url("@/assets/base.css");
 </style>
