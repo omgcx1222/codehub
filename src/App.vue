@@ -17,4 +17,6 @@ export default defineComponent({
 
 <style lang="less">
 @import url("@/assets/base.css");
+// @import url("vant/lib/index.css");
+// @import url("vant/es/toast/index.css");
 </style>
