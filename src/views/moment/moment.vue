@@ -31,6 +31,7 @@
 <script lang="ts">
 import { ref } from "vue"
 import { Swiper, SwiperSlide } from "swiper/vue"
+import { Swiper as SwiperClass } from "swiper/types"
 import "swiper/css"
 export default {
   name: "moment",
@@ -40,16 +41,16 @@ export default {
   },
   setup() {
     const list = ["推荐", "关注"]
-    let swiper: any
+    let swiper: SwiperClass
     const currentIndex = ref(0)
     const nextIndex = ref(0)
     let currentSize = ref(20)
     let nextSize = ref(16)
 
-    const onSwiper = (s: any) => {
+    const onSwiper = (s: SwiperClass) => {
       swiper = s
     }
-    const onSlideChange = (e: any) => {
+    const onSlideChange = (e: SwiperClass) => {
       currentIndex.value = e.activeIndex
       currentSize.value = 20
       nextSize.value = 16
@@ -60,7 +61,7 @@ export default {
     }
 
     let start = 0
-    const onTranslate = (swiper: any, t: number) => {
+    const onTranslate = (swiper: SwiperClass, t: number) => {
       const w = swiper.width
       if (t < start) {
         const m = t + currentIndex.value * w
