@@ -3,11 +3,10 @@ import { createStore } from "vuex"
 const store = createStore({
   state() {
     return {
-      userInfo: {
-        name: "hqq"
-      }
+      userInfo: {}
     }
-  }
+  },
+  mutations: {}
 })
 
 export default store
