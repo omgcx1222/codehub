@@ -4,7 +4,7 @@
       <van-icon class="icon" name="arrow-left" size="1.1em" />
     </div>
     <account ref="accountRef" />
-    <!-- <van-button type="primary" @click="login">登录</van-button> -->
+    <van-button type="primary" @click="login">登录</van-button>
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default defineComponent({
   setup() {
     const accountRef = ref<InstanceType<typeof account>>()
     const login = () => {
-      // accountRef.value?.login()
+      accountRef.value?.login()
     }
 
     return {
