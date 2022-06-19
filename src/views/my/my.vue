@@ -1,11 +1,21 @@
 <template>
-  <div>我的</div>
+  <div>
+    <user-header></user-header>
+  </div>
 </template>
 
-<script>
-export default {
-  name: "moment"
-}
+<script lang="ts">
+import { defineComponent } from "vue"
+import userHeader from "./components/userHeader.vue"
+
+export default defineComponent({
+  components: {
+    userHeader
+  },
+  setup() {
+    return {}
+  }
+})
 </script>
 
 <style scoped></style>

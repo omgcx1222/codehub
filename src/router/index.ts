@@ -16,6 +16,13 @@ const routes = [
   {
     path: "/my",
     component: () => import("@/views/my/my.vue")
+  },
+  {
+    path: "/login",
+    component: () => import("@/views/login/login.vue"),
+    meta: {
+      tabbarHidden: true
+    }
   }
 ]
 
