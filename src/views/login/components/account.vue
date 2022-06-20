@@ -1,49 +1,38 @@
 <template>
   <div class="account">
-    <div class="title">
-      <span class="app-name">codehub</span>
-      <span class="forgot-password">忘记密码？</span>
-    </div>
-    <div class="code">
-      <label>
-        <input
-          type="text"
-          v-model="userInfo.nickname"
-          placeholder="昵称(1~10任意字符)"
-          @input="input($event, 'nickname')"
-        />
-      </label>
-      <label>
-        <input
-          type="text"
-          v-model="userInfo.username"
-          placeholder="账号(4~16, 英文或数字)"
-          @focus="isShow(true)"
-          @blur="isShow(false)"
-          @input="input($event, 'username')"
-        />
-        <span class="icon" @click="clear">
-          <van-icon class="icon" name="clear" size="20px" color="#bbb" v-show="iconShow" />
-        </span>
-      </label>
-      <label>
-        <input
-          :type="inputType"
-          v-model="userInfo.password"
-          placeholder="密码(4~16, 至少包含数字英文两种以上)"
-          @focus="pFocus"
-          @input="input($event, 'password')"
-        />
-        <span class="icon" @click="showPassword">
-          <van-icon class="icon-i" name="eye" size="23px" :color="eyeColor" />
-        </span>
-      </label>
-    </div>
+    <label v-show="loginType === 'register'">
+      <input type="text" v-model="userInfo.nickname" placeholder="昵称(1~10任意字符)" />
+    </label>
+    <label>
+      <input
+        type="text"
+        v-model="userInfo.username"
+        placeholder="账号(4~16, 英文或数字)"
+        @focus="isShow(true)"
+        @blur="isShow(false)"
+      />
+      <span class="icon" @click="clear">
+        <van-icon class="icon" name="clear" size="20px" color="#bbb" v-show="clearIconShow" />
+      </span>
+    </label>
+    <label>
+      <input :type="inputType" v-model="userInfo.password" placeholder="密码(4~16, 至少包含数字英文两种以上)" />
+      <span class="icon" @click="showPassword">
+        <van-icon class="icon-i" name="eye" size="23px" :color="eyeColor" />
+      </span>
+    </label>
+  </div>
+  <div class="login-button">
+    <van-button type="primary" @click="login" :style="{ color: loginTextColor }">{{ loginText }}</van-button>
+  </div>
+  <div class="login-tip">
+    <span v-if="loginType === 'login'" @click="changeLoginType('register')">没有账号？去注册</span>
+    <span v-else @click="changeLoginType('login')">已有账号？去登录</span>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue"
+import { defineComponent, reactive, ref, computed } from "vue"
 import { Toast } from "vant"
 
 export default defineComponent({
@@ -53,9 +42,9 @@ export default defineComponent({
       username: "",
       password: ""
     })
-    const iconShow = ref(false)
+    const clearIconShow = ref(false)
     const isShow = (b: boolean) => {
-      iconShow.value = b
+      clearIconShow.value = b
     }
     const clear = () => {
       userInfo.username = ""
@@ -73,12 +62,24 @@ export default defineComponent({
       }
     }
 
+    const loginType = ref<"register" | "login">("login")
+    const loginText = computed(() => (loginType.value === "login" ? "登 录" : "注 册"))
+    const loginTextColor = computed(() => {
+      validator()
+      if (!tip) {
+        return "#fff"
+      }
+      return "#c8c9ccd9"
+    })
+    const changeLoginType = (type: "register" | "login") => {
+      loginType.value = type
+    }
+    // /^(\S){1,10}$/
     const usernameRule = /^[a-zA-Z0-9]{4,16}$/
     const passwordRule = /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{4,16}$/
-    let tip = "默认值"
-    const input = () => {
-      // console.log((e.target as HTMLInputElement).value)
-      if (userInfo.nickname.length < 1 || userInfo.nickname.length > 10) {
+    let tip = ""
+    const validator = () => {
+      if (loginType.value === "register" && (userInfo.nickname.length < 1 || userInfo.nickname.length > 10)) {
         tip = "请输入正确的昵称(1~10任意字符)"
       } else if (!usernameRule.test(userInfo.username)) {
         tip = "请输入正确的账号(4~16, 英文或数字)"
@@ -88,11 +89,16 @@ export default defineComponent({
         tip = ""
       }
     }
+
     const login = () => {
+      validator()
       if (tip === "") {
         console.log(userInfo)
       } else {
-        Toast("qweqweqwqw")
+        Toast({
+          message: tip,
+          position: "top"
+        })
       }
     }
 
@@ -102,36 +108,21 @@ export default defineComponent({
       inputType,
       eyeColor,
       showPassword,
-      iconShow,
+      clearIconShow,
       isShow,
       clear,
-      input
+      loginType,
+      loginText,
+      loginTextColor,
+      changeLoginType
     }
   }
 })
 </script>
 
 <style scoped lang="less">
-.title {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 0 20px;
-  height: 135px;
-  .app-name {
-    color: #000;
-    font-size: 45px;
-    font-weight: 600;
-  }
-  .forgot-password {
-    color: #8a8a8a;
-    font-weight: 600;
-    font-size: 16px;
-  }
-}
-
-.code {
-  padding: 20px;
+.account {
+  padding: 20px 20px 0 20px;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -141,7 +132,7 @@ export default defineComponent({
     align-items: center;
     flex-wrap: wrap;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     input {
       flex: 1;
       height: 36px;
@@ -168,5 +159,22 @@ export default defineComponent({
       height: 20px;
     }
   }
+}
+
+.login-button {
+  padding: 0 20px;
+  display: flex;
+  button {
+    flex: 1;
+    border-radius: 5px;
+    // color: #dfdfdf;
+    font-weight: 600;
+    font-size: 18px;
+  }
+}
+
+.login-tip {
+  text-align: center;
+  margin: 30px auto;
 }
 </style>

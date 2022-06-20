@@ -3,13 +3,16 @@
     <div class="back">
       <van-icon class="icon" name="arrow-left" size="1.1em" />
     </div>
+    <div class="title">
+      <span class="app-name">codehub</span>
+      <span class="forgot-password" v-show="isForgotPasswordShow">忘记密码？</span>
+    </div>
     <account ref="accountRef" />
-    <van-button type="primary" @click="login">登录</van-button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue"
+import { defineComponent, ref, computed } from "vue"
 import account from "./components/account.vue"
 
 export default defineComponent({
@@ -18,19 +21,33 @@ export default defineComponent({
   },
   setup() {
     const accountRef = ref<InstanceType<typeof account>>()
-    const login = () => {
-      accountRef.value?.login()
-    }
-
+    const isForgotPasswordShow = computed(() => accountRef.value?.loginType === "login")
     return {
       accountRef,
-      login
+      isForgotPasswordShow
     }
   }
 })
 </script>
 
 <style scoped lang="less">
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 20px;
+  height: 135px;
+  .app-name {
+    color: #000;
+    font-size: 45px;
+    font-weight: 600;
+  }
+  .forgot-password {
+    color: #8a8a8a;
+    font-weight: 600;
+    font-size: 16px;
+  }
+}
 .back {
   // width: 100%;
   height: 44px;
