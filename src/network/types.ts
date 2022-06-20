@@ -3,6 +3,8 @@ import { AxiosRequestConfig } from "axios"
 export interface HqqRequestConfig extends AxiosRequestConfig {
   showLoading?: {
     text: string
-    // icon: "success" | "error" | "warning"
+    errorMessage?: string | boolean
+    successMessage?: string
+    icon?: "success" | "error" | "warning"
   }
 }

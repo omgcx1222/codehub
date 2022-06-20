@@ -23,7 +23,7 @@
     </label>
   </div>
   <div class="login-button">
-    <van-button type="primary" @click="login" :style="{ color: loginTextColor }">{{ loginText }}</van-button>
+    <van-button type="primary" @click="clickLogin" :style="{ color: loginTextColor }">{{ loginText }}</van-button>
   </div>
   <div class="login-tip">
     <span v-if="loginType === 'login'" @click="changeLoginType('register')">没有账号？去注册</span>
@@ -33,10 +33,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, computed } from "vue"
+import { useStore } from "vuex"
 import { Toast } from "vant"
 
 export default defineComponent({
   setup() {
+    const store = useStore()
     const userInfo = reactive({
       nickname: "",
       username: "",
@@ -90,10 +92,14 @@ export default defineComponent({
       }
     }
 
-    const login = () => {
+    const clickLogin = async () => {
       validator()
       if (tip === "") {
-        console.log(userInfo)
+        if (loginType.value === "login") {
+          store.dispatch("loginAction", userInfo)
+        } else {
+          store.dispatch("registerAction", userInfo)
+        }
       } else {
         Toast({
           message: tip,
@@ -104,7 +110,7 @@ export default defineComponent({
 
     return {
       userInfo,
-      login,
+      clickLogin,
       inputType,
       eyeColor,
       showPassword,
