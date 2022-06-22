@@ -1,7 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios"
-import { HqqRequestConfig } from "../types"
 import { Toast } from "vant"
+
+import { getStorage } from "@/utils/localStorage"
+
+import { HqqRequestConfig } from "../types"
 import { ToastWrapperInstance } from "vant/lib/toast/types"
+import { IuserInfo } from "@/store/login/types"
 
 class HqqRequest {
   instance: AxiosInstance
@@ -19,11 +23,13 @@ class HqqRequest {
             message: config.showLoading.text
           })
         }
-        config.headers = config.headers ?? {}
 
-        const token = ""
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`
+        if (config.isToken) {
+          config.headers = config.headers ?? {}
+          const token = getStorage<IuserInfo>("userInfo").token
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+          }
         }
 
         return config

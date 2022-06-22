@@ -7,4 +7,5 @@ export interface HqqRequestConfig extends AxiosRequestConfig {
     successMessage?: string // 请求成功文本
     // icon?: "success" | "error" | "warning"
   }
+  isToken?: boolean
 }

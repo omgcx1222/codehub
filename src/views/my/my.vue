@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my">
     <user-header></user-header>
   </div>
 </template>
@@ -18,4 +18,10 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.my {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+</style>

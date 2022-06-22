@@ -1,15 +1,15 @@
 <template>
   <div class="user-header">
     <div>
-      <div>{{ loginStore }}</div>
+      <div>{{ userInfo }}</div>
       <div @click="login">去登录</div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
-import { mapGetters } from "vuex"
+import { defineComponent, computed } from "vue"
+import { useStore } from "vuex"
 import { useRouter } from "vue-router"
 
 export default defineComponent({
@@ -21,10 +21,11 @@ export default defineComponent({
       })
     }
 
-    const loginStore = mapGetters(["loginMutation/userInfo"])
+    const store = useStore()
+    const userInfo = computed(() => store.state.loginModule.userInfo)
     return {
       login,
-      loginStore
+      userInfo
     }
   }
 })

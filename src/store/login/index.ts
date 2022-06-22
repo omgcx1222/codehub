@@ -6,7 +6,7 @@ import { IloginState, IuserInfo } from "./types"
 import { IrootState } from "../types"
 
 import { login, register, verifyToken } from "@/network/login/login"
-import { setStorage, getStorage } from "@/utils/localStorage"
+import { setStorage, getStorage, removeStorage } from "@/utils/localStorage"
 
 const loginModule: Module<IloginState, IrootState> = {
   namespaced: true,
@@ -19,6 +19,7 @@ const loginModule: Module<IloginState, IrootState> = {
       const res = await login({ username: userInfo.username, password: userInfo.password })
       if (res.status === 200) {
         commit("loginMutation", res.data)
+        setStorage("userInfo", res.data)
         router.go(-1)
       }
     },
@@ -31,10 +32,15 @@ const loginModule: Module<IloginState, IrootState> = {
     // 根据本地缓存登录
     async localLogin({ commit }) {
       const userInfo = getStorage<IuserInfo>("userInfo")
+
       if (userInfo.token) {
-        const res = await verifyToken(userInfo.token)
+        const res = await verifyToken()
+
         if (res.status === 200) {
           commit("loginMutation", res.data)
+          setStorage("userInfo", res.data)
+        } else {
+          removeStorage("userInfo")
         }
       }
     }
@@ -42,7 +48,6 @@ const loginModule: Module<IloginState, IrootState> = {
   mutations: {
     loginMutation(state, payload) {
       state.userInfo = payload
-      setStorage("userInfo", payload)
     }
   }
 }

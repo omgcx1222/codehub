@@ -1,5 +1,5 @@
 <template>
-  <div @click="fn(123)">chat</div>
+  <div @click="fn('123')">chat</div>
 </template>
 
 <script lang="ts">
