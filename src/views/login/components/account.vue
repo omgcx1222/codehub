@@ -96,9 +96,9 @@ export default defineComponent({
       validator()
       if (tip === "") {
         if (loginType.value === "login") {
-          store.dispatch("loginAction", userInfo)
+          store.dispatch("loginModule/loginAction", { ...userInfo })
         } else {
-          store.dispatch("registerAction", userInfo)
+          store.dispatch("loginModule/registerAction", { ...userInfo })
         }
       } else {
         Toast({

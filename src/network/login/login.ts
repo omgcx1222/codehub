@@ -26,3 +26,14 @@ export function register(data: registerData) {
     }
   })
 }
+
+export function verifyToken(token: string) {
+  return hqqRequest.request({
+    method: "post",
+    url: "/token",
+    data: token,
+    showLoading: {
+      errorMessage: true
+    }
+  })
+}

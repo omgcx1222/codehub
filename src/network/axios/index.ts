@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios"
+import axios, { AxiosInstance, AxiosResponse } from "axios"
 import { HqqRequestConfig } from "../types"
 import { Toast } from "vant"
 import { ToastWrapperInstance } from "vant/lib/toast/types"
@@ -55,17 +55,16 @@ class HqqRequest {
     )
   }
 
-  request(config: HqqRequestConfig) {
+  request(config: HqqRequestConfig): Promise<AxiosResponse> {
     return new Promise((resolve, reject) => {
       this.requestConfig = config
       this.instance
         .request(config)
         .then((res) => {
-          if (res.status === 200) {
-            resolve(res.data)
-          }
+          resolve(res)
         })
         .catch((err) => {
+          console.log(err, "err")
           reject(err)
         })
     })

@@ -16,4 +16,9 @@ const store = createStore<IrootState>({
   }
 })
 
+// main.ts中调用初始化（根据本地缓存登录）
+export function initLogin() {
+  store.dispatch("loginModule/localLogin")
+}
+
 export default store

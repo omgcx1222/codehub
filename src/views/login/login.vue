@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="back">
-      <van-icon class="icon" name="arrow-left" size="1.1em" />
+      <van-icon class="icon" name="arrow-left" size="1.1em" @click="back" />
     </div>
     <div class="title">
       <span class="app-name">codehub</span>
@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue"
+import { useRouter } from "vue-router"
 import account from "./components/account.vue"
 
 export default defineComponent({
@@ -22,9 +23,16 @@ export default defineComponent({
   setup() {
     const accountRef = ref<InstanceType<typeof account>>()
     const isForgotPasswordShow = computed(() => accountRef.value?.loginType === "login")
+
+    const router = useRouter()
+    const back = () => {
+      router.go(-1)
+    }
+
     return {
       accountRef,
-      isForgotPasswordShow
+      isForgotPasswordShow,
+      back
     }
   }
 })
