@@ -4,10 +4,8 @@
   --van-background-color: var(--van-gray-2);
 
   /* moment title */
+  --moment-title-font-siez: 16px;
   --moment-title-color: #646566;
-  --moment-title-font-size: 16px;
-  --moment-title-font-weight: 500;
   --moment-title-active-color: #000;
-  --moment-title-active-font-size: 20px;
-  --moment-title-active-font-weight: 700;
+  --moment-line-color: #000;
 }
