@@ -32,21 +32,30 @@ export default {
 }
 
 .vant-tabs {
-  :deep(.van-tab) {
-    font-size: var(--moment-title-font-siez);
-    color: var(--moment-title-color);
+  // tab的header
+  :deep(.van-tabs__wrap) {
+    background-color: var(--white-background-color);
   }
-  :deep(.van-tab--active) {
-    color: var(--moment-title-active-color);
-  }
+  // tab的父
   :deep(.van-tabs__nav) {
     width: 240px;
     margin: 0 auto;
     padding-bottom: 10px;
   }
+  // 单个tab
+  :deep(.van-tab) {
+    font-size: var(--moment-title-font-siez);
+    color: var(--moment-title-color);
+  }
+  // 激活的tab
+  :deep(.van-tab--active) {
+    color: var(--moment-title-active-color);
+  }
+  // 线
   :deep(.van-tabs__line) {
     background-color: var(--moment-line-color);
   }
+  // 内容
   :deep(.van-tabs__content) {
     height: calc(100vh - 44px - 50px);
   }

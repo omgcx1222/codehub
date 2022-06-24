@@ -1,11 +1,28 @@
+body {
+  font-size: 14px;
+  color: var(--color);
+  background-color: var(--background-color);
+}
+
 :root {
-  --van-tabbar-item-text-color: var(--van-gray-6);
-  --van-primary-color: var(--van-black);
-  --van-background-color: var(--van-gray-2);
+  --color: #000;
+  --dark-color: #969799;
+  --dark-color2: #646566;
+  --background-color: #f2f3f5;
+  --white-background-color: #fff;
+
+  /* tabbar未选中文字颜色 */
+  --van-tabbar-item-text-color: var(--dark-color);
+  /* 主题色 */
+  --van-primary-color: var(--color);
+  /* 背景色 */
+  /* --van-background-color: #f2f3f5; */
 
   /* moment title */
   --moment-title-font-siez: 16px;
-  --moment-title-color: #646566;
-  --moment-title-active-color: #000;
-  --moment-line-color: #000;
+  --moment-title-color: var(--dark-color);
+  --moment-title-active-color: var(--color);
+  --moment-line-color: var(--color);
+
+  --menu-option-background-color: #fff;
 }

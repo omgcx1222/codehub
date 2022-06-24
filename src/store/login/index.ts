@@ -2,8 +2,7 @@ import { Module } from "vuex"
 import router from "@/router"
 
 import { registerData } from "@/network/login/types"
-import { IloginState, IuserInfo } from "./types"
-import { IrootState } from "../types"
+import { IrootState, IloginState, IuserInfo } from "../types"
 
 import { login, register, verifyToken } from "@/network/login/login"
 import { setStorage, getStorage, removeStorage } from "@/utils/localStorage"
@@ -30,7 +29,7 @@ const loginModule: Module<IloginState, IrootState> = {
     },
 
     // 根据本地缓存登录
-    async localLogin({ commit }) {
+    async localLoginAction({ commit }) {
       const userInfo = getStorage<IuserInfo>("userInfo")
 
       if (userInfo.token) {
@@ -43,11 +42,19 @@ const loginModule: Module<IloginState, IrootState> = {
           removeStorage("userInfo")
         }
       }
+    },
+
+    loginOutAction({ commit }) {
+      commit("loginOutMutation")
+      removeStorage("userInfo")
     }
   },
   mutations: {
     loginMutation(state, payload) {
       state.userInfo = payload
+    },
+    loginOutMutation(state) {
+      state.userInfo = {}
     }
   }
 }

@@ -5,7 +5,7 @@ import { getStorage } from "@/utils/localStorage"
 
 import { HqqRequestConfig } from "../types"
 import { ToastWrapperInstance } from "vant/lib/toast/types"
-import { IuserInfo } from "@/store/login/types"
+import { IuserInfo } from "@/store/types"
 
 class HqqRequest {
   instance: AxiosInstance
