@@ -1,7 +1,10 @@
+import { useStore as useVuexStore } from "vuex"
+
 import { createStore } from "vuex"
 import loginModule from "./login"
+import myModule from "./login"
 
-import { IrootState } from "./types"
+import { IrootState, storeType } from "./types"
 
 const store = createStore<IrootState>({
   state() {
@@ -12,9 +15,14 @@ const store = createStore<IrootState>({
   actions: {},
   mutations: {},
   modules: {
-    loginModule
+    loginModule,
+    myModule
   }
 })
+
+export function useStore() {
+  return useVuexStore<storeType>()
+}
 
 // main.ts中调用初始化（根据本地缓存登录）
 export function initLogin() {

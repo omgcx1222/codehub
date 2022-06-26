@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue"
-import { useStore } from "vuex"
+import { useStore } from "@/store"
 import { useRouter } from "vue-router"
 
 export default defineComponent({

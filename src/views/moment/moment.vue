@@ -1,8 +1,9 @@
 <template>
   <div class="moment">
     <van-tabs v-model:active="tabActive" swipeable class="vant-tabs">
-      <van-tab v-for="item in tabs" :title="item" :key="item">
+      <van-tab v-for="item in tabs" :title="item" :key="item" @click="abc">
         {{ item + "内容" }}
+        {{ obj2 }}
       </van-tab>
     </van-tabs>
   </div>
@@ -15,10 +16,25 @@ export default {
   setup() {
     const tabs = ["推荐", "关注"]
     const tabActive = ref(0)
+    const obj1 = {
+      name: 123
+    }
+    const obj2 = ref(obj1)
+    const abc = () => {
+      console.log(obj1.name)
+
+      // obj2.value = {
+      //   name: 99999
+      // }
+      obj2.value.name = 321
+      console.log(obj1.name)
+    }
 
     return {
       tabs,
-      tabActive
+      tabActive,
+      obj2,
+      abc
     }
   }
 }

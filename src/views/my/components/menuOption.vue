@@ -1,28 +1,23 @@
 <template>
   <div class="menu-option">
-    <!-- <div>
-      <van-icon name="setting-o" size="18px" />
-      <span class="text">设置</span>
-      <van-icon name="arrow" />
-    </div> -->
-    <van-cell title="我的收藏" icon="star-o" :border="false">
+    <van-cell class="item" title="我的收藏" icon="star-o" :border="false">
       <template #right-icon>
-        <van-icon name="arrow" />
+        <van-icon name="arrow" size="16px" />
       </template>
     </van-cell>
-    <van-cell title="我的评论" icon="comment-circle-o" :border="false">
+    <van-cell class="item" title="我的评论" icon="comment-circle-o" :border="false">
       <template #right-icon>
-        <van-icon name="arrow" />
+        <van-icon name="arrow" size="16px" />
       </template>
     </van-cell>
-    <van-cell title="修改资料" icon="edit" :border="false">
+    <van-cell class="item" title="修改资料" icon="edit" :border="false">
       <template #right-icon>
-        <van-icon name="arrow" />
+        <van-icon name="arrow" size="16px" />
       </template>
     </van-cell>
-    <van-cell title="设置" icon="setting-o" :border="false">
+    <van-cell class="item" title="设置" icon="setting-o" :border="false">
       <template #right-icon>
-        <van-icon name="arrow" />
+        <van-icon name="arrow" size="16px" />
       </template>
     </van-cell>
   </div>
@@ -40,17 +35,10 @@ export default defineComponent({
 
 <style scoped lang="less">
 .menu-option {
-  margin-top: 15px;
-  // display: flex;
-  // flex-direction: column;
-  // div {
-  //   padding: 15px 0;
-  //   display: flex;
-  //   align-items: center;
-  //   .text {
-  //     padding-left: 8px;
-  //     flex: 1;
-  //   }
-  // }
+  margin-top: 20px;
+  .item {
+    padding: 10px 8px;
+    align-items: center;
+  }
 }
 </style>

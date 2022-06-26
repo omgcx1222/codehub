@@ -39,6 +39,6 @@ export default defineComponent({
   flex: 1;
   background-color: var(--menu-option-background-color);
   border-radius: 20px 20px 0 0;
-  padding: 15px;
+  padding: 20px 15px 0;
 }
 </style>

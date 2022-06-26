@@ -1,6 +1,16 @@
+/**
+ * store
+ */
 export interface IrootState {
   name: string
 }
+
+export interface IstoreModuel {
+  loginModule: IloginState
+  myModule: ImyState
+}
+
+export type storeType = IrootState & IstoreModuel
 
 /**
  * login
@@ -11,6 +21,7 @@ export interface IuserInfo {
   nickname?: string
   token?: string
   username?: string
+  signature?: string
 }
 
 export interface IloginState {
