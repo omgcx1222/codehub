@@ -2,7 +2,8 @@ import { useStore as useVuexStore } from "vuex"
 
 import { createStore } from "vuex"
 import loginModule from "./login"
-import myModule from "./login"
+import myModule from "./my"
+import momentModule from "./moment"
 
 import { IrootState, storeType } from "./types"
 
@@ -16,7 +17,8 @@ const store = createStore<IrootState>({
   mutations: {},
   modules: {
     loginModule,
-    myModule
+    myModule,
+    momentModule
   }
 })
 

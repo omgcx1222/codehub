@@ -4,7 +4,7 @@ import router from "@/router"
 import { registerData } from "@/network/login/types"
 import { IrootState, IloginState, IuserInfo } from "../types"
 
-import { login, register, verifyToken } from "@/network/login/login"
+import { login, register, verifyToken } from "@/network/login"
 import { setStorage, getStorage, removeStorage } from "@/utils/localStorage"
 
 const loginModule: Module<IloginState, IrootState> = {

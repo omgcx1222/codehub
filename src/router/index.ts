@@ -10,6 +10,13 @@ const routes = [
     component: () => import("@/views/moment/moment.vue")
   },
   {
+    path: "/pubMoment",
+    component: () => import("@/views/moment/children/pubMoment.vue"),
+    meta: {
+      tabbarHidden: true
+    }
+  },
+  {
     path: "/chat",
     component: () => import("@/views/chat/chat.vue")
   },

@@ -1,40 +1,40 @@
 <template>
   <div class="moment">
     <van-tabs v-model:active="tabActive" swipeable class="vant-tabs">
-      <van-tab v-for="item in tabs" :title="item" :key="item" @click="abc">
+      <van-tab v-for="item in tabs" :title="item" :key="item">
         {{ item + "内容" }}
-        {{ obj2 }}
       </van-tab>
     </van-tabs>
+    <div class="suspension">
+      <van-button class="pub-button" icon="edit" type="primary" round to="/pubMoment" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
+import { useStore } from "vuex"
+import { mometnListBody } from "@/network/moment/types"
 export default {
   name: "moment",
   setup() {
     const tabs = ["推荐", "关注"]
     const tabActive = ref(0)
-    const obj1 = {
-      name: 123
-    }
-    const obj2 = ref(obj1)
-    const abc = () => {
-      console.log(obj1.name)
 
-      // obj2.value = {
-      //   name: 99999
-      // }
-      obj2.value.name = 321
-      console.log(obj1.name)
+    const store = useStore()
+    const getMoment = (payload?: mometnListBody) => {
+      store.dispatch("momentModule/momentListAction", payload)
     }
+
+    onMounted(() => {
+      // pubMoment("芜湖")
+      getMoment({ order: 1, limit: 100, offset: 0 })
+    })
 
     return {
       tabs,
       tabActive,
-      obj2,
-      abc
+      getMoment
     }
   }
 }
@@ -43,10 +43,19 @@ export default {
 <style lang="less" scoped>
 .moment {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 50px);
   overflow: hidden;
+  position: relative;
 }
-
+.suspension {
+  position: absolute;
+  bottom: 25px;
+  right: 20px;
+  .pub-button {
+    width: 45px;
+    height: 45px;
+  }
+}
 .vant-tabs {
   // tab的header
   :deep(.van-tabs__wrap) {

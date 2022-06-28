@@ -8,6 +8,7 @@ export interface IrootState {
 export interface IstoreModuel {
   loginModule: IloginState
   myModule: ImyState
+  momentModule: ImomentState
 }
 
 export type storeType = IrootState & IstoreModuel
@@ -36,4 +37,11 @@ export interface ImyState {
   fans: object
   moment: object
   comment: object
+}
+
+/**
+ * moment
+ */
+export interface ImomentState {
+  momentList: any[]
 }

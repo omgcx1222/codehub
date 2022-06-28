@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="back">
-      <van-icon class="icon" name="arrow-left" size="1.1em" @click="back" />
+      <van-icon class="icon" name="arrow-left" size="21" @click="back" />
     </div>
     <div class="title">
       <span class="app-name">codehub</span>

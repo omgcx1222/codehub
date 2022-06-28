@@ -1,5 +1,9 @@
 <template>
-  <router-view></router-view>
+  <router-view v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
   <van-tabbar route :style="{ display: $route.meta.tabbarHidden ? 'none' : '' }">
     <van-tabbar-item icon="smile" replace to="/moment">动态</van-tabbar-item>
     <van-tabbar-item icon="chat" replace to="/chat">消息</van-tabbar-item>
