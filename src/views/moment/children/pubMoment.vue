@@ -55,27 +55,37 @@ export default defineComponent({
     const publish = async () => {
       if (!message.value) return Toast("正文不能为空")
       const textRes = await store.dispatch("momentModule/pubMomentAction", { content: message.value })
+      if (textRes.status !== 200) {
+        return Toast.fail(textRes.data)
+      }
 
-      const data = new FormData()
-      data.append("picture", fileList.value[0].file)
-
-      Toast({
+      const toast = Toast({
         message: "正在上传",
         type: "loading",
         overlay: true,
         forbidClick: true,
         duration: 0
       })
-      if (textRes?.data?.id && fileList.value.length) {
+      let tip = "发布成功"
+      if (fileList.value.length) {
         const momentId = textRes.data.id
 
-        for (const f of fileList.value) {
-          const formData = new FormData()
-          formData.append("picture", f.file)
-          await store.dispatch("momentModule/uploadsAction", { momentId, formData })
-        }
+        await store.dispatch("momentModule/uploadsAction", {
+          momentId,
+          files: fileList.value,
+          process: (p: number) => {
+            toast.message = `正在上传图片${p * 100}%`
+            if (p === 1) toast.clear()
+            if (p === -1) {
+              toast.clear()
+              tip = "发布成功，但部分图片上传失败"
+            }
+          }
+        })
       }
-      Toast.success("发布成功")
+
+      Toast.success(tip)
+      if (tip === "发布成功") back()
     }
 
     return {

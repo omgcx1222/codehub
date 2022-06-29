@@ -1,9 +1,8 @@
 import { pubMoment, momentList, uploads } from "@/network/moment"
 
 import { Module } from "vuex"
-import { IrootState } from "../types"
-import { ImomentState } from "../types"
-import { pubMomentBody, mometnListBody, uploadsType } from "@/network/moment/types"
+import { IrootState, ImomentState, uploadsType } from "../types"
+import { pubMomentBody, mometnListBody } from "@/network/moment/types"
 
 const myModule: Module<ImomentState, IrootState> = {
   namespaced: true,
@@ -22,7 +21,20 @@ const myModule: Module<ImomentState, IrootState> = {
     },
 
     async uploadsAction(_, payload: uploadsType) {
-      await uploads(payload.momentId, payload.formData)
+      let p = 0
+      const l = payload.files.length
+      for (const f of payload.files) {
+        const formData = new FormData()
+        formData.append("picture", f.file)
+        const res = await uploads(payload.momentId, formData)
+        if (res.status === 200) {
+          p++
+          const p2 = (p / l).toFixed(2)
+          payload.process(Number(p2))
+        } else {
+          payload.process(-1)
+        }
+      }
     }
   },
   mutations: {}

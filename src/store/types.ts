@@ -45,3 +45,8 @@ export interface ImyState {
 export interface ImomentState {
   momentList: any[]
 }
+export interface uploadsType {
+  momentId: number
+  files: any[]
+  process: (p: number) => void
+}

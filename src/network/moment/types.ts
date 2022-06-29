@@ -7,8 +7,3 @@ export declare type mometnListBody = {
 export declare type pubMomentBody = {
   content: string
 }
-
-export declare type uploadsType = {
-  momentId: number
-  formData: any
-}

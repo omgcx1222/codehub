@@ -43,21 +43,27 @@ class HqqRequest {
 
     this.instance.interceptors.response.use(
       (res) => {
-        this.toast?.clear()
-        if (this.requestConfig?.showLoading?.successMessage) {
-          Toast.success(this.requestConfig.showLoading?.successMessage)
+        if (this.toast) {
+          this.toast?.clear()
+          if (this.requestConfig?.showLoading?.successMessage) {
+            Toast.success(this.requestConfig.showLoading?.successMessage)
+          }
         }
+        this.toast = undefined
         return res
       },
       (err) => {
-        this.toast?.clear()
-        if (this.requestConfig?.showLoading?.errorMessage) {
-          if (typeof this.requestConfig.showLoading?.errorMessage === "string") {
-            Toast.fail(this.requestConfig.showLoading?.errorMessage)
-          } else if (typeof this.requestConfig.showLoading?.errorMessage === "boolean") {
-            Toast.fail(err.response.data)
+        if (this.toast) {
+          this.toast?.clear()
+          if (this.requestConfig?.showLoading?.errorMessage) {
+            if (typeof this.requestConfig.showLoading?.errorMessage === "string") {
+              Toast.fail(this.requestConfig.showLoading?.errorMessage)
+            } else if (typeof this.requestConfig.showLoading?.errorMessage === "boolean") {
+              Toast.fail(err.response.data)
+            }
           }
         }
+        this.toast = undefined
         return err.response
       }
     )
