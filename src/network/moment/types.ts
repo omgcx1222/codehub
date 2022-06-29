@@ -10,5 +10,5 @@ export declare type pubMomentBody = {
 
 export declare type uploadsType = {
   momentId: number
-  files: any[]
+  formData: any
 }

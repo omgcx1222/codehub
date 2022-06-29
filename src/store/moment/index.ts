@@ -22,11 +22,7 @@ const myModule: Module<ImomentState, IrootState> = {
     },
 
     async uploadsAction(_, payload: uploadsType) {
-      for (const f of payload.files) {
-        const formData = new FormData()
-        formData.append("picture", f.file)
-        await uploads(payload.momentId, formData)
-      }
+      await uploads(payload.momentId, payload.formData)
     }
   },
   mutations: {}

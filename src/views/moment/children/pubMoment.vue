@@ -53,15 +53,29 @@ export default defineComponent({
 
     const store = useStore()
     const publish = async () => {
-      // if (!message.value) return Toast("正文不能为空")
-      // const textRes = await store.dispatch("momentModule/pubMomentAction", { content: message.value })
-      // if (textRes?.data?.id) {
-      //   const momentId = textRes.data.id
-      //   const res = await store.dispatch("momentModule/uploadsAction", { momentId, fileList })
-      //   console.log(res)
-      // }
+      if (!message.value) return Toast("正文不能为空")
+      const textRes = await store.dispatch("momentModule/pubMomentAction", { content: message.value })
 
-      await store.dispatch("momentModule/uploadsAction", { momentId: 196, files: fileList.value })
+      const data = new FormData()
+      data.append("picture", fileList.value[0].file)
+
+      Toast({
+        message: "正在上传",
+        type: "loading",
+        overlay: true,
+        forbidClick: true,
+        duration: 0
+      })
+      if (textRes?.data?.id && fileList.value.length) {
+        const momentId = textRes.data.id
+
+        for (const f of fileList.value) {
+          const formData = new FormData()
+          formData.append("picture", f.file)
+          await store.dispatch("momentModule/uploadsAction", { momentId, formData })
+        }
+      }
+      Toast.success("发布成功")
     }
 
     return {
