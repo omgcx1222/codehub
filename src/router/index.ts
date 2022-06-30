@@ -17,6 +17,13 @@ const routes = [
     }
   },
   {
+    path: "/momentDetail/:id",
+    component: () => import("@/views/moment/children/momentDetail.vue"),
+    meta: {
+      tabbarHidden: true
+    }
+  },
+  {
     path: "/chat",
     component: () => import("@/views/chat/chat.vue")
   },

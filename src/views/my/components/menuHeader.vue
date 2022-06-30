@@ -1,33 +1,36 @@
 <template>
   <div class="menu-header">
     <div>
-      <span class="number">0</span>
+      <span class="number">{{ userInfo.followCount ?? 0 }}</span>
       <span>关注</span>
     </div>
     <div>
-      <span class="number">0</span>
+      <span class="number">{{ userInfo.fansCount ?? 0 }}</span>
       <span>粉丝</span>
     </div>
     <div>
-      <span class="number">0</span>
-      <span>动态</span>
+      <span class="number">{{ userInfo.userRank ?? "1000+" }}</span>
+      <span>粉丝排行</span>
     </div>
     <div>
-      <span class="number">0</span>
+      <span class="number">{{ userInfo.getAgreeCount ?? 0 }}</span>
       <span>获赞</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
-// import { useStore } from "vuex"
+import { defineComponent, computed } from "vue"
+import { useStore } from "@/store"
 
 export default defineComponent({
   setup() {
-    // const store = useStore()
+    const store = useStore()
+    const userInfo = computed(() => store.state.userInfo)
 
-    return {}
+    return {
+      userInfo
+    }
   }
 })
 </script>

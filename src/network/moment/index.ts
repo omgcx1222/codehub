@@ -7,10 +7,10 @@ export function momentList(payload: mometnListBody) {
     url: "/moment",
     params: {
       ...payload
-    },
-    showLoading: {
-      errorMessage: true
     }
+    // showLoading: {
+    //   errorMessage: true
+    // }
   })
 }
 export function pubMoment(data: pubMomentBody) {

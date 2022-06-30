@@ -9,8 +9,8 @@
       <span class="signature">{{ userInfo.signature ?? "因为个性所以没签名" }}</span>
     </div>
     <div class="login">
-      <span v-if="!userInfo.token" @click="login(1)">去登录</span>
-      <span v-else @click="login(0)">退出登录</span>
+      <hqq-tag v-if="!userInfo.token" @click="login(1)" value="去登录"></hqq-tag>
+      <hqq-tag v-else @click="login(0)" value="退出登录"></hqq-tag>
     </div>
   </div>
 </template>
@@ -19,8 +19,12 @@
 import { defineComponent, computed } from "vue"
 import { useStore } from "@/store"
 import { useRouter } from "vue-router"
+import hqqTag from "@/components/hqqTag.vue"
 
 export default defineComponent({
+  components: {
+    hqqTag
+  },
   setup() {
     const store = useStore()
     const userInfo = computed(() => store.state.loginModule.userInfo)
@@ -75,14 +79,7 @@ export default defineComponent({
     }
   }
   .login {
-    span {
-      font-size: 12px;
-      text-align: center;
-      line-height: 60px;
-      border: 1px var(--dark-color) solid;
-      border-radius: 5px;
-      padding: 3px 5px;
-    }
+    line-height: 60px;
   }
 }
 </style>

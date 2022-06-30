@@ -18,6 +18,7 @@ const loginModule: Module<IloginState, IrootState> = {
       const res = await login({ username: userInfo.username, password: userInfo.password })
       if (res.status === 200) {
         commit("loginMutation", res.data)
+        commit("changeUserInfo", res.data, { root: true })
         setStorage("userInfo", res.data)
         router.go(-1)
       }
@@ -37,6 +38,7 @@ const loginModule: Module<IloginState, IrootState> = {
 
         if (res.status === 200) {
           commit("loginMutation", res.data)
+          commit("changeUserInfo", res.data, { root: true })
           setStorage("userInfo", res.data)
         } else {
           removeStorage("userInfo")
@@ -44,18 +46,20 @@ const loginModule: Module<IloginState, IrootState> = {
       }
     },
 
+    // 退出登录
     loginOutAction({ commit }) {
-      commit("loginOutMutation")
+      commit("loginMutation", {})
+      commit("changeUserInfo", {}, { root: true })
       removeStorage("userInfo")
     }
   },
   mutations: {
     loginMutation(state, payload) {
       state.userInfo = payload
-    },
-    loginOutMutation(state) {
-      state.userInfo = {}
     }
+    // loginOutMutation(state) {
+    //   state.userInfo = {}
+    // }
   }
 }
 

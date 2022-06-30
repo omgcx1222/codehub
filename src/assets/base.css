@@ -1,5 +1,5 @@
 body {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color);
   background-color: var(--background-color);
 }
@@ -25,4 +25,6 @@ body {
   --moment-line-color: var(--color);
 
   --menu-option-background-color: #fff;
+
+  --agree-color: #fb7299;
 }

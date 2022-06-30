@@ -1,13 +1,17 @@
 import { pubMoment, momentList, uploads } from "@/network/moment"
 
 import { Module } from "vuex"
-import { IrootState, ImomentState, uploadsType } from "../types"
-import { pubMomentBody, mometnListBody } from "@/network/moment/types"
+import { IrootState, ImomentState, uploadsType, momentPage, momentItem } from "../types"
+import { pubMomentBody } from "@/network/moment/types"
 
 const myModule: Module<ImomentState, IrootState> = {
   namespaced: true,
   state: {
-    momentList: []
+    momentList: {
+      news: { list: [], page: 0 },
+      host: { list: [], page: 0 },
+      follow: { list: [], page: 0 }
+    }
   },
   actions: {
     async pubMomentAction(_, payload: pubMomentBody) {
@@ -15,9 +19,18 @@ const myModule: Module<ImomentState, IrootState> = {
       return res
     },
 
-    async momentListAction(_, payload: mometnListBody) {
-      const res = await momentList({ ...payload })
-      return res.data
+    async momentListAction(store, payload: momentPage) {
+      const offset = (payload.page - 1) * 10
+      const limit = offset + 10
+      const res = await momentList({ order: payload.order, offset, limit })
+
+      // 0最新，1最热，2关注
+      if (payload.order === 0) {
+        return store.commit("changeMomentListNews", { list: res.data, page: payload.page })
+      } else if (payload.order === 1) {
+        return store.commit("changeMomentListHost", { list: res.data, page: payload.page })
+      }
+      store.commit("changeMomentListFollow", { list: res.data, page: payload.page })
     },
 
     async uploadsAction(_, payload: uploadsType) {
@@ -37,7 +50,20 @@ const myModule: Module<ImomentState, IrootState> = {
       }
     }
   },
-  mutations: {}
+  mutations: {
+    changeMomentListNews(state, payload: momentItem) {
+      state.momentList.news.list.push(...payload.list)
+      state.momentList.news.page = payload.page
+    },
+    changeMomentListHost(state, payload: momentItem) {
+      state.momentList.host.list.push(...payload.list)
+      state.momentList.host.page = payload.page
+    },
+    changeMomentListFollow(state, payload: momentItem) {
+      state.momentList.follow.list.push(...payload.list)
+      state.momentList.follow.page = payload.page
+    }
+  }
 }
 
 export default myModule

@@ -5,16 +5,20 @@ import loginModule from "./login"
 import myModule from "./my"
 import momentModule from "./moment"
 
-import { IrootState, storeType } from "./types"
+import { IrootState, storeType, IuserInfo } from "./types"
 
 const store = createStore<IrootState>({
   state() {
     return {
-      name: ""
+      userInfo: {}
     }
   },
   actions: {},
-  mutations: {},
+  mutations: {
+    changeUserInfo(state, payload: IuserInfo) {
+      state.userInfo = payload
+    }
+  },
   modules: {
     loginModule,
     myModule,

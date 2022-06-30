@@ -2,7 +2,7 @@
  * store
  */
 export interface IrootState {
-  name: string
+  userInfo: IuserInfo
 }
 
 export interface IstoreModuel {
@@ -42,11 +42,23 @@ export interface ImyState {
 /**
  * moment
  */
+export interface momentItem {
+  list: object[]
+  page: number
+}
 export interface ImomentState {
-  momentList: any[]
+  momentList: {
+    news: momentItem
+    host: momentItem
+    follow: momentItem
+  }
 }
 export interface uploadsType {
   momentId: number
   files: any[]
   process: (p: number) => void
+}
+export interface momentPage {
+  order: 0 | 1 | 2
+  page: number
 }

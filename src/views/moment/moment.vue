@@ -1,10 +1,18 @@
 <template>
   <div class="moment">
-    <van-tabs v-model:active="tabActive" swipeable class="vant-tabs">
-      <van-tab v-for="item in tabs" :title="item" :key="item">
-        {{ item + "内容" }}
+    <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable @change="tabChange" :lazy-render="false">
+      <van-tab v-for="item in tabs" :title="item.label" :key="item.value">
+        <template v-for="item in momentList[item.value].list" :key="item.momentId">
+          <van-cell-group inset class="item">
+            <van-skeleton title avatar :row="3" :loading="item.momentId == ''">
+              <moment-item :momentData="item"></moment-item>
+            </van-skeleton>
+          </van-cell-group>
+        </template>
       </van-tab>
     </van-tabs>
+
+    <!-- 悬浮按钮 -->
     <div class="suspension">
       <van-button class="pub-button" icon="edit" type="primary" round to="/pubMoment" />
     </div>
@@ -12,29 +20,52 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from "vue"
-import { useStore } from "vuex"
-import { mometnListBody } from "@/network/moment/types"
+import { ref, onMounted, computed } from "vue"
+import { useStore } from "@/store"
+
+import momentItem from "./components/momentItem.vue"
+
 export default {
   name: "moment",
+  components: {
+    momentItem
+  },
   setup() {
-    const tabs = ["推荐", "关注"]
+    const tabs = [
+      { label: "最新", value: "news" },
+      { label: "最热", value: "host" },
+      { label: "关注", value: "follow" }
+    ]
     const tabActive = ref(0)
-
     const store = useStore()
-    const getMoment = (payload?: mometnListBody) => {
-      store.dispatch("momentModule/momentListAction", payload)
+    const momentList = computed(() => store.state.momentModule.momentList)
+
+    const tabChange = (index: number) => {
+      if (index === 0 && momentList.value.news.list.length === 0) {
+        getMoment(index, 1)
+      } else if (index === 1 && momentList.value.host.list.length === 0) {
+        getMoment(index, 1)
+      } else if (index === 2 && momentList.value.follow.list.length === 0) {
+        getMoment(index, 1)
+      }
+    }
+
+    // 0为最新，1为最热，2为关注
+    const getMoment = (order: 0 | 1 | 2, page: number) => {
+      store.dispatch("momentModule/momentListAction", { order, page })
     }
 
     onMounted(() => {
       // pubMoment("芜湖")
-      getMoment({ order: 1, limit: 100, offset: 0 })
+      getMoment(0, 1)
     })
 
     return {
       tabs,
       tabActive,
-      getMoment
+      tabChange,
+      getMoment,
+      momentList
     }
   }
 }
@@ -60,6 +91,7 @@ export default {
   // tab的header
   :deep(.van-tabs__wrap) {
     background-color: var(--white-background-color);
+    box-shadow: 0 0 1px var(--dark-color);
   }
   // tab的父
   :deep(.van-tabs__nav) {
@@ -84,5 +116,11 @@ export default {
   :deep(.van-tabs__content) {
     height: calc(100vh - 44px - 50px);
   }
+  :deep(.van-swipe-item) {
+    overflow: scroll;
+  }
+}
+.item {
+  margin: 16px;
 }
 </style>
