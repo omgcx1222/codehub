@@ -1,14 +1,16 @@
 <template>
   <div class="moment">
-    <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable @change="tabChange" :lazy-render="false">
+    <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable animated @change="tabChange">
       <van-tab v-for="item in tabs" :title="item.label" :key="item.value">
-        <template v-for="item in momentList[item.value].list" :key="item.momentId">
-          <van-cell-group inset class="item">
-            <van-skeleton title avatar :row="3" :loading="item.momentId == ''">
-              <moment-item :momentData="item"></moment-item>
-            </van-skeleton>
-          </van-cell-group>
-        </template>
+        <div class="list">
+          <van-list finished-text="没有更多了">
+            <template v-for="item in momentList[item.value].list" :key="item.momentId">
+              <div class="item">
+                <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
+              </div>
+            </template>
+          </van-list>
+        </div>
       </van-tab>
     </van-tabs>
 
@@ -21,6 +23,7 @@
 
 <script lang="ts">
 import { ref, onMounted, computed } from "vue"
+import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 
 import momentItem from "./components/momentItem.vue"
@@ -55,6 +58,22 @@ export default {
       store.dispatch("momentModule/momentListAction", { order, page })
     }
 
+    const router = useRouter()
+    const momentDetail = (id: number) => {
+      router.push({
+        path: "/momentDetail",
+        query: {
+          id
+        }
+      })
+    }
+
+    const beforeChange = (a: any, b: any, c: any) => {
+      console.log(1)
+
+      console.log(a, b, c)
+    }
+
     onMounted(() => {
       // pubMoment("芜湖")
       getMoment(0, 1)
@@ -65,7 +84,9 @@ export default {
       tabActive,
       tabChange,
       getMoment,
-      momentList
+      momentList,
+      momentDetail,
+      beforeChange
     }
   }
 }
@@ -75,7 +96,7 @@ export default {
 .moment {
   width: 100%;
   height: calc(100vh - 50px);
-  overflow: hidden;
+  overflow: scroll;
   position: relative;
 }
 .suspension {
@@ -91,7 +112,7 @@ export default {
   // tab的header
   :deep(.van-tabs__wrap) {
     background-color: var(--white-background-color);
-    box-shadow: 0 0 1px var(--dark-color);
+    box-shadow: 0 0 1px var(--dark-color2);
   }
   // tab的父
   :deep(.van-tabs__nav) {
@@ -112,15 +133,17 @@ export default {
   :deep(.van-tabs__line) {
     background-color: var(--moment-line-color);
   }
-  // 内容
+  // 内容的父级
   :deep(.van-tabs__content) {
     height: calc(100vh - 44px - 50px);
   }
-  :deep(.van-swipe-item) {
+  .list {
+    height: calc(100vh - 44px - 50px);
     overflow: scroll;
   }
-}
-.item {
-  margin: 16px;
+  .item {
+    // padding: 15px 15px 0;
+    margin: 15px;
+  }
 }
 </style>

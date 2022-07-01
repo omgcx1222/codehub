@@ -31,7 +31,7 @@ export default defineComponent({
 .tag span {
   font-size: 12px;
   text-align: center;
-  border: 1px var(--dark-color) solid;
+  border: 1px var(--dark-color2) solid;
   border-radius: 5px;
   padding: 3px 5px;
 }

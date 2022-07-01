@@ -43,7 +43,7 @@ export default defineComponent({
     justify-content: space-around;
     height: 60px;
     text-align: center;
-    color: var(--dark-color2);
+    color: var(--dark-color3);
     font-size: 12px;
   }
 }

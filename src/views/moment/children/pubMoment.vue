@@ -39,6 +39,7 @@ import { useRouter } from "vue-router"
 import { Toast } from "vant"
 
 export default defineComponent({
+  name: "pubMoment",
   setup() {
     const router = useRouter()
     const back = () => {
@@ -73,10 +74,11 @@ export default defineComponent({
         await store.dispatch("momentModule/uploadsAction", {
           momentId,
           files: fileList.value,
-          process: (p: number) => {
+          process: (progress: number) => {
+            const p = Number(progress.toFixed(2))
             toast.message = `正在上传图片${p * 100}%`
-            if (p === 1) toast.clear()
-            if (p === -1) {
+            if (progress === 1) toast.clear()
+            if (progress === -1) {
               toast.clear()
               tip = "发布成功，但部分图片上传失败"
             }
@@ -105,7 +107,7 @@ export default defineComponent({
   justify-content: space-between;
   margin: 25px 20px 15px;
   .back {
-    color: var(--dark-color);
+    color: var(--dark-color2);
   }
   .nav-bar-right {
     padding: 12px 12px;

@@ -1,4 +1,4 @@
-import { pubMoment, momentList, uploads } from "@/network/moment"
+import { pubMoment, momentList, uploads, momentDetail, commentList } from "@/network/moment"
 
 import { Module } from "vuex"
 import { IrootState, ImomentState, uploadsType, momentPage, momentItem } from "../types"
@@ -42,11 +42,19 @@ const myModule: Module<ImomentState, IrootState> = {
         const res = await uploads(payload.momentId, formData)
         if (res.status === 200) {
           p++
-          const p2 = (p / l).toFixed(2)
-          payload.process(Number(p2))
+          payload.process(p / l)
         } else {
           payload.process(-1)
         }
+      }
+    },
+
+    async momentDetailAndCommentListAction(_, momentId: string) {
+      const moment = await momentDetail(momentId)
+      const cList = await commentList(momentId)
+      return {
+        moment: moment.data,
+        commentList: cList.data
       }
     }
   },

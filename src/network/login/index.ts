@@ -4,7 +4,7 @@ import { loginData, registerData } from "./types"
 export function login(data: loginData) {
   return hqqRequest.request({
     method: "post",
-    url: "/login",
+    url: "/user/login",
     data,
     showLoading: {
       text: "正在登录",
@@ -30,7 +30,7 @@ export function register(data: registerData) {
 export function verifyToken() {
   return hqqRequest.request({
     method: "post",
-    url: "/token",
+    url: "/user/token",
     showLoading: {
       errorMessage: true
     }

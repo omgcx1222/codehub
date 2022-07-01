@@ -8,9 +8,6 @@ export function momentList(payload: mometnListBody) {
     params: {
       ...payload
     }
-    // showLoading: {
-    //   errorMessage: true
-    // }
   })
 }
 export function pubMoment(data: pubMomentBody) {
@@ -25,5 +22,25 @@ export function uploads(momentId: number, formData: any) {
     method: "post",
     url: `/upload/${momentId}/picture`,
     data: formData
+  })
+}
+
+export function momentDetail(momentId: string) {
+  return hqqRequest.request({
+    method: "get",
+    url: `/moment/${momentId}`
+    // showLoading: {
+    //   errorMessage: true
+    // }
+  })
+}
+
+export function commentList(momentId: string) {
+  return hqqRequest.request({
+    method: "get",
+    url: "/comment",
+    params: {
+      momentId
+    }
   })
 }

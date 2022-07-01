@@ -17,7 +17,7 @@ const routes = [
     }
   },
   {
-    path: "/momentDetail/:id",
+    path: "/momentDetail",
     component: () => import("@/views/moment/children/momentDetail.vue"),
     meta: {
       tabbarHidden: true

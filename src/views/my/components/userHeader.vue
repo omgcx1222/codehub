@@ -75,7 +75,7 @@ export default defineComponent({
     .signature {
       font-size: 12px;
       font-weight: 500;
-      color: var(--dark-color);
+      color: var(--dark-color2);
     }
   }
   .login {
