@@ -6,10 +6,14 @@
       :rows="1"
       :autosize="{ maxHeight: 120 }"
       type="textarea"
-      placeholder="发一条友善的评论"
+      :maxlength="300"
+      :placeholder="tip"
+      @click-input="clickInput"
+      @blur="blur"
+      ref="input"
     >
       <template #button>
-        <van-button class="pub-button" type="primary" size="mini">发送</van-button>
+        <van-button class="pub-button" type="primary" size="mini" @click="submit">发送</van-button>
       </template>
     </van-field>
   </van-cell-group>
@@ -17,12 +21,44 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue"
+import type { FieldInstance } from "vant"
 
 export default defineComponent({
-  setup() {
+  emits: ["submit", "focus", "blur"],
+  props: {
+    tip: {
+      type: String,
+      default: ""
+    }
+  },
+  setup(_, { emit }) {
     const message = ref("")
+    const input = ref<FieldInstance>()
+    const focusState = ref(false)
+    const submit = () => {
+      emit("submit", message.value)
+    }
+    const clickInput = () => {
+      if (!focusState.value) {
+        emit("focus")
+        focusState.value = true
+      }
+    }
+    const focus = () => {
+      input.value?.focus()
+      focusState.value = true
+    }
+    const blur = () => {
+      focusState.value = false
+      emit("blur")
+    }
     return {
-      message
+      input,
+      message,
+      submit,
+      clickInput,
+      blur,
+      focus
     }
   }
 })
@@ -46,6 +82,7 @@ export default defineComponent({
   .pub-button {
     border-radius: 5px;
     padding: 5px 8px;
+    height: 30px;
   }
 }
 </style>

@@ -7,6 +7,9 @@ export function momentList(payload: mometnListBody) {
     url: "/moment",
     params: {
       ...payload
+    },
+    showLoading: {
+      errorMessage: true
     }
   })
 }
@@ -41,6 +44,33 @@ export function commentList(momentId: string) {
     url: "/comment",
     params: {
       momentId
+    }
+  })
+}
+
+export function replyList(commentId: number) {
+  return hqqRequest.request({
+    method: "get",
+    url: "/comment",
+    params: {
+      commentId
+    },
+    showLoading: {
+      errorMessage: true
+    }
+  })
+}
+
+export function pubComment(payload: object) {
+  return hqqRequest.request({
+    method: "post",
+    url: "/comment",
+    data: {
+      ...payload
+    },
+    showLoading: {
+      successMessage: "发表成功",
+      errorMessage: true
     }
   })
 }

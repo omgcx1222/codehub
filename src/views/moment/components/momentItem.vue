@@ -3,15 +3,12 @@
     <van-skeleton class="loading" title avatar :row="row" :loading="!moment.momentId">
       <div class="moment-info" v-if="moment.momentId">
         <!-- 作者信息 -->
-        <div class="header">
-          <img v-if="moment.author.avatar" :src="moment.author.avatar" alt="" />
-          <img v-else src="@/assets/img/user.png" />
-          <div class="name">
-            <div>{{ moment.author.nickname }}</div>
-            <div class="fans">{{ moment.author.fans ?? 0 }} 粉丝</div>
-          </div>
-          <hqq-tag value="关注" class="follow" @click="follow"></hqq-tag>
-        </div>
+        <hqq-header
+          class="header"
+          :img="moment.author.avatarUrl ?? undefined"
+          :name="moment.author.nickname"
+          :message="moment.authorFans + ' 粉丝'"
+        ></hqq-header>
         <!-- 文字和图片 -->
         <div class="content van-multi-ellipsis--l3" @click="momentDetail">
           <div class="text">{{ moment.content }}</div>
@@ -44,12 +41,13 @@
 
 <script lang="ts">
 import { defineComponent, computed, getCurrentInstance } from "vue"
-import hqqTag from "@/components/hqqTag.vue"
+
+import hqqHeader from "@/components/hqqHeader.vue"
 
 export default defineComponent({
-  emits: ["momentDetail"],
+  emits: ["momentDetail", "focus"],
   components: {
-    hqqTag
+    hqqHeader
   },
   props: {
     momentData: {
@@ -107,35 +105,14 @@ export default defineComponent({
 // .moment-info {
 //   padding: 15px 15px 0;
 // }
-.header {
-  display: flex;
-  align-items: center;
-  // margin-bottom: 25px;
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  .name {
-    display: flex;
-    flex-direction: column;
-    margin-left: 12px;
-    .fans {
-      font-size: 12px;
-      color: var(--dark-color2);
-    }
-  }
-  .follow {
-    margin-left: auto;
-  }
-}
 
 .content {
   // margin: 5px;
-  font-size: 14px;
   line-height: 1.5;
   .text {
-    margin: 20px 5px 10px;
+    font-size: 16px;
+
+    margin: 10px 5px;
   }
   .img {
     width: 100%;

@@ -23,6 +23,10 @@ export interface IuserInfo {
   token?: string
   username?: string
   signature?: string
+  followCount?: number
+  fansCount?: number
+  userRank?: string | number
+  getAgreeCount?: string
 }
 
 export interface IloginState {
@@ -42,16 +46,19 @@ export interface ImyState {
 /**
  * moment
  */
-export interface momentItem {
-  list: object[]
-  page: number
-}
 export interface ImomentState {
   momentList: {
     news: momentItem
     host: momentItem
     follow: momentItem
   }
+  momentDetail: ImomentDetail | object
+  commentList: Icomment[]
+  replyList: Icomment[]
+}
+export interface momentItem {
+  list: any[]
+  page: number
 }
 export interface uploadsType {
   momentId: number
@@ -62,3 +69,46 @@ export interface momentPage {
   order: 0 | 1 | 2
   page: number
 }
+export interface ImomentDetail {
+  momentId: number
+  content: string
+  createTime: string
+  updateTime: string
+  author: {
+    id: number
+    nickname: string
+    avatarUrl: string | null
+  }
+  agree: number
+  authorFans: number
+  images: string | null
+}
+
+export interface Icomment {
+  isAgree: number
+  agree: number
+  author: { id: number; nickname: string; avatarUrl: string | null }
+  authorFans?: number
+  childCount?: number
+  commentId: number
+  content: string
+  createTime: string
+  id: number
+  momentId: number
+  replyChild?: Icomment[]
+  replyAuthor?: { id: number; nickname: string; avatarUrl: string | null }
+  replyUserId: number
+}
+
+// export interface Ireply {
+//   isAgree: number
+//   agree: number
+//   author: { id: number; nickname: string; avatarUrl: string | null }
+//   commentId: number
+//   content: string
+//   createTime: string
+//   id: number
+//   momentId: number
+//   replyAuthor: { id: number; nickname: string; avatarUrl: string | null }
+//   replyUserId: number
+// }

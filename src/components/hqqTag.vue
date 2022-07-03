@@ -27,6 +27,8 @@ export default defineComponent({
 <style scoped>
 .tag {
   display: inline-block;
+  /* width: 100%;
+  height: 100%; */
 }
 .tag span {
   font-size: 12px;

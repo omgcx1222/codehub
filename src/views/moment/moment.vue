@@ -25,6 +25,7 @@
 import { ref, onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "@/store"
+import { tabsType } from "@/views/types"
 
 import momentItem from "./components/momentItem.vue"
 
@@ -34,7 +35,7 @@ export default {
     momentItem
   },
   setup() {
-    const tabs = [
+    const tabs: tabsType = [
       { label: "最新", value: "news" },
       { label: "最热", value: "host" },
       { label: "关注", value: "follow" }

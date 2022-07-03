@@ -1,6 +1,15 @@
 <template>
   <div class="my">
-    <user-header></user-header>
+    <div class="header">
+      <hqq-header
+        :img="userInfo.avatarUrl ?? undefined"
+        :name="userInfo.nickname ?? '未登录'"
+        :message="userInfo.signature ?? '因为个性所以没签名'"
+        :rightText="userInfo.id ? '退出登录' : '去登录'"
+        @clickRight="login"
+      ></hqq-header>
+    </div>
+
     <div class="menu">
       <menu-header></menu-header>
       <menu-option></menu-option>
@@ -9,24 +18,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
-import userHeader from "./components/userHeader.vue"
+import { defineComponent, computed } from "vue"
+import { useStore } from "@/store"
+import { useRouter } from "vue-router"
+
+import hqqHeader from "@/components/hqqHeader.vue"
 import menuHeader from "./components/menuHeader.vue"
 import menuOption from "./components/menuOption.vue"
 
 export default defineComponent({
   components: {
-    userHeader,
+    hqqHeader,
     menuHeader,
     menuOption
   },
   setup() {
-    return {}
+    const store = useStore()
+    const userInfo = computed(() => store.state.loginModule.userInfo)
+
+    const router = useRouter()
+    const login = () => {
+      if (!userInfo.value.id) {
+        router.push({
+          path: "/login"
+        })
+      } else {
+        store.dispatch("loginModule/loginOutAction")
+      }
+    }
+    return {
+      login,
+      userInfo
+    }
   }
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .my {
   width: 100%;
   height: calc(100vh - 50px);
@@ -34,6 +62,20 @@ export default defineComponent({
   background-color: var(--background-color);
   display: flex;
   flex-direction: column;
+}
+.header {
+  font-size: 15px;
+  padding: 50px 15px 30px;
+  :deep(.img) {
+    width: 60px;
+    height: 60px;
+  }
+  :deep(.title) {
+    min-height: 60px;
+  }
+  :deep(.name) {
+    font-weight: 600;
+  }
 }
 .menu {
   flex: 1;

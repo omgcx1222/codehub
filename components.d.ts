@@ -5,6 +5,9 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    HqqHeader: typeof import('./src/components/hqqHeader.vue')['default']
+    HqqInput: typeof import('./src/components/hqqInput.vue')['default']
+    HqqMessage: typeof import('./src/components/hqqMessage.vue')['default']
     HqqTag: typeof import('./src/components/hqqTag.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -18,8 +21,8 @@ declare module '@vue/runtime-core' {
     VanImage: typeof import('vant/es')['Image']
     VanList: typeof import('vant/es')['List']
     VanNavBar: typeof import('vant/es')['NavBar']
+    VanPopup: typeof import('vant/es')['Popup']
     VanSkeleton: typeof import('vant/es')['Skeleton']
-    VanSticky: typeof import('vant/es')['Sticky']
     VanTab: typeof import('vant/es')['Tab']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
