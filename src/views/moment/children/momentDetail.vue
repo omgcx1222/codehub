@@ -68,6 +68,14 @@
         </div>
       </div>
     </van-popup>
+
+    <van-action-sheet
+      v-model:show="menuShow"
+      :actions="menuActions"
+      cancel-text="取消"
+      close-on-click-action
+      @select="menuSelect"
+    />
   </div>
 </template>
 
@@ -75,8 +83,9 @@
 import { defineComponent, onMounted, ref, reactive, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useStore } from "@/store"
-import { Icomment } from "@/store/types"
+import { Icomment, ImomentDetail } from "@/store/types"
 
+import { Toast } from "vant"
 import momentItem from "../components/momentItem.vue"
 import hqqInput from "@/components/hqqInput.vue"
 import commentItem from "../components/commentItem.vue"
@@ -109,8 +118,29 @@ export default defineComponent({
     const back = () => {
       router.go(-1)
     }
+
+    const menuShow = ref(false)
+    const menuActions = reactive([
+      { name: "举报", disabled: false },
+      { name: "删除", disabled: true }
+    ])
+    const userInfo = computed(() => store.state.userInfo)
     const menu = () => {
-      console.log(1)
+      if ((moment.value as ImomentDetail)?.author?.id === userInfo.value.id) {
+        menuActions[0].disabled = true
+        menuActions[1].disabled = false
+      }
+      menuShow.value = true
+    }
+    const menuSelect = (select: any) => {
+      if (select.name === "举报") {
+        Toast.loading("正在举报")
+        setTimeout(() => {
+          Toast.success("已举报")
+        }, 500)
+      } else if (select.name === "删除") {
+        store.dispatch("momentModule/deleteMomentAction", Number(momentId as string))
+      }
     }
 
     const commentPopupShow = ref(false)
@@ -158,6 +188,9 @@ export default defineComponent({
       commentList,
       back,
       menu,
+      menuActions,
+      menuShow,
+      menuSelect,
       commentPopupShow,
       clickCommentPopupShow,
       firstComment,

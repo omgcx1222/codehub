@@ -1,41 +1,59 @@
-import { pubMoment, momentList, uploads, momentDetail, commentList, replyList, pubComment } from "@/network/moment"
+import {
+  pubMoment,
+  momentList,
+  uploads,
+  momentDetail,
+  commentList,
+  replyList,
+  pubComment,
+  deleteMoment
+} from "@/network/moment"
 
 import { Module } from "vuex"
-import { IrootState, ImomentState, uploadsType, momentPage, momentItem, ImomentDetail, Icomment } from "../types"
+import {
+  IrootState,
+  ImomentState,
+  uploadsType,
+  ImomentDetail,
+  Icomment,
+  IchangeMomentListOption,
+  changeMomentType,
+  momentOrder
+} from "../types"
 import { pubMomentBody } from "@/network/moment/types"
 // import { commentList as cl } from "@/views/types"
 
 const myModule: Module<ImomentState, IrootState> = {
   namespaced: true,
   state: {
-    momentList: {
-      news: { list: [], page: 0 },
-      host: { list: [], page: 0 },
-      follow: { list: [], page: 0 }
-    },
+    momentList: [],
+    // 0最新，1最热，2关注
+    active: 0,
     momentDetail: {},
     commentList: [],
     replyList: []
   },
   actions: {
+    async momentListAction(store, payload: { order: momentOrder; type: changeMomentType }) {
+      const offset = payload.type === "all" ? 0 : store.state.momentList[payload.order]?.length
+      const limit = offset + 10
+      const res = await momentList({ order: store.state.active, offset, limit })
+      if (res.status !== 200) return
+
+      store.commit("changeMomentList", { list: res.data, type: payload.type, order: payload.order })
+    },
+
     async pubMomentAction(_, payload: pubMomentBody) {
       const res = await pubMoment({ ...payload })
       return res
     },
 
-    async momentListAction(store, payload: momentPage) {
-      const offset = (payload.page - 1) * 10
-      const limit = offset + 10
-      const res = await momentList({ order: payload.order, offset, limit })
-      if (res.status !== 200) return
-
-      // 0最新，1最热，2关注
-      if (payload.order === 0) {
-        return store.commit("changeMomentListNews", { list: res.data, page: payload.page })
-      } else if (payload.order === 1) {
-        return store.commit("changeMomentListHost", { list: res.data, page: payload.page })
-      }
-      store.commit("changeMomentListFollow", { list: res.data, page: payload.page })
+    async refreshMomentListAction(store, order: momentOrder) {
+      store.dispatch("momentListAction", { order, type: "all" })
+    },
+    async pubSuccess(store) {
+      if (store.state.momentList[0]?.length) store.dispatch("momentListAction", { order: 0, type: "all" })
+      if (store.state.momentList[1]?.length) store.dispatch("momentListAction", { order: 1, type: "all" })
     },
 
     async uploadsAction(_, payload: uploadsType) {
@@ -76,27 +94,31 @@ const myModule: Module<ImomentState, IrootState> = {
       const res = await pubComment(payload)
       if (res.status === 200) {
         // 1-评论动态  2-回复评论  3-回复评论的回复
-        console.log(res.data[0])
         if (payload.commentId) {
           commit("unShiftReply", { id: payload.commentId, reply: res.data[0] })
         } else {
           commit("unShiftComment", res.data[0])
         }
       }
+    },
+
+    async deleteMomentAction(_, momentId: number) {
+      await deleteMoment(momentId)
     }
   },
   mutations: {
-    changeMomentListNews(state, payload: momentItem) {
-      state.momentList.news.list.push(...payload.list)
-      state.momentList.news.page = payload.page
+    changeActive(state, index: 0 | 1 | 2) {
+      state.active = index
     },
-    changeMomentListHost(state, payload: momentItem) {
-      state.momentList.host.list.push(...payload.list)
-      state.momentList.host.page = payload.page
-    },
-    changeMomentListFollow(state, payload: momentItem) {
-      state.momentList.follow.list.push(...payload.list)
-      state.momentList.follow.page = payload.page
+    changeMomentList(state, payload: IchangeMomentListOption) {
+      if (payload.list.length === 0) return
+      if (payload.type === "all") {
+        state.momentList[payload.order] = payload.list
+      } else if (payload.type === "push") {
+        state.momentList[payload.order].push(...payload.list)
+      } else {
+        state.momentList[payload.order].unshift(...payload.list)
+      }
     },
     changeMomentDetail(state, momentDetail: ImomentDetail) {
       state.momentDetail = momentDetail

@@ -74,3 +74,15 @@ export function pubComment(payload: object) {
     }
   })
 }
+
+export function deleteMoment(momentId: number) {
+  return hqqRequest.request({
+    method: "delete",
+    url: `/moment/${momentId}`,
+    showLoading: {
+      text: "正在删除",
+      errorMessage: true,
+      successMessage: "删除成功"
+    }
+  })
+}

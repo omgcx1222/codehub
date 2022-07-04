@@ -1,15 +1,26 @@
 <template>
   <div class="moment">
     <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable animated @change="tabChange">
-      <van-tab v-for="item in tabs" :title="item.label" :key="item.value">
+      <van-tab v-for="(tab, index) in tabs" :title="tab.label" :key="tab.value">
         <div class="list">
-          <van-list finished-text="没有更多了">
-            <template v-for="item in momentList[item.value].list" :key="item.momentId">
-              <div class="item">
-                <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
-              </div>
-            </template>
-          </van-list>
+          <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" loading-text="正在刷新...">
+            <van-list
+              finished-text="没有更多了"
+              v-if="isNull !== index"
+              @load="listLoad"
+              :finished="finished"
+              v-model:loading="isAddLoading"
+              :offset="0"
+              :immediate-check="false"
+            >
+              <template v-for="item in momentList[index]" :key="item.momentId">
+                <div class="item">
+                  <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
+                </div>
+              </template>
+            </van-list>
+            <van-empty description="关注人没有发布过动态" v-else />
+          </van-pull-refresh>
         </div>
       </van-tab>
     </van-tabs>
@@ -35,6 +46,10 @@ export default {
     momentItem
   },
   setup() {
+    onMounted(() => {
+      getMoment("all")
+    })
+
     const tabs: tabsType = [
       { label: "最新", value: "news" },
       { label: "最热", value: "host" },
@@ -43,20 +58,27 @@ export default {
     const tabActive = ref(0)
     const store = useStore()
     const momentList = computed(() => store.state.momentModule.momentList)
+    const isNull = ref(-1) //空列表
 
-    const tabChange = (index: number) => {
-      if (index === 0 && momentList.value.news.list.length === 0) {
-        getMoment(index, 1)
-      } else if (index === 1 && momentList.value.host.list.length === 0) {
-        getMoment(index, 1)
-      } else if (index === 2 && momentList.value.follow.list.length === 0) {
-        getMoment(index, 1)
+    const tabChange = async (index: number) => {
+      await store.commit("momentModule/changeActive", index)
+      if (!momentList.value[index]) {
+        getMoment("all")
       }
     }
 
     // 0为最新，1为最热，2为关注
-    const getMoment = (order: 0 | 1 | 2, page: number) => {
-      store.dispatch("momentModule/momentListAction", { order, page })
+    const getMoment = async (type: "all" | "push" | "unshift") => {
+      await store.dispatch("momentModule/momentListAction", { order: tabActive.value, type })
+      if (!momentList.value[tabActive.value]) {
+        setTimeout(() => {
+          isNull.value = tabActive.value
+        }, 500)
+      } else {
+        if (isNull.value === tabActive.value) {
+          isNull.value = -1
+        }
+      }
     }
 
     const router = useRouter()
@@ -75,19 +97,41 @@ export default {
       console.log(a, b, c)
     }
 
-    onMounted(() => {
-      // pubMoment("芜湖")
-      getMoment(0, 1)
-    })
+    // 下拉刷新
+    const isRefresh = ref(false)
+    const onRefresh = async () => {
+      await store.dispatch("momentModule/refreshMomentListAction", tabActive.value)
+      isRefresh.value = false
+    }
+
+    // 上拉加载
+    const finished = ref(false) // 是否开启上拉加载功能
+    const isAddLoading = ref(false) //上拉加载状态
+    const listLoad = async () => {
+      isAddLoading.value = true
+      const ordL = momentList.value[tabActive.value]?.length
+      await getMoment("push")
+      if (ordL === momentList.value[tabActive.value]?.length) {
+        // 说明已无新数据，关闭上拉加载功能
+        finished.value = true
+      }
+      isAddLoading.value = false
+    }
 
     return {
+      isNull,
       tabs,
       tabActive,
       tabChange,
       getMoment,
       momentList,
       momentDetail,
-      beforeChange
+      beforeChange,
+      listLoad,
+      finished,
+      isAddLoading,
+      onRefresh,
+      isRefresh
     }
   }
 }
@@ -141,6 +185,13 @@ export default {
   .list {
     height: calc(100vh - 44px - 50px);
     overflow: scroll;
+    :deep(.van-list__finished-text) {
+      line-height: normal;
+      margin-bottom: 15px;
+    }
+    :deep(.van-pull-refresh__head) {
+      line-height: 40px;
+    }
   }
   .item {
     // padding: 15px 15px 0;

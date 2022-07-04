@@ -87,7 +87,10 @@ export default defineComponent({
       }
 
       Toast.success(tip)
-      if (tip === "发布成功") back()
+      if (tip === "发布成功") {
+        store.dispatch("momentModule/pubSuccess")
+        back()
+      }
     }
 
     return {

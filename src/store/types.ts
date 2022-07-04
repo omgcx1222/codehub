@@ -47,18 +47,12 @@ export interface ImyState {
  * moment
  */
 export interface ImomentState {
-  momentList: {
-    news: momentItem
-    host: momentItem
-    follow: momentItem
-  }
+  momentList: ImomentDetail[][]
+  // 0最新，1最热，2关注
+  active: 0 | 1 | 2
   momentDetail: ImomentDetail | object
   commentList: Icomment[]
   replyList: Icomment[]
-}
-export interface momentItem {
-  list: any[]
-  page: number
 }
 export interface uploadsType {
   momentId: number
@@ -70,18 +64,18 @@ export interface momentPage {
   page: number
 }
 export interface ImomentDetail {
-  momentId: number
-  content: string
-  createTime: string
-  updateTime: string
-  author: {
+  momentId?: number
+  content?: string
+  createTime?: string
+  updateTime?: string
+  author?: {
     id: number
     nickname: string
     avatarUrl: string | null
   }
-  agree: number
-  authorFans: number
-  images: string | null
+  agree?: number
+  authorFans?: number
+  images?: string | null
 }
 
 export interface Icomment {
@@ -99,6 +93,15 @@ export interface Icomment {
   replyAuthor?: { id: number; nickname: string; avatarUrl: string | null }
   replyUserId: number
 }
+
+export interface IchangeMomentListOption {
+  list: any[]
+  order: momentOrder
+  type: changeMomentType
+}
+
+export type momentOrder = 0 | 1 | 2
+export type changeMomentType = "push" | "unshift" | "all"
 
 // export interface Ireply {
 //   isAgree: number
