@@ -6,7 +6,8 @@ import {
   commentList,
   replyList,
   pubComment,
-  deleteMoment
+  deleteMoment,
+  likeMoment
 } from "@/network/moment"
 
 import { Module } from "vuex"
@@ -17,8 +18,7 @@ import {
   ImomentDetail,
   Icomment,
   IchangeMomentListOption,
-  changeMomentType,
-  momentOrder
+  changeMomentType
 } from "../types"
 import { pubMomentBody } from "@/network/moment/types"
 // import { commentList as cl } from "@/views/types"
@@ -34,13 +34,14 @@ const myModule: Module<ImomentState, IrootState> = {
     replyList: []
   },
   actions: {
-    async momentListAction(store, payload: { order: momentOrder; type: changeMomentType }) {
-      const offset = payload.type === "all" ? 0 : store.state.momentList[payload.order]?.length
+    async momentListAction(store, type: changeMomentType) {
+      const activeTab = store.state.active // 记录本次获取数据的activeTab
+      const offset = type === "all" ? 0 : store.state.momentList[activeTab]?.length
       const limit = offset + 10
-      const res = await momentList({ order: store.state.active, offset, limit })
+      const res = await momentList({ order: activeTab, offset, limit })
       if (res.status !== 200) return
 
-      store.commit("changeMomentList", { list: res.data, type: payload.type, order: payload.order })
+      store.commit("changeMomentList", { list: res.data, type, order: activeTab })
     },
 
     async pubMomentAction(_, payload: pubMomentBody) {
@@ -48,12 +49,13 @@ const myModule: Module<ImomentState, IrootState> = {
       return res
     },
 
-    async refreshMomentListAction(store, order: momentOrder) {
-      store.dispatch("momentListAction", { order, type: "all" })
+    async refreshMomentListAction(store) {
+      store.dispatch("momentListAction", "all")
     },
     async pubSuccess(store) {
-      if (store.state.momentList[0]?.length) store.dispatch("momentListAction", { order: 0, type: "all" })
-      if (store.state.momentList[1]?.length) store.dispatch("momentListAction", { order: 1, type: "all" })
+      store.dispatch("momentListAction", "all")
+      // if (store.state.momentList[0]?.length) store.dispatch("momentListAction", "all")
+      // if (store.state.momentList[1]?.length) store.dispatch("momentListAction", "all")
     },
 
     async uploadsAction(_, payload: uploadsType) {
@@ -104,6 +106,10 @@ const myModule: Module<ImomentState, IrootState> = {
 
     async deleteMomentAction(_, momentId: number) {
       await deleteMoment(momentId)
+    },
+
+    async likeMomentAction(_, momentId: number) {
+      await likeMoment(momentId)
     }
   },
   mutations: {

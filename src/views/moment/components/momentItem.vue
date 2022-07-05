@@ -8,6 +8,7 @@
           :img="moment.author.avatarUrl ?? undefined"
           :name="moment.author.nickname"
           :message="moment.authorFans + ' 粉丝'"
+          @clickRight="follow"
         ></hqq-header>
         <!-- 文字和图片 -->
         <div class="content van-multi-ellipsis--l3" @click="momentDetail">
@@ -30,6 +31,7 @@
                 :text="String(moment.agree)"
                 :icon="moment.isAgree === 1 ? 'good-job' : 'good-job-o'"
                 :class="moment.isAgree === 1 ? 'is-agree' : ''"
+                @click="likeMoment"
               />
             </van-grid>
           </slot>
@@ -40,7 +42,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, getCurrentInstance } from "vue"
+import { defineComponent, computed, getCurrentInstance, PropType } from "vue"
+import { useStore } from "@/store"
+import { ImomentDetail } from "@/store/types"
 
 import hqqHeader from "@/components/hqqHeader.vue"
 
@@ -51,7 +55,7 @@ export default defineComponent({
   },
   props: {
     momentData: {
-      type: Object,
+      type: Object as PropType<ImomentDetail>,
       required: true
     },
     row: {
@@ -80,11 +84,17 @@ export default defineComponent({
       console.log("关注")
     }
 
+    const store = useStore()
+    const likeMoment = () => {
+      store.dispatch("momentModule/likeMomentAction", moment.value.momentId)
+    }
+
     return {
       moment,
       clickImg,
       momentDetail,
-      follow
+      follow,
+      likeMoment
     }
   }
 })

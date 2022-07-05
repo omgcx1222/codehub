@@ -46,7 +46,17 @@ class HqqRequest {
         if (this.toast) {
           this.toast?.clear()
           if (this.requestConfig?.showLoading?.successMessage) {
-            Toast.success(this.requestConfig.showLoading?.successMessage)
+            if (typeof this.requestConfig.showLoading?.successMessage === "string") {
+              Toast({
+                message: this.requestConfig.showLoading?.successMessage,
+                icon: this.requestConfig.showLoading?.icon ? "success" : ""
+              })
+            } else if (typeof this.requestConfig.showLoading?.successMessage === "boolean") {
+              Toast({
+                message: res.data,
+                icon: this.requestConfig.showLoading?.icon ? "success" : ""
+              })
+            }
           }
         }
         this.toast = undefined
@@ -57,9 +67,15 @@ class HqqRequest {
           this.toast?.clear()
           if (this.requestConfig?.showLoading?.errorMessage) {
             if (typeof this.requestConfig.showLoading?.errorMessage === "string") {
-              Toast.fail(this.requestConfig.showLoading?.errorMessage)
+              Toast({
+                message: this.requestConfig.showLoading?.errorMessage,
+                icon: this.requestConfig.showLoading?.icon ? "fail" : ""
+              })
             } else if (typeof this.requestConfig.showLoading?.errorMessage === "boolean") {
-              Toast.fail(err.response.data)
+              Toast({
+                message: err.response.data,
+                icon: this.requestConfig.showLoading?.icon ? "fail" : ""
+              })
             }
           }
         }

@@ -18,6 +18,7 @@
                   <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
                 </div>
               </template>
+              <!-- 加载数据时先展示骨架屏 -->
               <template v-else>
                 <div class="item" v-for="item in [{}, {}, {}, {}, {}]" :key="item.momentId">
                   <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
@@ -67,21 +68,24 @@ export default {
 
     const tabChange = async (index: number) => {
       await store.commit("momentModule/changeActive", index)
+      tabActive.value = index
+
       finished.value = false
-      if (!momentList.value[index]) {
+      if (!momentList.value[index]?.length) {
         getMoment("all")
       }
     }
 
     // 0为最新，1为最热，2为关注
     const getMoment = async (type: "all" | "push" | "unshift") => {
-      await store.dispatch("momentModule/momentListAction", { order: tabActive.value, type })
-      if (!momentList.value[tabActive.value]) {
+      const currentIndex = tabActive.value //记录本次执行的激活的tab，以免被快速切换tab影响
+      await store.dispatch("momentModule/momentListAction", type)
+      if (!momentList.value[currentIndex]) {
         setTimeout(() => {
-          isNull.value = tabActive.value
+          isNull.value = currentIndex
         }, 500)
       } else {
-        if (isNull.value === tabActive.value) {
+        if (isNull.value === currentIndex) {
           isNull.value = -1
         }
       }
@@ -103,11 +107,12 @@ export default {
       console.log(a, b, c)
     }
 
-    // 下拉刷新
+    // 下拉刷新(刷新时数据恢复10条，开启上拉加载功能)
     const isRefresh = ref(false)
     const onRefresh = async () => {
-      await store.dispatch("momentModule/refreshMomentListAction", tabActive.value)
+      await store.dispatch("momentModule/refreshMomentListAction")
       isRefresh.value = false
+      finished.value = false // 开启上拉加载功能
     }
 
     // 上拉加载

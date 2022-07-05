@@ -86,3 +86,13 @@ export function deleteMoment(momentId: number) {
     }
   })
 }
+
+export function likeMoment(momentId: number) {
+  return hqqRequest.request({
+    method: "post",
+    url: `/moment/${momentId}/like`,
+    showLoading: {
+      successMessage: true
+    }
+  })
+}
