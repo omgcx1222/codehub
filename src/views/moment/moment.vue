@@ -13,8 +13,13 @@
               :offset="0"
               :immediate-check="false"
             >
-              <template v-for="item in momentList[index]" :key="item.momentId">
-                <div class="item">
+              <template v-if="momentList[index]">
+                <div class="item" v-for="item in momentList[index]" :key="item.momentId">
+                  <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
+                </div>
+              </template>
+              <template v-else>
+                <div class="item" v-for="item in [{}, {}, {}, {}, {}]" :key="item.momentId">
                   <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
                 </div>
               </template>
@@ -62,6 +67,7 @@ export default {
 
     const tabChange = async (index: number) => {
       await store.commit("momentModule/changeActive", index)
+      finished.value = false
       if (!momentList.value[index]) {
         getMoment("all")
       }
@@ -105,7 +111,7 @@ export default {
     }
 
     // 上拉加载
-    const finished = ref(false) // 是否开启上拉加载功能
+    const finished = ref(false) // 是否关闭上拉加载功能
     const isAddLoading = ref(false) //上拉加载状态
     const listLoad = async () => {
       isAddLoading.value = true
