@@ -8,7 +8,7 @@
           :img="moment.author.avatarUrl ?? undefined"
           :name="moment.author.nickname"
           :message="moment.authorFans + ' 粉丝'"
-          @clickRight="follow"
+          @clickRight="follow(moment.author.id)"
         ></hqq-header>
         <!-- 文字和图片 -->
         <div class="content van-multi-ellipsis--l3" @click="momentDetail">
@@ -28,7 +28,7 @@
               <van-grid-item icon="share-o" />
               <van-grid-item icon="chat-o" :text="String(moment.commentCount)" @click="momentDetail" />
               <van-grid-item
-                :text="String(moment.agree)"
+                :text="moment.agree == 0 ? '' : String(moment.agree)"
                 :icon="moment.isAgree === 1 ? 'good-job' : 'good-job-o'"
                 :class="moment.isAgree === 1 ? 'is-agree' : ''"
                 @click="likeMoment"
@@ -80,8 +80,8 @@ export default defineComponent({
       emit("momentDetail", moment.value.momentId)
     }
 
-    const follow = () => {
-      console.log("关注")
+    const follow = (id: number) => {
+      store.dispatch("followAction", id)
     }
 
     const store = useStore()

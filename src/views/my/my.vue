@@ -34,7 +34,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const userInfo = computed(() => store.state.loginModule.userInfo)
+    const userInfo = computed(() => store.state.userInfo)
 
     const router = useRouter()
     const login = () => {

@@ -29,8 +29,11 @@ const myModule: Module<ImomentState, IrootState> = {
     momentList: [],
     // 0最新，1最热，2关注
     active: 0,
+    // 某条动态的详情
     momentDetail: {},
+    // 某条动态的评论列表
     commentList: [],
+    // 动态某条评论的回复列表（popup弹框内）
     replyList: []
   },
   actions: {
@@ -87,15 +90,17 @@ const myModule: Module<ImomentState, IrootState> = {
 
     async replyListAction({ commit }, commentId: number) {
       const res = await replyList(commentId)
+
       if (res.status === 200) {
         commit("changeReplyList", res.data)
       }
     },
 
+    // 评论或回复
     async pubCommentAction({ commit }, payload: any) {
       const res = await pubComment(payload)
       if (res.status === 200) {
-        // 1-评论动态  2-回复评论  3-回复评论的回复
+        // 判断是动态的评论 还是评论的回复
         if (payload.commentId) {
           commit("unShiftReply", { id: payload.commentId, reply: res.data[0] })
         } else {
@@ -104,12 +109,19 @@ const myModule: Module<ImomentState, IrootState> = {
       }
     },
 
-    async deleteMomentAction(_, momentId: number) {
-      await deleteMoment(momentId)
+    async deleteMomentAction({ commit }, momentId: number) {
+      const res = await deleteMoment(momentId)
+      if (res.status === 200) {
+        commit("deleteMoment", momentId)
+      }
     },
 
-    async likeMomentAction(_, momentId: number) {
-      await likeMoment(momentId)
+    async likeMomentAction({ commit }, momentId: number) {
+      const res = await likeMoment(momentId)
+      if (res.status === 200) {
+        const isAgree = res.data === "点赞成功" ? 1 : 0
+        commit("likeMoment", { momentId, isAgree })
+      }
     }
   },
   mutations: {
@@ -141,12 +153,28 @@ const myModule: Module<ImomentState, IrootState> = {
         c.childCount = Number(c.childCount) + 1
         c.replyChild?.unshift(option.reply)
       }
+      // 判断是否在评论的回复详情页（popup弹框内，目前未在关闭弹框时置空replyList）
       if (state.replyList.length) {
         state.replyList.unshift(option.reply)
       }
     },
     unShiftComment(state, comment: Icomment) {
       state.commentList.unshift(comment)
+    },
+    likeMoment(state, { momentId, isAgree }: { momentId: number; isAgree: 0 | 1 }) {
+      for (const moment of state.momentList) {
+        const m = moment?.find((item) => item.momentId === momentId)
+        if (m) {
+          m.isAgree = isAgree
+          m.agree = isAgree ? m.agree + 1 : m.agree - 1
+        }
+      }
+    },
+    deleteMoment(state, momentId: number) {
+      const m0 = state.momentList[0]?.findIndex((item) => item.momentId === momentId)
+      const m1 = state.momentList[1]?.findIndex((item) => item.momentId === momentId)
+      if (m0 != -1) state.momentList[0].splice(m0, 1)
+      if (m1 != -1) state.momentList[1].splice(m1, 1)
     }
   }
 }

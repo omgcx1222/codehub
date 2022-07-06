@@ -5,6 +5,7 @@ import loginModule from "./login"
 import myModule from "./my"
 import momentModule from "./moment"
 
+import { follow } from "@/network/common"
 import { IrootState, storeType, IuserInfo } from "./types"
 
 const store = createStore<IrootState>({
@@ -13,7 +14,11 @@ const store = createStore<IrootState>({
       userInfo: {}
     }
   },
-  actions: {},
+  actions: {
+    async followAction(_, followId: number) {
+      await follow(followId)
+    }
+  },
   mutations: {
     changeUserInfo(state, payload: IuserInfo) {
       state.userInfo = payload

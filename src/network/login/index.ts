@@ -1,4 +1,4 @@
-import hqqRequest from "../index"
+import { hqqRequest } from "../index"
 import { loginData, registerData } from "./types"
 
 export function login(data: loginData) {

@@ -5,7 +5,7 @@ export interface HqqRequestConfig extends AxiosRequestConfig {
     text?: string // 加载时文本
     errorMessage?: string | boolean // 请求失败文本，传入boolean（true或false都一样）值表示使用接口返回的错误信息
     successMessage?: string | boolean // 请求成功文本
-    icon?: boolean
+    icon?: boolean // 是否显示icon
   }
   isToken?: boolean
 }

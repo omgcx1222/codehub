@@ -29,9 +29,7 @@ export interface IuserInfo {
   getAgreeCount?: string
 }
 
-export interface IloginState {
-  userInfo: IuserInfo
-}
+export type IloginState = object
 
 /**
  * my
@@ -73,13 +71,14 @@ export interface ImomentDetail {
     nickname: string
     avatarUrl: string | null
   }
-  agree?: number
+  agree: number
   authorFans?: number
   images?: string | null
+  isAgree: 0 | 1
 }
 
 export interface Icomment {
-  isAgree: number
+  isAgree: 0 | 1
   agree: number
   author: { id: number; nickname: string; avatarUrl: string | null }
   authorFans?: number

@@ -17,7 +17,7 @@ class HqqRequest {
 
     this.instance.interceptors.request.use(
       (config: HqqRequestConfig) => {
-        if (config.showLoading) {
+        if (config.showLoading && config.showLoading.icon) {
           this.toast = Toast.loading({
             duration: 0,
             message: config.showLoading.text
@@ -43,20 +43,18 @@ class HqqRequest {
 
     this.instance.interceptors.response.use(
       (res) => {
-        if (this.toast) {
-          this.toast?.clear()
-          if (this.requestConfig?.showLoading?.successMessage) {
-            if (typeof this.requestConfig.showLoading?.successMessage === "string") {
-              Toast({
-                message: this.requestConfig.showLoading?.successMessage,
-                icon: this.requestConfig.showLoading?.icon ? "success" : ""
-              })
-            } else if (typeof this.requestConfig.showLoading?.successMessage === "boolean") {
-              Toast({
-                message: res.data,
-                icon: this.requestConfig.showLoading?.icon ? "success" : ""
-              })
-            }
+        this.toast?.clear()
+        if (this.requestConfig?.showLoading?.successMessage) {
+          if (typeof this.requestConfig.showLoading?.successMessage === "string") {
+            Toast({
+              message: this.requestConfig.showLoading?.successMessage,
+              icon: this.requestConfig.showLoading?.icon ? "success" : ""
+            })
+          } else if (typeof this.requestConfig.showLoading?.successMessage === "boolean") {
+            Toast({
+              message: res.data,
+              icon: this.requestConfig.showLoading?.icon ? "success" : ""
+            })
           }
         }
         this.toast = undefined

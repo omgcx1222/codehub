@@ -1,4 +1,4 @@
-import hqqRequest from "../index"
+import { hqqRequest } from "../index"
 import { mometnListBody, pubMomentBody } from "./types"
 
 export function momentList(payload: mometnListBody) {
@@ -7,9 +7,6 @@ export function momentList(payload: mometnListBody) {
     url: "/moment",
     params: {
       ...payload
-    },
-    showLoading: {
-      errorMessage: true
     }
   })
 }
@@ -92,7 +89,8 @@ export function likeMoment(momentId: number) {
     method: "post",
     url: `/moment/${momentId}/like`,
     showLoading: {
-      successMessage: true
+      successMessage: true,
+      icon: false
     }
   })
 }
