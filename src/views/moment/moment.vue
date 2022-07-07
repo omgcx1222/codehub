@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted, computed, onActivated } from "vue"
+import { ref, onMounted, computed, onActivated, nextTick } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 import { tabsType } from "@/views/types"
@@ -54,16 +54,20 @@ export default {
   setup() {
     onMounted(() => {
       getMoment("all")
+      // console.log(listRef.value)
+
       setTimeout(() => {
         onScroll()
-      }, 500)
+      })
     })
     onActivated(() => {
       // 页面激活时设置滚动位置
-      for (const i in tabs) {
-        if (!listRef.value) return
-        listRef.value[i].scrollTop = tabs[i].scrollTop
-      }
+      nextTick(() => {
+        for (const i in tabs) {
+          if (!listRef.value) return
+          listRef.value[i].scrollTop = tabs[i].scrollTop
+        }
+      })
     })
 
     const tabs: tabsType = [
