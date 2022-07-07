@@ -1,8 +1,8 @@
 <template>
   <div class="moment">
     <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable animated @change="tabChange">
-      <van-tab v-for="(tab, index) in tabs" :title="tab.label" :key="tab.value">
-        <div class="list">
+      <van-tab v-for="(tab, index) in tabs" :title="tab.label" :key="tab.label">
+        <div class="list" ref="listRef">
           <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" loading-text="正在刷新...">
             <van-list
               finished-text="没有更多了"
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted, computed } from "vue"
+import { ref, onMounted, computed, onActivated } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 import { tabsType } from "@/views/types"
@@ -54,12 +54,22 @@ export default {
   setup() {
     onMounted(() => {
       getMoment("all")
+      setTimeout(() => {
+        onScroll()
+      }, 500)
+    })
+    onActivated(() => {
+      // 页面激活时设置滚动位置
+      for (const i in tabs) {
+        if (!listRef.value) return
+        listRef.value[i].scrollTop = tabs[i].scrollTop
+      }
     })
 
     const tabs: tabsType = [
-      { label: "最新", value: "news" },
-      { label: "最热", value: "host" },
-      { label: "关注", value: "follow" }
+      { label: "最新", scrollTop: 0 },
+      { label: "最热", scrollTop: 0 },
+      { label: "关注", scrollTop: 0 }
     ]
     const tabActive = ref(0)
     const store = useStore()
@@ -101,10 +111,15 @@ export default {
       })
     }
 
-    const beforeChange = (a: any, b: any, c: any) => {
-      console.log(1)
+    const listRef = ref()
+    const onScroll = () => {
+      for (const i in tabs) {
+        if (!listRef.value[i]) return
 
-      console.log(a, b, c)
+        listRef.value[i].onscroll = (e: any) => {
+          tabs[i].scrollTop = e.target.scrollTop
+        }
+      }
     }
 
     // 下拉刷新(刷新时数据恢复10条，开启上拉加载功能)
@@ -137,12 +152,12 @@ export default {
       getMoment,
       momentList,
       momentDetail,
-      beforeChange,
       listLoad,
       finished,
       isAddLoading,
       onRefresh,
-      isRefresh
+      isRefresh,
+      listRef
     }
   }
 }

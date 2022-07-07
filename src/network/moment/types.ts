@@ -3,6 +3,11 @@ export declare type mometnListBody = {
   limit?: number
   offset?: number
 }
+export declare type cometnListBody = {
+  momentId: string
+  limit?: number
+  offset?: number
+}
 
 export declare type pubMomentBody = {
   content: string

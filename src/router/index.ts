@@ -8,6 +8,10 @@ const routes = [
   {
     path: "/moment",
     component: () => import("@/views/moment/moment.vue")
+    // beforeEnter: (to, from) => {
+    //   if(to.path === "/")
+    //   return false
+    // }
   },
   {
     path: "/pubMoment",

@@ -8,9 +8,11 @@
       </slot>
     </div>
     <div class="right" v-if="isRightShow">
-      <slot name="right">
-        <hqq-tag :value="rightText" class="follow" @click="clickRight"></hqq-tag>
-      </slot>
+      <div @click="clickRight">
+        <slot name="right">
+          <hqq-tag :value="rightText" class="follow"></hqq-tag>
+        </slot>
+      </div>
     </div>
   </div>
 </template>

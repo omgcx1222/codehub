@@ -7,7 +7,9 @@ import {
   replyList,
   pubComment,
   deleteMoment,
-  likeMoment
+  deleteComment,
+  likeMoment,
+  likeComment
 } from "@/network/moment"
 
 import { Module } from "vuex"
@@ -42,9 +44,7 @@ const myModule: Module<ImomentState, IrootState> = {
       const offset = type === "all" ? 0 : store.state.momentList[activeTab]?.length
       const limit = offset + 10
       const res = await momentList({ order: activeTab, offset, limit })
-      if (res.status !== 200) return
-
-      store.commit("changeMomentList", { list: res.data, type, order: activeTab })
+      if (res.status === 200) store.commit("changeMomentList", { list: res.data, type, order: activeTab })
     },
 
     async pubMomentAction(_, payload: pubMomentBody) {
@@ -77,14 +77,20 @@ const myModule: Module<ImomentState, IrootState> = {
       }
     },
 
-    async momentDetailAndCommentListAction({ commit }, momentId: string) {
+    async momentDetailAndCommentListAction(
+      { state, commit },
+      { momentId, type }: { momentId: string; type: changeMomentType }
+    ) {
+      const offset = type === "all" ? 0 : state.commentList?.length
+      const limit = offset + 10
+      // const res = await momentList({ order: activeTab, offset, limit })
       const moment = await momentDetail(momentId)
-      const cList = await commentList(momentId)
+      const cList = await commentList({ momentId, offset, limit })
       if (moment.status === 200) {
         commit("changeMomentDetail", moment.data)
       }
       if (cList.status === 200) {
-        commit("changeCommentList", cList.data)
+        commit("changeCommentList", { list: cList.data, type })
       }
     },
 
@@ -116,11 +122,24 @@ const myModule: Module<ImomentState, IrootState> = {
       }
     },
 
+    async deleteComentAction({ commit }, commentId: number) {
+      const res = await deleteComment(commentId)
+      if (res.status === 200) commit("deleteComment", commentId)
+    },
+
     async likeMomentAction({ commit }, momentId: number) {
       const res = await likeMoment(momentId)
       if (res.status === 200) {
         const isAgree = res.data === "点赞成功" ? 1 : 0
         commit("likeMoment", { momentId, isAgree })
+      }
+    },
+
+    async likeCommentAction({ commit }, commentId: number) {
+      const res = await likeComment(commentId)
+      if (res.status === 200) {
+        const isAgree = res.data === "点赞成功" ? 1 : 0
+        commit("likeComment", { commentId, isAgree })
       }
     }
   },
@@ -129,7 +148,6 @@ const myModule: Module<ImomentState, IrootState> = {
       state.active = index
     },
     changeMomentList(state, payload: IchangeMomentListOption) {
-      if (payload.list.length === 0) return
       if (payload.type === "all") {
         state.momentList[payload.order] = payload.list
       } else if (payload.type === "push") {
@@ -141,8 +159,14 @@ const myModule: Module<ImomentState, IrootState> = {
     changeMomentDetail(state, momentDetail: ImomentDetail) {
       state.momentDetail = momentDetail
     },
-    changeCommentList(state, commentList: Icomment[]) {
-      state.commentList = commentList
+    changeCommentList(state, { list, type }: { list: Icomment[]; type: changeMomentType }) {
+      if (type === "all") {
+        state.commentList = list
+      } else if (type === "push") {
+        state.commentList.push(...list)
+      } else {
+        state.commentList.unshift(...list)
+      }
     },
     changeReplyList(state, replyList: Icomment[]) {
       state.replyList = replyList
@@ -170,11 +194,22 @@ const myModule: Module<ImomentState, IrootState> = {
         }
       }
     },
+    likeComment(state, { commentId, isAgree }: { commentId: number; isAgree: 0 | 1 }) {
+      const c = state.commentList.find((item) => item.id === commentId)
+      if (c) {
+        c.isAgree = isAgree
+        c.agree = isAgree ? c.agree + 1 : c.agree - 1
+      }
+    },
     deleteMoment(state, momentId: number) {
       const m0 = state.momentList[0]?.findIndex((item) => item.momentId === momentId)
       const m1 = state.momentList[1]?.findIndex((item) => item.momentId === momentId)
       if (m0 != -1) state.momentList[0].splice(m0, 1)
       if (m1 != -1) state.momentList[1].splice(m1, 1)
+    },
+    deleteComment(state, commentId: number) {
+      const c = state.commentList.findIndex((item) => item.id === commentId)
+      if (c != -1) state.commentList.splice(c, 1)
     }
   }
 }

@@ -1,13 +1,20 @@
 <template>
   <div class="moment-detail">
-    <van-nav-bar class="nav-bar" left-arrow @click-left="back" @click-right="menu">
+    <van-nav-bar class="nav-bar" left-arrow @click-left="back" @click-right="menuShow">
       <template #right>
         <van-icon name="ellipsis" size="18" />
       </template>
     </van-nav-bar>
 
-    <div class="main">
-      <van-list finished-text="没有更多了">
+    <van-pull-refresh class="main" v-model="isRefresh" @refresh="onRefresh" loading-text="正在刷新...">
+      <van-list
+        finished-text="没有更多了"
+        @load="listLoad"
+        :finished="finished"
+        v-model:loading="isAddLoading"
+        :offset="0"
+        :immediate-check="false"
+      >
         <moment-item :momentData="moment" :row="15" @momentDetail="focus">
           <div class="comment-total">全部评论（{{ commentList.length }}）</div>
         </moment-item>
@@ -33,7 +40,7 @@
           </template>
         </div>
       </van-list>
-    </div>
+    </van-pull-refresh>
 
     <div class="comment-input">
       <hqq-input ref="input" @submit="submit" @focus="focus" @blur="blur" :tip="replyOption.tip"></hqq-input>
@@ -70,7 +77,7 @@
     </van-popup>
 
     <van-action-sheet
-      v-model:show="menuShow"
+      v-model:show="isMenuShow"
       :actions="menuActions"
       cancel-text="取消"
       close-on-click-action
@@ -105,13 +112,13 @@ export default defineComponent({
     const momentId = route.query.id
 
     onMounted(() => {
-      getMomentDetail(momentId as string)
+      getMomentDetail("all")
     })
 
     const moment = computed(() => store.state.momentModule.momentDetail)
     const commentList = computed(() => store.state.momentModule.commentList)
-    const getMomentDetail = async (id: string) => {
-      await store.dispatch("momentModule/momentDetailAndCommentListAction", id)
+    const getMomentDetail = async (type: "all" | "unshift" | "push") => {
+      await store.dispatch("momentModule/momentDetailAndCommentListAction", { momentId: momentId as string, type })
     }
 
     const router = useRouter()
@@ -119,18 +126,18 @@ export default defineComponent({
       router.go(-1)
     }
 
-    const menuShow = ref(false)
+    const isMenuShow = ref(false)
     const menuActions = reactive([
       { name: "举报", disabled: false },
       { name: "删除", disabled: true }
     ])
     const userInfo = computed(() => store.state.userInfo)
-    const menu = () => {
+    const menuShow = () => {
       if ((moment.value as ImomentDetail)?.author?.id === userInfo.value.id) {
         menuActions[0].disabled = true
         menuActions[1].disabled = false
       }
-      menuShow.value = true
+      isMenuShow.value = true
     }
     const menuSelect = (select: any) => {
       if (select.name === "举报") {
@@ -183,13 +190,34 @@ export default defineComponent({
       store.dispatch("momentModule/pubCommentAction", replyOption)
     }
 
+    const isRefresh = ref(false)
+    const onRefresh = async () => {
+      isRefresh.value = true
+      await getMomentDetail("all")
+      isRefresh.value = false
+      finished.value = false
+    }
+
+    const isAddLoading = ref(false)
+    const finished = ref(false)
+    const listLoad = async () => {
+      isAddLoading.value = true
+      const ordL = commentList.value.length
+      await getMomentDetail("push")
+      if (ordL === commentList.value.length) {
+        // 说明已无新数据，关闭上拉加载功能
+        finished.value = true
+      }
+      isAddLoading.value = false
+    }
+
     return {
       moment,
       commentList,
       back,
-      menu,
-      menuActions,
       menuShow,
+      menuActions,
+      isMenuShow,
       menuSelect,
       commentPopupShow,
       clickCommentPopupShow,
@@ -200,7 +228,12 @@ export default defineComponent({
       input,
       popuoInput,
       blur,
-      replyOption
+      replyOption,
+      isRefresh,
+      onRefresh,
+      isAddLoading,
+      finished,
+      listLoad
     }
   }
 })
@@ -226,9 +259,8 @@ export default defineComponent({
   background-color: var(--white-background-color);
 }
 
-.comment-item-header {
+.comment-item {
   border-bottom: 1px solid var(--dark-color1);
-  padding: 15px;
   font-size: 13px;
   color: var(--dark-color3);
   .child-comment {

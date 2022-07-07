@@ -1,5 +1,5 @@
 import { hqqRequest } from "../index"
-import { mometnListBody, pubMomentBody } from "./types"
+import { mometnListBody, pubMomentBody, cometnListBody } from "./types"
 
 export function momentList(payload: mometnListBody) {
   return hqqRequest.request({
@@ -35,13 +35,11 @@ export function momentDetail(momentId: string) {
   })
 }
 
-export function commentList(momentId: string) {
+export function commentList(payload: cometnListBody) {
   return hqqRequest.request({
     method: "get",
     url: "/comment",
-    params: {
-      momentId
-    }
+    params: payload
   })
 }
 
@@ -84,10 +82,32 @@ export function deleteMoment(momentId: number) {
   })
 }
 
+export function deleteComment(commentId: number) {
+  return hqqRequest.request({
+    method: "delete",
+    url: `/comment/${commentId}`,
+    showLoading: {
+      text: "正在删除",
+      errorMessage: true,
+      successMessage: "删除成功"
+    }
+  })
+}
+
 export function likeMoment(momentId: number) {
   return hqqRequest.request({
     method: "post",
     url: `/moment/${momentId}/like`,
+    showLoading: {
+      successMessage: true,
+      icon: false
+    }
+  })
+}
+export function likeComment(commentId: number) {
+  return hqqRequest.request({
+    method: "post",
+    url: `/comment/${commentId}/like`,
     showLoading: {
       successMessage: true,
       icon: false
