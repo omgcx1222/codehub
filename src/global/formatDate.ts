@@ -17,15 +17,15 @@ export default {
       // console.log(dayjs().diff(dayjs.utc(date).format("YYYY-MM-DD HH:mm"), "day"))
 
       const currentDate = dayjs()
-      const byDate = dayjs.utc(date).format("YYYY-MM-DD HH:mm")
+      const oldDate = dayjs.utc(date).format("YYYY-MM-DD HH:mm")
 
-      if (currentDate.diff(byDate, unit) > 1) {
-        if (currentDate.diff(byDate, "year") > 1) {
-          return byDate
+      if (currentDate.diff(oldDate, unit) > 1) {
+        if (currentDate.diff(oldDate, "year") > 1) {
+          return oldDate
         }
         return dayjs.utc(date).format("MM-DD HH:mm")
       }
-      return currentDate.to(byDate)
+      return currentDate.to(oldDate)
     }
   }
 }

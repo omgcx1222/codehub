@@ -39,6 +39,10 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
+.login {
+  height: 100vh;
+  background-color: var(--white-background-color);
+}
 .title {
   display: flex;
   justify-content: space-between;

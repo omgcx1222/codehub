@@ -2,7 +2,7 @@
   <div class="moment">
     <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable animated @change="tabChange">
       <van-tab v-for="(tab, index) in tabs" :title="tab.label" :key="tab.label">
-        <div class="list" ref="listRef">
+        <div class="list" :ref="setListRef">
           <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" loading-text="正在刷新...">
             <van-list
               finished-text="没有更多了"
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted, computed, onActivated, nextTick } from "vue"
+import { ref, onMounted, computed, onActivated, onBeforeUpdate } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 import { tabsType } from "@/views/types"
@@ -54,7 +54,6 @@ export default {
   setup() {
     onMounted(() => {
       getMoment("all")
-      // console.log(listRef.value)
 
       setTimeout(() => {
         onScroll()
@@ -62,13 +61,27 @@ export default {
     })
     onActivated(() => {
       // 页面激活时设置滚动位置
-      nextTick(() => {
-        for (const i in tabs) {
-          if (!listRef.value) return
-          listRef.value[i].scrollTop = tabs[i].scrollTop
-        }
-      })
+      for (const i in tabs) {
+        if (!listRef.value[i]) return
+        listRef.value[i].scrollTop = tabs[i].scrollTop
+      }
     })
+    onBeforeUpdate(() => {
+      listRef.value = []
+    })
+    const listRef = ref<any[]>([])
+    const setListRef = (el: Element) => {
+      listRef.value.push(el)
+    }
+    const onScroll = () => {
+      for (const i in tabs) {
+        if (!listRef.value[i]) return
+
+        listRef.value[i].onscroll = (e: any) => {
+          tabs[i].scrollTop = e.target.scrollTop
+        }
+      }
+    }
 
     const tabs: tabsType = [
       { label: "最新", scrollTop: 0 },
@@ -115,17 +128,6 @@ export default {
       })
     }
 
-    const listRef = ref()
-    const onScroll = () => {
-      for (const i in tabs) {
-        if (!listRef.value[i]) return
-
-        listRef.value[i].onscroll = (e: any) => {
-          tabs[i].scrollTop = e.target.scrollTop
-        }
-      }
-    }
-
     // 下拉刷新(刷新时数据恢复10条，开启上拉加载功能)
     const isRefresh = ref(false)
     const onRefresh = async () => {
@@ -161,7 +163,7 @@ export default {
       isAddLoading,
       onRefresh,
       isRefresh,
-      listRef
+      setListRef
     }
   }
 }

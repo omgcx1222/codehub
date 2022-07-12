@@ -23,7 +23,7 @@
         <div class="time" @click="momentDetail">{{ $formatDate(moment.createTime) }}</div>
         <!-- 插槽：默认转发评论点赞 -->
         <div class="menu">
-          <slot>
+          <slot :moment="moment">
             <van-grid class="van-hairline--top" :column-num="3" :border="false" icon-size="16px" direction="horizontal">
               <van-grid-item icon="share-o" />
               <van-grid-item icon="chat-o" :text="String(moment.commentCount)" @click="momentDetail" />

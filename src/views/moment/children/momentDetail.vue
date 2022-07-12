@@ -16,7 +16,15 @@
         :immediate-check="false"
       >
         <moment-item :momentData="moment" :row="15" @momentDetail="focus">
-          <div class="comment-total">全部评论（{{ commentList.length }}）</div>
+          <template #default="{ moment }">
+            <div class="moment-menu">
+              <span style="flex: 1">全部评论（{{ commentList.length }}）</span>
+              <span :class="moment.isAgree === 1 ? 'is-agree' : ''" @click="likeMoment">
+                <van-icon :name="moment.isAgree === 1 ? 'good-job' : 'good-job-o'" size="22" />
+                <span>{{ moment.agree }}</span>
+              </span>
+            </div>
+          </template>
         </moment-item>
         <div class="comment-item">
           <template v-for="comment in commentList" :key="comment.id">
@@ -198,6 +206,7 @@ export default defineComponent({
       finished.value = false
     }
 
+    // 上拉加载
     const isAddLoading = ref(false)
     const finished = ref(false)
     const listLoad = async () => {
@@ -209,6 +218,10 @@ export default defineComponent({
         finished.value = true
       }
       isAddLoading.value = false
+    }
+
+    const likeMoment = () => {
+      store.dispatch("momentModule/likeMomentAction", Number(momentId))
     }
 
     return {
@@ -233,7 +246,8 @@ export default defineComponent({
       onRefresh,
       isAddLoading,
       finished,
-      listLoad
+      listLoad,
+      likeMoment
     }
   }
 })
@@ -252,8 +266,9 @@ export default defineComponent({
   flex: 1;
   overflow: scroll;
 }
-.comment-total {
+.moment-menu {
   padding: 10px 15px;
+  display: flex;
   border-top: 8px solid var(--dark-color1);
   border-bottom: 2px solid var(--dark-color1);
   background-color: var(--white-background-color);

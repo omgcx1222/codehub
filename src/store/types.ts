@@ -48,7 +48,7 @@ export interface ImomentState {
   momentList: ImomentDetail[][]
   // 0最新，1最热，2关注
   active: 0 | 1 | 2
-  momentDetail: ImomentDetail | object
+  momentDetail: ImomentDetail
   commentList: Icomment[]
   replyList: Icomment[]
 }
@@ -71,10 +71,10 @@ export interface ImomentDetail {
     nickname: string
     avatarUrl: string | null
   }
-  agree: number
+  agree?: number
   authorFans?: number
   images?: string | null
-  isAgree: 0 | 1
+  isAgree?: 0 | 1
 }
 
 export interface Icomment {

@@ -131,7 +131,7 @@ export default defineComponent({
   padding: 20px 20px 0 20px;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: var(--white-background-color);
   label {
     flex: 1;
     display: flex;

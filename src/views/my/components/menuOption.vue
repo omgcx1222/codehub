@@ -1,10 +1,10 @@
 <template>
   <div class="menu-option">
-    <van-cell class="item" title="我的收藏" icon="star-o" :border="false">
+    <!-- <van-cell class="item" title="我的收藏" icon="star-o" :border="false">
       <template #right-icon>
         <van-icon name="arrow" size="16px" />
       </template>
-    </van-cell>
+    </van-cell> -->
     <van-cell class="item" title="我的动态" icon="smile-o" :border="false">
       <template #right-icon>
         <van-icon name="arrow" size="16px" />

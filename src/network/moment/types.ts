@@ -1,5 +1,5 @@
 export declare type mometnListBody = {
-  order?: 0 | 1 | 2
+  order?: 0 | 1 | 2 // 0-最新 1-最热 2-关注
   limit?: number
   offset?: number
 }

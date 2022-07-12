@@ -186,11 +186,16 @@ const myModule: Module<ImomentState, IrootState> = {
       state.commentList.unshift(comment)
     },
     likeMoment(state, { momentId, isAgree }: { momentId: number; isAgree: 0 | 1 }) {
+      const m = state.momentDetail
+      if (m.momentId) {
+        m.isAgree = isAgree
+        m.agree = isAgree ? m.agree! + 1 : m.agree! - 1
+      }
       for (const moment of state.momentList) {
         const m = moment?.find((item) => item.momentId === momentId)
         if (m) {
           m.isAgree = isAgree
-          m.agree = isAgree ? m.agree + 1 : m.agree - 1
+          m.agree = isAgree ? m.agree! + 1 : m.agree! - 1
         }
       }
     },
