@@ -3,6 +3,7 @@ body {
   color: var(--color);
   background-color: var(--background-color);
 }
+
 .is-agree {
   color: var(--agree-color);
 }

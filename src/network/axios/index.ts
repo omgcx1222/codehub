@@ -61,20 +61,18 @@ class HqqRequest {
         return res
       },
       (err) => {
-        if (this.toast) {
-          this.toast?.clear()
-          if (this.requestConfig?.showLoading?.errorMessage) {
-            if (typeof this.requestConfig.showLoading?.errorMessage === "string") {
-              Toast({
-                message: this.requestConfig.showLoading?.errorMessage,
-                icon: this.requestConfig.showLoading?.icon ? "fail" : ""
-              })
-            } else if (typeof this.requestConfig.showLoading?.errorMessage === "boolean") {
-              Toast({
-                message: err.response.data,
-                icon: this.requestConfig.showLoading?.icon ? "fail" : ""
-              })
-            }
+        this.toast?.clear()
+        if (this.requestConfig?.showLoading?.errorMessage) {
+          if (typeof this.requestConfig.showLoading?.errorMessage === "string") {
+            Toast({
+              message: this.requestConfig.showLoading?.errorMessage,
+              icon: this.requestConfig.showLoading?.icon ? "fail" : ""
+            })
+          } else if (typeof this.requestConfig.showLoading?.errorMessage === "boolean") {
+            Toast({
+              message: err.response.data,
+              icon: this.requestConfig.showLoading?.icon ? "fail" : ""
+            })
           }
         }
         this.toast = undefined

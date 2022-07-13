@@ -100,7 +100,8 @@ export function likeMoment(momentId: number) {
     url: `/moment/${momentId}/like`,
     showLoading: {
       successMessage: true,
-      icon: false
+      icon: false,
+      errorMessage: true
     }
   })
 }
@@ -110,7 +111,8 @@ export function likeComment(commentId: number) {
     url: `/comment/${commentId}/like`,
     showLoading: {
       successMessage: true,
-      icon: false
+      icon: false,
+      errorMessage: true
     }
   })
 }
