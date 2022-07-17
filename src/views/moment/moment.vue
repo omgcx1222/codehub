@@ -20,12 +20,12 @@
               </template>
               <!-- 加载数据时先展示骨架屏 -->
               <template v-else>
-                <div class="item" v-for="item in [{}, {}, {}, {}, {}]" :key="item.momentId">
+                <div class="item" v-for="(item, i) in [{}, {}, {}, {}, {}]" :key="i">
                   <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
                 </div>
               </template>
             </van-list>
-            <van-empty description="关注人没有发布过动态" v-else />
+            <van-empty description="没有动态" v-else />
           </van-pull-refresh>
         </div>
       </van-tab>
@@ -142,12 +142,13 @@ export default {
     const listLoad = async () => {
       isAddLoading.value = true
       const ordL = momentList.value[tabActive.value]?.length
-      await getMoment("push")
-      if (ordL === momentList.value[tabActive.value]?.length) {
-        // 说明已无新数据，关闭上拉加载功能
-        finished.value = true
-      }
-      isAddLoading.value = false
+      await getMoment("push").then(() => {
+        if (ordL === momentList.value[tabActive.value]?.length) {
+          // 说明已无新数据，关闭上拉加载功能
+          finished.value = true
+        }
+        isAddLoading.value = false
+      })
     }
 
     return {

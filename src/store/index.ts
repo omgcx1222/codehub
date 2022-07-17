@@ -38,6 +38,13 @@ export function useStore() {
 // main.ts中调用初始化（根据本地缓存登录）
 export function initLogin() {
   store.dispatch("loginModule/localLoginAction")
+  const socket = new WebSocket("ws://192.168.31.94:80/socket")
+  socket.onmessage = (e) => {
+    console.log(e)
+  }
+  socket.onopen = () => {
+    socket.send("111111")
+  }
 }
 
 export default store
