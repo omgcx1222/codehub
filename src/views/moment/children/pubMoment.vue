@@ -105,6 +105,9 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
+.pub-moment {
+  height: 100vh;
+}
 .pub-nav-bar {
   display: flex;
   justify-content: space-between;

@@ -107,7 +107,7 @@ export default {
     const getMoment = async (type: "all" | "push" | "unshift") => {
       const currentIndex = tabActive.value //记录本次执行的激活的tab，以免被快速切换tab影响
       await store.dispatch("momentModule/momentListAction", type)
-      if (!momentList.value[currentIndex]) {
+      if (momentList.value[currentIndex].length === 0) {
         setTimeout(() => {
           isNull.value = currentIndex
         }, 500)
@@ -173,7 +173,7 @@ export default {
 <style lang="less" scoped>
 .moment {
   width: 100%;
-  height: calc(100vh - 50px);
+  height: calc(100% - 50px);
   overflow: scroll;
   position: relative;
 }
