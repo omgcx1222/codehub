@@ -26,7 +26,7 @@
         :max-count="9"
         :max-size="20 * 1024 * 1024"
         @oversize="onOversize"
-        preview-size="100"
+        preview-size="92"
       />
     </div>
   </div>
@@ -35,15 +35,18 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue"
 import { useStore } from "vuex"
-import { useRouter } from "vue-router"
 import { Toast } from "vant"
 
 export default defineComponent({
   name: "pubMoment",
-  setup() {
-    const router = useRouter()
-    const back = () => {
-      router.go(-1)
+  emits: ["back"],
+  setup(_, { emit }) {
+    const back = (clear: boolean) => {
+      if (clear) {
+        message.value = ""
+        fileList.value = []
+      }
+      emit("back")
     }
 
     const message = ref("")
@@ -89,7 +92,7 @@ export default defineComponent({
       Toast.success(tip)
       if (tip === "发布成功") {
         store.dispatch("momentModule/pubSuccess")
-        back()
+        back(true)
       }
     }
 
@@ -106,7 +109,9 @@ export default defineComponent({
 
 <style scoped lang="less">
 .pub-moment {
-  height: 100vh;
+  width: 100%;
+  // height: 100vh;
+  background-color: var(--white-background-color);
 }
 .pub-nav-bar {
   display: flex;
@@ -122,6 +127,7 @@ export default defineComponent({
   }
 }
 .upload {
+  width: 300px;
   margin: 25px 20px 15px;
 }
 </style>

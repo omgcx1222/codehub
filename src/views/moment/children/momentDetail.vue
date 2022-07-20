@@ -95,8 +95,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, reactive, computed } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { defineComponent, ref, reactive, computed, watch } from "vue"
 import { useStore } from "@/store"
 import { Icomment, ImomentDetail } from "@/store/types"
 
@@ -114,24 +113,33 @@ export default defineComponent({
     commentItem,
     hqqMessage
   },
-  setup() {
-    const route = useRoute()
+  props: {
+    id: {
+      type: Number
+    }
+  },
+  emits: ["back"],
+  setup(props, { emit }) {
     const store = useStore()
-    const momentId = route.query.id
 
-    onMounted(() => {
-      getMomentDetail("all")
-    })
+    // const momentId = route.query.id
+    const momentId = computed(() => props.id)
+
+    // onMounted(() => {
+    //   getMomentDetail("all")
+    // })
 
     const moment = computed(() => store.state.momentModule.momentDetail)
     const commentList = computed(() => store.state.momentModule.commentList)
     const getMomentDetail = async (type: "all" | "unshift" | "push") => {
-      await store.dispatch("momentModule/momentDetailAndCommentListAction", { momentId: momentId as string, type })
+      await store.dispatch("momentModule/momentDetailAndCommentListAction", { momentId: momentId.value, type })
     }
 
-    const router = useRouter()
     const back = () => {
-      router.go(-1)
+      // router.go(-1)
+      store.commit("momentModule/changeMomentDetail", [])
+      store.commit("momentModule/changeCommentList", { list: [], type: "all" })
+      emit("back")
     }
 
     const isMenuShow = ref(false)
@@ -154,7 +162,7 @@ export default defineComponent({
           Toast.success("已举报")
         }, 500)
       } else if (select.name === "删除") {
-        store.dispatch("momentModule/deleteMomentAction", Number(momentId as string))
+        store.dispatch("momentModule/deleteMomentAction", momentId.value)
       }
     }
 
@@ -170,7 +178,7 @@ export default defineComponent({
     const input = ref<InstanceType<typeof hqqInput>>()
     const popuoInput = ref<InstanceType<typeof hqqInput>>()
     const replyOption = reactive({
-      momentId: "",
+      momentId: 0,
       commentId: "",
       replyId: "",
       content: "",
@@ -178,7 +186,7 @@ export default defineComponent({
     })
     const focus = (mId: any, cId: any, rId: any, name: any) => {
       // console.log(mId, cId, rId, name)
-      replyOption.momentId = momentId as string
+      replyOption.momentId = momentId.value ?? 0
       replyOption.commentId = cId
       replyOption.replyId = rId
       replyOption.tip = name ? `回复 @${name} : ` : "评论动态"
@@ -221,9 +229,20 @@ export default defineComponent({
     }
 
     const likeMoment = () => {
-      store.dispatch("momentModule/likeMomentAction", Number(momentId))
+      store.dispatch("momentModule/likeMomentAction", momentId.value)
     }
 
+    watch(
+      props,
+      (props) => {
+        if (props.id && props.id >= 0) {
+          getMomentDetail("all")
+        }
+      },
+      {
+        immediate: true
+      }
+    )
     return {
       moment,
       commentList,

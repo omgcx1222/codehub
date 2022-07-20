@@ -21,7 +21,7 @@
               <!-- 加载数据时先展示骨架屏 -->
               <template v-else>
                 <div class="item" v-for="(item, i) in [{}, {}, {}, {}, {}]" :key="i">
-                  <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
+                  <moment-item :momentData="item" :row="5"></moment-item>
                 </div>
               </template>
             </van-list>
@@ -33,23 +33,42 @@
 
     <!-- 悬浮按钮 -->
     <div class="suspension">
-      <van-button class="pub-button" icon="edit" type="primary" round to="/pubMoment" />
+      <!-- <van-button class="pub-button" icon="edit" type="primary" round to="/pubMoment" /> -->
+      <van-button class="pub-button" icon="edit" type="primary" round @click="pubMomentShow = true" />
+    </div>
+
+    <div class="pub-box" :style="{ 'z-index': pubMomentShow ? '999' : '0' }">
+      <transition name="pub-moment">
+        <pub-moment v-show="pubMomentShow" class="pub-moment" @back="pubMomentShow = false"></pub-moment>
+      </transition>
     </div>
   </div>
+  <transition name="moment-detail">
+    <moment-detail
+      class="moment-detail"
+      v-show="momentDetailId >= 0"
+      :id="momentDetailId"
+      @back="momentDetailId = -1"
+    ></moment-detail>
+  </transition>
 </template>
 
 <script lang="ts">
 import { ref, onMounted, computed, onActivated, onBeforeUpdate } from "vue"
-import { useRouter } from "vue-router"
+// import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 import { tabsType } from "@/views/types"
 
+import pubMoment from "./children/pubMoment.vue"
 import momentItem from "./components/momentItem.vue"
+import momentDetail from "./children/momentDetail.vue"
 
 export default {
   name: "moment",
   components: {
-    momentItem
+    momentItem,
+    pubMoment,
+    momentDetail
   },
   setup() {
     onMounted(() => {
@@ -118,14 +137,16 @@ export default {
       }
     }
 
-    const router = useRouter()
+    // const router = useRouter()
+    const momentDetailId = ref(-1)
     const momentDetail = (id: number) => {
-      router.push({
-        path: "/momentDetail",
-        query: {
-          id
-        }
-      })
+      momentDetailId.value = id
+      // router.push({
+      //   path: "/momentDetail",
+      //   query: {
+      //     id
+      //   }
+      // })
     }
 
     // 下拉刷新(刷新时数据恢复10条，开启上拉加载功能)
@@ -151,6 +172,8 @@ export default {
       })
     }
 
+    const pubMomentShow = ref(false)
+
     return {
       isNull,
       tabs,
@@ -164,7 +187,9 @@ export default {
       isAddLoading,
       onRefresh,
       isRefresh,
-      setListRef
+      setListRef,
+      pubMomentShow,
+      momentDetailId
     }
   }
 }
@@ -179,14 +204,18 @@ export default {
 }
 .suspension {
   position: absolute;
-  bottom: 25px;
+  top: 88%;
   right: 20px;
+  box-shadow: 0 0 8px #000;
+  border-radius: 50%;
   .pub-button {
     width: 45px;
     height: 45px;
   }
+  z-index: 1;
 }
 .vant-tabs {
+  z-index: 1;
   // tab的header
   :deep(.van-tabs__wrap) {
     background-color: var(--white-background-color);
@@ -230,5 +259,59 @@ export default {
     // padding: 15px 15px 0;
     margin: 15px;
   }
+}
+.pub-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: z-index 0.2s linear;
+  .pub-moment {
+    position: absolute;
+    width: 90%;
+    margin: 0 auto;
+    // height: 100%;
+    top: 5%;
+    right: 5%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #bbb;
+    transform: scale(1);
+  }
+  // 动画
+  .pub-moment-enter-active,
+  .pub-moment-leave-active {
+    transition: all 0.2s linear;
+  }
+  .pub-moment-enter-from,
+  .pub-moment-leave-to {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    top: 88%;
+    right: 20px;
+    box-shadow: 0 0 5px #fff;
+    transform: scale(0);
+  }
+}
+.moment-detail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  border-radius: 0;
+}
+.moment-detail-enter-active,
+.moment-detail-leave-active {
+  transition: all 0.3s ease;
+}
+.moment-detail-enter-from,
+.moment-detail-leave-to {
+  // width: 300px;
+  // height: 100px;
+  // top: 100px;
+  // left: 50%;
+  transform: scale(0.6, 0.1);
+  opacity: 0;
 }
 </style>

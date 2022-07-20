@@ -13,13 +13,13 @@ const routes = [
     //   return false
     // }
   },
-  {
-    path: "/pubMoment",
-    component: () => import("@/views/moment/children/pubMoment.vue"),
-    meta: {
-      tabbarHidden: true
-    }
-  },
+  // {
+  //   path: "/pubMoment",
+  //   component: () => import("@/views/moment/children/pubMoment.vue"),
+  //   meta: {
+  //     tabbarHidden: true
+  //   }
+  // },
   {
     path: "/momentDetail",
     component: () => import("@/views/moment/children/momentDetail.vue"),
