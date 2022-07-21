@@ -53,7 +53,7 @@ const myModule: Module<ImomentState, IrootState> = {
     },
 
     async refreshMomentListAction(store) {
-      store.dispatch("momentListAction", "all")
+      await store.dispatch("momentListAction", "all")
     },
     async pubSuccess(store) {
       store.dispatch("momentListAction", "all")

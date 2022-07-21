@@ -9,7 +9,8 @@ export function follow(followId: number) {
     },
     showLoading: {
       successMessage: true,
-      icon: false
+      icon: false,
+      errorMessage: true
     }
   })
 }

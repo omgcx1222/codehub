@@ -8,6 +8,7 @@
           :img="moment.author.avatarUrl ?? undefined"
           :name="moment.author.nickname"
           :message="moment.authorFans + ' 粉丝'"
+          :rightText="moment.isFans ? '已关注' : '关注'"
           @clickRight="follow(moment.author.id)"
         ></hqq-header>
         <!-- 文字和图片 -->
@@ -15,7 +16,7 @@
           <div class="text">{{ moment.content }}</div>
           <van-grid square :column-num="3" :border="false">
             <van-grid-item v-for="(img, index) in moment.images" :key="img">
-              <van-image class="img" :src="img" fit="cover" position="center" @click.stop="clickImg(index)" />
+              <van-image class="img" :src="img" fit="cover" position="center" @click.stop="clickImg(index)" lazy-load />
             </van-grid-item>
           </van-grid>
         </div>

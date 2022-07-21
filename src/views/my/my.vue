@@ -21,6 +21,7 @@
 import { defineComponent, computed } from "vue"
 import { useStore } from "@/store"
 import { useRouter } from "vue-router"
+import { Dialog } from "vant"
 
 import hqqHeader from "@/components/hqqHeader.vue"
 import menuHeader from "./components/menuHeader.vue"
@@ -43,7 +44,11 @@ export default defineComponent({
           path: "/login"
         })
       } else {
-        store.dispatch("loginModule/loginOutAction")
+        Dialog.confirm({
+          message: "是否退出登录"
+        }).then(() => {
+          store.dispatch("loginModule/loginOutAction")
+        })
       }
     }
     return {

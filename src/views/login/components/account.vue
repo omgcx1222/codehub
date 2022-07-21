@@ -33,6 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, computed } from "vue"
+import { useRouter } from "vue-router"
 import { useStore } from "vuex"
 import { Toast } from "vant"
 
@@ -92,11 +93,15 @@ export default defineComponent({
       }
     }
 
+    const router = useRouter()
     const clickLogin = async () => {
       validator()
       if (tip === "") {
         if (loginType.value === "login") {
-          store.dispatch("loginModule/loginAction", { ...userInfo })
+          const res = await store.dispatch("loginModule/loginAction", { ...userInfo })
+          if (res) {
+            router.go(-1)
+          }
         } else {
           store.dispatch("loginModule/registerAction", { ...userInfo })
         }

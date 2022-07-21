@@ -3,7 +3,12 @@
     <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable animated @change="tabChange">
       <van-tab v-for="(tab, index) in tabs" :title="tab.label" :key="tab.label">
         <div class="list" :ref="setListRef">
-          <van-pull-refresh v-model="isRefresh" @refresh="onRefresh" loading-text="正在刷新...">
+          <van-pull-refresh
+            v-model="isRefresh"
+            @refresh="onRefresh"
+            loading-text="正在刷新..."
+            :style="isNull === index ? 'height: 100%' : ''"
+          >
             <van-list
               finished-text="没有更多了"
               v-if="isNull !== index"
@@ -25,7 +30,7 @@
                 </div>
               </template>
             </van-list>
-            <van-empty description="没有动态" v-else />
+            <van-empty description="没有动态了ヽ(*。>Д<)o゜" v-else />
           </van-pull-refresh>
         </div>
       </van-tab>
@@ -199,7 +204,7 @@ export default {
 .moment {
   width: 100%;
   height: calc(100% - 50px);
-  overflow: scroll;
+  overflow: hidden;
   position: relative;
 }
 .suspension {
@@ -307,11 +312,13 @@ export default {
 }
 .moment-detail-enter-from,
 .moment-detail-leave-to {
-  // width: 300px;
-  // height: 100px;
-  // top: 100px;
-  // left: 50%;
-  transform: scale(0.6, 0.1);
+  width: 90%;
+  height: 200px;
+  top: 400px;
+  left: 5%;
+  border-radius: 10%;
+  // transform: translateX(-50%);
+  // transform: scale(0.6, 0.1);
   opacity: 0;
 }
 </style>
