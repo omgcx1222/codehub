@@ -18,7 +18,7 @@ const loginModule: Module<IloginState, IrootState> = {
       if (res.status === 200) {
         store.commit("changeUserInfo", res.data, { root: true })
         setStorage("userInfo", res.data)
-        socket.send({ type: "connect", data: { userInfo: store.rootState.userInfo } })
+        socket.send({ type: "login", data: { token: res.data.token } })
         // 返回登录成功，让路由跳转
         return true
       }

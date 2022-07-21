@@ -13,6 +13,7 @@ class Socket {
     this.socket.onopen = (s: any) => {
       if (s.target.readyState === 1) {
         this.state = 1
+        this.send({ type: "login" })
       }
     }
     this.socket.onmessage = (msg) => {
