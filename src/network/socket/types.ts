@@ -1,6 +1,5 @@
-export type messageType = "login" | "chat" | "system" | "chatMessage"
+export type messageType = "login" | "chat" | "system" | "sendPublicChat"
 export type sendDataType = {
   type: messageType
   data?: any
-  token?: string
 }

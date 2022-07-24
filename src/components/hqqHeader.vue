@@ -1,7 +1,7 @@
 <template>
   <div class="hqq-header">
-    <img class="img" :src="img" alt="" @click="clickTitle" />
-    <div class="title" @click="clickTitle">
+    <img class="img" :src="img" alt="" @click="clickTitle" :style="`width: ${size}; height: ${size}`" />
+    <div class="title" @click="clickTitle" :style="`min-height: ${size}`">
       <div class="name">{{ name }}</div>
       <slot name="message">
         <div class="message">{{ message }}</div>
@@ -29,7 +29,7 @@ export default defineComponent({
     },
     name: {
       type: String,
-      default: "title"
+      default: "name"
     },
     message: {
       type: String,
@@ -42,6 +42,10 @@ export default defineComponent({
     isRightShow: {
       type: Boolean,
       default: true
+    },
+    size: {
+      type: String,
+      default: "40px"
     }
   },
   setup(_, { emit }) {
@@ -65,13 +69,13 @@ export default defineComponent({
   align-items: flex-start;
   // margin-bottom: 25px;
   .img {
-    width: 40px;
-    height: 40px;
+    // width: 50px;
+    // height: 50px;
     border-radius: 50%;
   }
   .title {
     flex: 1;
-    min-height: 40px;
+    // min-height: 50px;
     display: flex;
     flex-direction: column;
     margin-left: 12px;

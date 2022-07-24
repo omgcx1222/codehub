@@ -6,6 +6,7 @@
         :name="userInfo.nickname ?? '未登录'"
         :message="userInfo.signature ?? '因为个性所以没签名'"
         :rightText="userInfo.id ? '退出登录' : '去登录'"
+        size="60px"
         @clickRight="login"
       ></hqq-header>
     </div>
@@ -71,13 +72,13 @@ export default defineComponent({
 .header {
   font-size: 15px;
   padding: 50px 15px 30px;
-  :deep(.img) {
-    width: 60px;
-    height: 60px;
-  }
-  :deep(.title) {
-    min-height: 60px;
-  }
+  // :deep(.img) {
+  //   width: 60px;
+  //   height: 60px;
+  // }
+  // :deep(.title) {
+  //   min-height: 60px;
+  // }
   :deep(.name) {
     font-weight: 600;
   }

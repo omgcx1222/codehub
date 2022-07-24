@@ -1,4 +1,5 @@
 import { sendDataType } from "./types"
+import { getStorage } from "@/utils/localStorage"
 
 class Socket {
   socket: WebSocket
@@ -13,7 +14,11 @@ class Socket {
     this.socket.onopen = (s: any) => {
       if (s.target.readyState === 1) {
         this.state = 1
-        this.send({ type: "login" })
+        const userInfo = getStorage("userInfo")
+        this.send({ type: "login", data: { userInfo } })
+        setTimeout(() => {
+          this.send({ type: "sendPublicChat", data: { userInfo, chatId: 1, message: 666 } })
+        }, 2000)
       }
     }
     this.socket.onmessage = (msg) => {

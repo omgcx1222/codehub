@@ -13,10 +13,11 @@
       <span>收到的赞</span>
     </div>
     <div>
-      <span>
+      <!-- <span>
         <van-icon name="friends" size="28px" color="#ffd01e" badge="99+" />
-      </span>
-      <span>大聊天室</span>
+      </span> -->
+      <span>在线用户：9</span>
+      <span>游客：9</span>
     </div>
   </div>
 </template>
@@ -36,6 +37,7 @@ export default defineComponent({
   display: flex;
   padding: 10px 0;
   background-color: var(--white-background-color);
+  // border-bottom: 8px solid var(--dark-color1);
   div {
     flex: 1;
     display: flex;

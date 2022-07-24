@@ -262,7 +262,7 @@ export default {
   }
   .item {
     // padding: 15px 15px 0;
-    margin: 15px;
+    margin: 15px 10px;
   }
 }
 .pub-box {
