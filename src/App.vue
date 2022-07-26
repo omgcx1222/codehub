@@ -1,6 +1,7 @@
 <template>
   <router-view v-slot="{ Component }">
-    <keep-alive :exclude="['pubMoment', 'momentDetail']">
+    <!-- <keep-alive :exclude="['pubMoment', 'momentDetail']"> -->
+    <keep-alive>
       <component :is="Component" />
     </keep-alive>
   </router-view>

@@ -1,8 +1,8 @@
 <template>
   <div class="moment">
     <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable animated @change="tabChange">
-      <van-tab v-for="(tab, index) in tabs" :title="tab.label" :key="tab.label">
-        <div class="list" :ref="setListRef">
+      <van-tab v-for="(tab, index) in tabs" :title="tab" :key="tab">
+        <div class="list">
           <van-pull-refresh
             v-model="isRefresh"
             @refresh="onRefresh"
@@ -19,8 +19,8 @@
               :immediate-check="false"
             >
               <template v-if="momentList[index]">
-                <div class="item" v-for="item in momentList[index]" :key="item.momentId">
-                  <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
+                <div class="item" ref="momentItemRef" v-for="(item, index) in momentList[index]" :key="item.momentId">
+                  <moment-item :momentData="item" :row="5" @momentDetail="momentDetail($event, index)"></moment-item>
                 </div>
               </template>
               <!-- 加载数据时先展示骨架屏 -->
@@ -39,34 +39,37 @@
     <!-- 悬浮按钮 -->
     <div class="suspension">
       <!-- <van-button class="pub-button" icon="edit" type="primary" round to="/pubMoment" /> -->
-      <van-button class="pub-button" icon="edit" type="primary" round @click="pubMomentShow = true" />
+      <van-button class="pub-button" icon="edit" type="primary" round @click="pubMomentShow = !pubMomentShow" />
     </div>
 
-    <div class="pub-box" :style="{ 'z-index': pubMomentShow ? '999' : '0' }">
+    <!-- 发布动态 -->
+    <div class="pub-box" :style="{ 'z-index': pubMomentShow ? '8' : '0' }">
       <transition name="pub-moment">
         <pub-moment v-show="pubMomentShow" class="pub-moment" @back="pubMomentShow = false"></pub-moment>
       </transition>
     </div>
+    <!-- 动态详情 -->
+    <transition name="moment-detail">
+      <moment-detail
+        :style="momentDetailStyle"
+        class="moment-detail"
+        v-show="momentDetailId >= 0"
+        :id="momentDetailId"
+        @back="momentDetail(-1)"
+      ></moment-detail>
+    </transition>
   </div>
-  <transition name="moment-detail">
-    <moment-detail
-      class="moment-detail"
-      v-show="momentDetailId >= 0"
-      :id="momentDetailId"
-      @back="momentDetailId = -1"
-    ></moment-detail>
-  </transition>
 </template>
 
 <script lang="ts">
-import { ref, onMounted, computed, onActivated, onBeforeUpdate } from "vue"
+import { ref, reactive, onMounted, computed } from "vue"
 // import { useRouter } from "vue-router"
 import { useStore } from "@/store"
-import { tabsType } from "@/views/types"
 
 import pubMoment from "./children/pubMoment.vue"
 import momentItem from "./components/momentItem.vue"
 import momentDetail from "./children/momentDetail.vue"
+import { useRect } from "@vant/use"
 
 export default {
   name: "moment",
@@ -78,40 +81,9 @@ export default {
   setup() {
     onMounted(() => {
       getMoment("all")
-
-      setTimeout(() => {
-        onScroll()
-      })
     })
-    onActivated(() => {
-      // 页面激活时设置滚动位置
-      for (const i in tabs) {
-        if (!listRef.value[i]) return
-        listRef.value[i].scrollTop = tabs[i].scrollTop
-      }
-    })
-    onBeforeUpdate(() => {
-      listRef.value = []
-    })
-    const listRef = ref<any[]>([])
-    const setListRef = (el: Element) => {
-      listRef.value.push(el)
-    }
-    const onScroll = () => {
-      for (const i in tabs) {
-        if (!listRef.value[i]) return
 
-        listRef.value[i].onscroll = (e: any) => {
-          tabs[i].scrollTop = e.target.scrollTop
-        }
-      }
-    }
-
-    const tabs: tabsType = [
-      { label: "最新", scrollTop: 0 },
-      { label: "最热", scrollTop: 0 },
-      { label: "关注", scrollTop: 0 }
-    ]
+    const tabs = ["最新", "最热", "关注"]
     const tabActive = ref(0)
     const store = useStore()
     const momentList = computed(() => store.state.momentModule.momentList)
@@ -142,16 +114,38 @@ export default {
       }
     }
 
-    // const router = useRouter()
+    // 动态详情
     const momentDetailId = ref(-1)
-    const momentDetail = (id: number) => {
-      momentDetailId.value = id
-      // router.push({
-      //   path: "/momentDetail",
-      //   query: {
-      //     id
-      //   }
-      // })
+    const momentItemRef = ref()
+    const momentDetailStyle = ref("")
+    const itemInfo = reactive({
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0
+    })
+    const momentDetail = (id: number, index?: number) => {
+      if (typeof index === "number") {
+        momentDetailId.value = id
+        const item = useRect(momentItemRef.value[index])
+        console.log(itemInfo)
+
+        const { top, left, height, width } = item
+        itemInfo.top = top
+        itemInfo.left = left
+        itemInfo.height = height
+        itemInfo.width = width
+
+        momentDetailStyle.value = `top: ${top}px; left: ${left}px; width: ${width}px; height: ${height}px; opacity: 0; transform: scale(0.8);`
+        setTimeout(() => {
+          momentDetailStyle.value = ""
+        })
+      } else {
+        momentDetailStyle.value = `top: ${itemInfo.top}px; left: ${itemInfo.left}px; width: ${itemInfo.width}px; height: ${itemInfo.height}px; opacity: 0;`
+        setTimeout(() => {
+          momentDetailId.value = id
+        }, 200)
+      }
     }
 
     // 下拉刷新(刷新时数据恢复10条，开启上拉加载功能)
@@ -192,9 +186,10 @@ export default {
       isAddLoading,
       onRefresh,
       isRefresh,
-      setListRef,
       pubMomentShow,
-      momentDetailId
+      momentDetailId,
+      momentDetailStyle,
+      momentItemRef
     }
   }
 }
@@ -217,7 +212,7 @@ export default {
     width: 45px;
     height: 45px;
   }
-  z-index: 1;
+  z-index: 9;
 }
 .vant-tabs {
   z-index: 1;
@@ -271,7 +266,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  transition: z-index 0.2s linear;
+  transition: z-index 0.2s ease-out;
   .pub-moment {
     position: absolute;
     width: 90%;
@@ -286,7 +281,7 @@ export default {
   // 动画
   .pub-moment-enter-active,
   .pub-moment-leave-active {
-    transition: all 0.2s linear;
+    transition: all 0.2s ease-out;
   }
   .pub-moment-enter-from,
   .pub-moment-leave-to {
@@ -301,24 +296,22 @@ export default {
 }
 .moment-detail {
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  border-radius: 0;
+  top: 3%;
+  left: 3%;
+  width: 94%;
+  height: 94%;
+  z-index: 10;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #bbb;
+  transition: all 0.2s ease-out;
+  transform: scale(1);
 }
-.moment-detail-enter-active,
-.moment-detail-leave-active {
-  transition: all 0.3s ease;
-}
-.moment-detail-enter-from,
-.moment-detail-leave-to {
-  width: 90%;
-  height: 200px;
-  top: 400px;
-  left: 5%;
-  border-radius: 10%;
-  // transform: translateX(-50%);
-  // transform: scale(0.6, 0.1);
-  opacity: 0;
-}
+// .moment-detail-enter-active,
+// .moment-detail-leave-active {
+//   transition: all 0.3s ease;
+// }
+// .moment-detail-enter-from,
+// .moment-detail-leave-to {
+//   left: 100%;
+// }
 </style>

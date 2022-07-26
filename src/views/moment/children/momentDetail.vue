@@ -63,7 +63,7 @@
     >
       <div class="popup">
         <div class="title">评论详情</div>
-        <div class="main">
+        <div class="list">
           <van-list finished-text="没有更多了">
             <!-- 一级评论 -->
             <comment-item :comment="firstComment" :isShowReplyText="false" @focus="focus"></comment-item>
@@ -324,7 +324,7 @@ export default defineComponent({
     font-size: 14px;
     box-shadow: 0 1px 10px #ebebeb;
   }
-  .main {
+  .list {
     flex: 1;
   }
   .tip {

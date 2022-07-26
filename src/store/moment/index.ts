@@ -23,7 +23,6 @@ import {
   changeMomentType
 } from "../types"
 import { pubMomentBody } from "@/network/moment/types"
-// import { commentList as cl } from "@/views/types"
 
 const myModule: Module<ImomentState, IrootState> = {
   namespaced: true,
