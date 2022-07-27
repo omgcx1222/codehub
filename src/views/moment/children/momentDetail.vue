@@ -1,6 +1,6 @@
 <template>
   <div class="moment-detail">
-    <van-nav-bar class="nav-bar" left-arrow @click-left="back" @click-right="menuShow">
+    <van-nav-bar left-arrow @click-left="back" @click-right="menuShow">
       <template #right>
         <van-icon name="ellipsis" size="18" />
       </template>
@@ -15,6 +15,7 @@
         :offset="0"
         :immediate-check="false"
       >
+        <!-- 动态详情 -->
         <moment-item :momentData="moment" :row="15" @momentDetail="focus">
           <template #default="{ moment }">
             <div class="moment-menu">
@@ -26,6 +27,8 @@
             </div>
           </template>
         </moment-item>
+
+        <!-- 评论列表 -->
         <div class="comment-item">
           <template v-for="comment in commentList" :key="comment.id">
             <comment-item :comment="comment" :isShowReplyText="false" @focus="focus">
@@ -35,7 +38,7 @@
                   <hqq-message
                     :name="reply.author?.nickname"
                     :byName="reply.replyAuthor?.nickname"
-                    :message="reply.content"
+                    :message="' : ' + reply.content"
                     :isShowReplyText="!!reply.replyAuthor"
                   ></hqq-message>
                 </div>
@@ -97,7 +100,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, watch } from "vue"
+import { defineComponent, ref, reactive, computed, onMounted } from "vue"
 import { useStore } from "@/store"
 import { Icomment, ImomentDetail } from "@/store/types"
 
@@ -127,9 +130,11 @@ export default defineComponent({
     // const momentId = route.query.id
     const momentId = computed(() => props.id)
 
-    // onMounted(() => {
-    //   getMomentDetail("all")
-    // })
+    onMounted(() => {
+      // setTimeout(() => {
+      getMomentDetail("all")
+      // }, 300)
+    })
 
     const moment = computed(() => store.state.momentModule.momentDetail)
     const commentList = computed(() => store.state.momentModule.commentList)
@@ -140,12 +145,13 @@ export default defineComponent({
     const back = () => {
       emit("back")
       setTimeout(() => {
-        // 动画完成再清空数据
+        // 关闭的动画完成再清空数据
         store.commit("momentModule/changeMomentDetail", [])
         store.commit("momentModule/changeCommentList", { list: [], type: "all" })
       }, 300)
     }
 
+    // 右上角三个点操作
     const isMenuShow = ref(false)
     const menuActions = reactive([
       { name: "举报", disabled: false },
@@ -170,6 +176,7 @@ export default defineComponent({
       }
     }
 
+    // 评论详情弹出框
     const commentPopupShow = ref(false)
     const firstComment: any = ref({})
     const replyList = computed(() => store.state.momentModule.replyList)
@@ -237,20 +244,20 @@ export default defineComponent({
       store.dispatch("momentModule/likeMomentAction", momentId.value)
     }
 
-    watch(
-      props,
-      (props) => {
-        if (props.id && props.id >= 0) {
-          setTimeout(() => {
-            // 动画完成再请求数据
-            getMomentDetail("all")
-          }, 300)
-        }
-      },
-      {
-        immediate: true
-      }
-    )
+    // watch(
+    //   props,
+    //   (props) => {
+    //     if (props.id && props.id >= 0) {
+    //       setTimeout(() => {
+    //         // 动画完成再请求数据
+    //         getMomentDetail("all")
+    //       }, 300)
+    //     }
+    //   },
+    //   {
+    //     immediate: true
+    //   }
+    // )
     return {
       moment,
       commentList,

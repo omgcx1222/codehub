@@ -1,8 +1,8 @@
 <template>
-  <div class="hqq-header">
+  <div class="hqq-header" :style="{ 'flex-direction': direction == 'left' ? '' : 'row-reverse' }">
     <img class="img" :src="img" alt="" @click="clickTitle" :style="`width: ${size}; height: ${size}`" />
     <div class="title" @click="clickTitle" :style="`min-height: ${size}`">
-      <div class="name">{{ name }}</div>
+      <div class="name" :style="{ 'text-align': direction == 'left' ? 'left' : 'right' }">{{ name }}</div>
       <slot name="message">
         <div class="message">{{ message }}</div>
       </slot>
@@ -46,6 +46,10 @@ export default defineComponent({
     size: {
       type: String,
       default: "40px"
+    },
+    direction: {
+      type: String,
+      default: "left"
     }
   },
   setup(_, { emit }) {
@@ -78,7 +82,7 @@ export default defineComponent({
     // min-height: 50px;
     display: flex;
     flex-direction: column;
-    margin-left: 12px;
+    margin: 0 12px;
     justify-content: space-around;
     .message {
       font-size: 12px;

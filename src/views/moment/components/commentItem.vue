@@ -13,7 +13,7 @@
           class="content"
           :isShowReplyText="isShowReplyText"
           :byName="comment.replyAuthor?.nickname"
-          :message="comment.content"
+          :message="' : ' + comment.content"
           v-if="isShowReplyText"
           @click="focus"
         ></hqq-message>

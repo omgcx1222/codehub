@@ -50,7 +50,7 @@ import { ImomentDetail } from "@/store/types"
 import hqqHeader from "@/components/hqqHeader.vue"
 
 export default defineComponent({
-  emits: ["momentDetail", "focus"],
+  emits: ["momentDetail"],
   components: {
     hqqHeader
   },

@@ -5,7 +5,7 @@
       <span> 回复 </span>
       <span style="color: var(--van-blue)">{{ "@" + byName }}</span>
     </span>
-    <span> : </span>
+    <!-- <span> : </span> -->
     <span class="content">{{ message }}</span>
   </div>
 </template>
@@ -19,14 +19,15 @@ export default defineComponent({
       type: String,
       default: ""
     },
-    byName: {
-      type: String,
-      default: ""
-    },
     // 是否显示文字：回复
     isShowReplyText: {
       type: Boolean,
       default: true
+    },
+    // 显示 “回复” 文字时，回复的 昵称
+    byName: {
+      type: String,
+      default: ""
     },
     message: {
       type: String,

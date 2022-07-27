@@ -50,11 +50,12 @@
         <pub-moment v-show="pubMomentShow" class="pub-moment" @back="pubMomentShow = false"></pub-moment>
       </transition>
     </div>
+
     <!-- 动态详情 -->
     <transition name="moment-detail">
       <moment-detail
         class="moment-detail"
-        v-show="momentDetailId >= 0"
+        v-if="momentDetailId >= 0"
         :id="momentDetailId"
         @back="momentDetail(-1)"
       ></moment-detail>
