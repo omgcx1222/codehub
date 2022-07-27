@@ -19,8 +19,15 @@
               :immediate-check="false"
             >
               <template v-if="momentList[index]">
-                <div class="item" ref="momentItemRef" v-for="(item, index) in momentList[index]" :key="item.momentId">
-                  <moment-item :momentData="item" :row="5" @momentDetail="momentDetail($event, index)"></moment-item>
+                <div class="item" v-for="(item, index) in momentList[index]" :key="item.momentId">
+                  <transition @before-enter="beforeEnter" @enter="enter" appear>
+                    <moment-item
+                      :momentData="item"
+                      :row="5"
+                      @momentDetail="momentDetail($event, index)"
+                      :data-index="index"
+                    ></moment-item>
+                  </transition>
                 </div>
               </template>
               <!-- 加载数据时先展示骨架屏 -->
@@ -51,7 +58,6 @@
     <!-- 动态详情 -->
     <transition name="moment-detail">
       <moment-detail
-        :style="momentDetailStyle"
         class="moment-detail"
         v-show="momentDetailId >= 0"
         :id="momentDetailId"
@@ -62,14 +68,14 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, onMounted, computed } from "vue"
+import { ref, onMounted, computed } from "vue"
 // import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 
 import pubMoment from "./children/pubMoment.vue"
 import momentItem from "./components/momentItem.vue"
 import momentDetail from "./children/momentDetail.vue"
-import { useRect } from "@vant/use"
+// import { useRect } from "@vant/use"
 
 export default {
   name: "moment",
@@ -116,36 +122,8 @@ export default {
 
     // 动态详情
     const momentDetailId = ref(-1)
-    const momentItemRef = ref()
-    const momentDetailStyle = ref("")
-    const itemInfo = reactive({
-      left: 0,
-      top: 0,
-      width: 0,
-      height: 0
-    })
-    const momentDetail = (id: number, index?: number) => {
-      if (typeof index === "number") {
-        momentDetailId.value = id
-        const item = useRect(momentItemRef.value[index])
-        console.log(itemInfo)
-
-        const { top, left, height, width } = item
-        itemInfo.top = top
-        itemInfo.left = left
-        itemInfo.height = height
-        itemInfo.width = width
-
-        momentDetailStyle.value = `top: ${top}px; left: ${left}px; width: ${width}px; height: ${height}px; opacity: 0; transform: scale(0.8);`
-        setTimeout(() => {
-          momentDetailStyle.value = ""
-        })
-      } else {
-        momentDetailStyle.value = `top: ${itemInfo.top}px; left: ${itemInfo.left}px; width: ${itemInfo.width}px; height: ${itemInfo.height}px; opacity: 0;`
-        setTimeout(() => {
-          momentDetailId.value = id
-        }, 200)
-      }
+    const momentDetail = (id: number) => {
+      momentDetailId.value = id
     }
 
     // 下拉刷新(刷新时数据恢复10条，开启上拉加载功能)
@@ -173,6 +151,21 @@ export default {
 
     const pubMomentShow = ref(false)
 
+    // moment-item的动画
+    const beforeEnter = (el: any) => {
+      el.style.transition = "all 0.3s ease-out"
+      el.style.opacity = 0
+      el.style.transform = "translateX(250px)"
+    }
+    const enter = (el: any, done: any) => {
+      const index = Number(el.dataset.index) + 1
+      setTimeout(() => {
+        el.style.opacity = 1
+        el.style.transform = "translateX(0)"
+        done()
+      }, index * 100)
+    }
+
     return {
       isNull,
       tabs,
@@ -188,8 +181,8 @@ export default {
       isRefresh,
       pubMomentShow,
       momentDetailId,
-      momentDetailStyle,
-      momentItemRef
+      beforeEnter,
+      enter
     }
   }
 }
@@ -295,23 +288,18 @@ export default {
   }
 }
 .moment-detail {
-  position: absolute;
-  top: 3%;
-  left: 3%;
-  width: 94%;
-  height: 94%;
+  position: fixed;
+  top: 0%;
+  // left: 0%;
   z-index: 10;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #bbb;
-  transition: all 0.2s ease-out;
-  transform: scale(1);
+  transform: translateX(0);
 }
-// .moment-detail-enter-active,
-// .moment-detail-leave-active {
-//   transition: all 0.3s ease;
-// }
-// .moment-detail-enter-from,
-// .moment-detail-leave-to {
-//   left: 100%;
-// }
+.moment-detail-enter-active,
+.moment-detail-leave-active {
+  transition: transform 0.3s ease;
+}
+.moment-detail-enter-from,
+.moment-detail-leave-to {
+  transform: translateX(100%);
+}
 </style>

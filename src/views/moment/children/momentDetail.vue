@@ -136,10 +136,12 @@ export default defineComponent({
     }
 
     const back = () => {
-      // router.go(-1)
-      store.commit("momentModule/changeMomentDetail", [])
-      store.commit("momentModule/changeCommentList", { list: [], type: "all" })
       emit("back")
+      setTimeout(() => {
+        // 动画完成再清空数据
+        store.commit("momentModule/changeMomentDetail", [])
+        store.commit("momentModule/changeCommentList", { list: [], type: "all" })
+      }, 300)
     }
 
     const isMenuShow = ref(false)
@@ -206,6 +208,7 @@ export default defineComponent({
       store.dispatch("momentModule/pubCommentAction", replyOption)
     }
 
+    // 下拉刷新
     const isRefresh = ref(false)
     const onRefresh = async () => {
       isRefresh.value = true
@@ -236,7 +239,10 @@ export default defineComponent({
       props,
       (props) => {
         if (props.id && props.id >= 0) {
-          getMomentDetail("all")
+          setTimeout(() => {
+            // 动画完成再请求数据
+            getMomentDetail("all")
+          }, 300)
         }
       },
       {
