@@ -9,6 +9,7 @@ export interface IstoreModuel {
   loginModule: IloginState
   myModule: ImyState
   momentModule: ImomentState
+  chatModule: IchatState
 }
 
 export type storeType = IrootState & IstoreModuel
@@ -114,3 +115,11 @@ export type changeMomentType = "push" | "unshift" | "all"
 //   replyAuthor: { id: number; nickname: string; avatarUrl: string | null }
 //   replyUserId: number
 // }
+
+/**
+ * moment
+ */
+export interface IchatState {
+  onLineCount: number
+  touristCount: number
+}

@@ -1,5 +1,6 @@
 import { sendDataType } from "./types"
 import { getStorage } from "@/utils/localStorage"
+import store from "@/store"
 
 class Socket {
   socket: WebSocket
@@ -22,7 +23,11 @@ class Socket {
       }
     }
     this.socket.onmessage = (msg) => {
-      const data = JSON.parse(msg.data)
+      const { data, type } = JSON.parse(msg.data)
+      if (type === "onLine") {
+        store.commit("chatModule/changeOnLine", data)
+      }
+
       this.messageCb && this.messageCb(data)
     }
     this.socket.onerror = (err) => {

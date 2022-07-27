@@ -54,6 +54,7 @@
       <hqq-input ref="input" @submit="submit" @focus="focus" @blur="blur" :tip="replyOption.tip"></hqq-input>
     </div>
 
+    <!-- 评论详情弹出框 -->
     <van-popup
       v-model:show="commentPopupShow"
       round
@@ -84,6 +85,7 @@
       </div>
     </van-popup>
 
+    <!-- 右上角三个点操作 -->
     <van-action-sheet
       v-model:show="isMenuShow"
       :actions="menuActions"
@@ -332,6 +334,8 @@ export default defineComponent({
   }
   .list {
     flex: 1;
+    // height: calc(100% - 44px - 50px);
+    overflow: scroll;
   }
   .tip {
     font-size: 12px;

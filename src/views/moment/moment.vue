@@ -19,16 +19,11 @@
               :immediate-check="false"
             >
               <template v-if="momentList[index]">
-                <div class="item" v-for="(item, index) in momentList[index]" :key="item.momentId">
-                  <transition @before-enter="beforeEnter" @enter="enter" appear>
-                    <moment-item
-                      :momentData="item"
-                      :row="5"
-                      @momentDetail="momentDetail($event, index)"
-                      :data-index="index"
-                    ></moment-item>
-                  </transition>
-                </div>
+                <transition-group @before-enter="beforeEnter" @enter="enter" appear>
+                  <div class="item" v-for="(item, index) in momentList[index]" :key="item.momentId" :data-index="index">
+                    <moment-item :momentData="item" :row="5" @momentDetail="momentDetail($event, index)"></moment-item>
+                  </div>
+                </transition-group>
               </template>
               <!-- 加载数据时先展示骨架屏 -->
               <template v-else>
@@ -153,9 +148,10 @@ export default {
 
     // moment-item的动画
     const beforeEnter = (el: any) => {
+      const index = Number(el.dataset.index) + 1
       el.style.transition = "all 0.3s ease-out"
       el.style.opacity = 0
-      el.style.transform = "translateX(250px)"
+      el.style.transform = `translateX(${100 * index}px)`
     }
     const enter = (el: any, done: any) => {
       const index = Number(el.dataset.index) + 1

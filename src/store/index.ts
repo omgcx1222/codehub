@@ -4,6 +4,7 @@ import { createStore } from "vuex"
 import loginModule from "./login"
 import myModule from "./my"
 import momentModule from "./moment"
+import chatModule from "./chat"
 
 import { follow } from "@/network/common"
 import { IrootState, storeType, IuserInfo } from "./types"
@@ -27,7 +28,8 @@ const store = createStore<IrootState>({
   modules: {
     loginModule,
     myModule,
-    momentModule
+    momentModule,
+    chatModule
   }
 })
 

@@ -16,17 +16,21 @@
       <!-- <span>
         <van-icon name="friends" size="28px" color="#ffd01e" badge="99+" />
       </span> -->
-      <span>在线用户：9</span>
-      <span>游客：9</span>
+      <span>在线用户：{{ $store.state.chatModule.onLineCount }}</span>
+      <span>游客：{{ $store.state.chatModule.touristCount }}</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue"
+// import { useStore } from "@/store"
 
 export default defineComponent({
   setup() {
+    // const store = useStore()
+    // const onLineCount = computed(() => store.state.chatModule.onLineCount)
+    // const touristCount = computed(() => store.state.chatModule.touristCount)
     return {}
   }
 })
