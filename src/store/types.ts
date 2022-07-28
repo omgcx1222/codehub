@@ -122,4 +122,19 @@ export type changeMomentType = "push" | "unshift" | "all"
 export interface IchatState {
   onLineCount: number
   touristCount: number
+  chatRooms: IchatRoom[]
+}
+
+export interface IchatRoom {
+  id: number
+  name: string
+  chats: Ichat[]
+}
+
+export interface Ichat {
+  avatarUrl: string | null
+  id: string
+  message: string
+  nickname: string
+  userId: number
 }

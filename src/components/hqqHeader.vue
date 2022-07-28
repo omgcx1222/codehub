@@ -1,11 +1,13 @@
 <template>
-  <div class="hqq-header" :style="{ 'flex-direction': direction == 'left' ? '' : 'row-reverse' }">
+  <div class="hqq-header" :style="{ 'flex-direction': direction === 'left' ? '' : 'row-reverse' }">
     <img class="img" :src="img" alt="" @click="clickTitle" :style="`width: ${size}; height: ${size}`" />
     <div class="title" @click="clickTitle" :style="`min-height: ${size}`">
-      <div class="name" :style="{ 'text-align': direction == 'left' ? 'left' : 'right' }">{{ name }}</div>
-      <slot name="message">
-        <div class="message">{{ message }}</div>
-      </slot>
+      <div class="name" :style="{ 'text-align': direction === 'left' ? 'left' : 'right' }">{{ name }}</div>
+      <div :style="{ 'align-self': direction === 'left' ? '' : 'flex-end' }">
+        <slot name="message">
+          <div class="message">{{ message }}</div>
+        </slot>
+      </div>
     </div>
     <div class="right" v-if="isRightShow">
       <div @click="clickRight">

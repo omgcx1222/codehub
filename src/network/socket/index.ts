@@ -17,18 +17,27 @@ class Socket {
         this.state = 1
         const userInfo = getStorage("userInfo")
         this.send({ type: "login", data: { userInfo } })
-        setTimeout(() => {
-          this.send({ type: "sendPublicChat", data: { userInfo, chatId: 1, message: 666 } })
-        }, 2000)
+        // setTimeout(() => {
+        //   this.send({ type: "sendPublicChat", data: { userInfo, chatId: 1, message: 666 } })
+        // }, 2000)
       }
     }
     this.socket.onmessage = (msg) => {
       const { data, type } = JSON.parse(msg.data)
-      if (type === "onLine") {
-        store.commit("chatModule/changeOnLine", data)
+
+      switch (type) {
+        case "onLine":
+          store.commit("chatModule/changeOnLine", data)
+          break
+        case "chatRecord":
+          store.commit("chatModule/changeChatRecord", data)
+          break
+
+        default:
+          break
       }
 
-      this.messageCb && this.messageCb(data)
+      // this.messageCb && this.messageCb(data)
     }
     this.socket.onerror = (err) => {
       this.errorCb && this.errorCb(err)

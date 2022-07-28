@@ -6,7 +6,8 @@ const chatModule: Module<IchatState, IrootState> = {
   namespaced: true,
   state: {
     onLineCount: 0,
-    touristCount: 0
+    touristCount: 0,
+    chatRooms: []
   },
   actions: {},
   mutations: {
@@ -14,6 +15,10 @@ const chatModule: Module<IchatState, IrootState> = {
       const { onLineCount, touristCount } = data.onLineCount
       state.onLineCount = onLineCount ?? 0
       state.touristCount = touristCount ?? 0
+    },
+    changeChatRecord(state, data) {
+      const { chatRooms = [] } = data
+      state.chatRooms = chatRooms
     }
   }
 }

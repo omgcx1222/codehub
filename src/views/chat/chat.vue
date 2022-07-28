@@ -2,8 +2,8 @@
   <div class="chat">
     <chat-header></chat-header>
     <div class="chat-main">
-      <div class="item" v-for="i in 10" :key="i" @click="chatDetail('1')">
-        <hqq-header name="正能量聊天群" :img="require('@/assets/img/chat.png')" message="小明：哈哈哈" size="50px">
+      <div class="item" v-for="(item, index) in chatRooms" :key="item.id" @click="chatDetail(item.id, index)">
+        <hqq-header :name="item.name" :img="require('@/assets/img/chat.png')" message="小明：哈哈哈" size="50px">
           <template #right>
             <div class="time">12:20</div>
           </template>
@@ -12,13 +12,19 @@
     </div>
 
     <transition name="chat-detail">
-      <chat-detail class="chat-detail" v-if="chatRoomId" @back="back" title="正能量聊天群"></chat-detail>
+      <chat-detail
+        class="chat-detail"
+        v-if="chatRoomIndex !== -1"
+        @back="back"
+        :chats="chatRooms[chatRoomIndex]"
+      ></chat-detail>
     </transition>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue"
+import { defineComponent, ref, computed } from "vue"
+import { useStore } from "@/store"
 import chatHeader from "./components/chatHeader.vue"
 import chatDetail from "./components/chatDetail.vue"
 
@@ -28,19 +34,23 @@ export default defineComponent({
     chatDetail
   },
   setup() {
-    const chatRoomId = ref("")
-    const chatDetail = (id: string) => {
-      chatRoomId.value = id
+    const store = useStore()
+    const chatRooms = computed(() => store.state.chatModule.chatRooms)
+
+    const chatRoomIndex = ref(-1)
+    const chatDetail = (id: number, index: number) => {
+      chatRoomIndex.value = index
     }
 
     const back = () => {
-      chatRoomId.value = ""
+      chatRoomIndex.value = -1
     }
 
     return {
-      chatRoomId,
+      chatRoomIndex,
       chatDetail,
-      back
+      back,
+      chatRooms
     }
   }
 })

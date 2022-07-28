@@ -1,10 +1,8 @@
 <template>
   <div class="hqq-message">
     <span style="color: var(--van-blue)">{{ name }}</span>
-    <span v-if="isShowReplyText">
-      <span> 回复 </span>
-      <span style="color: var(--van-blue)">{{ "@" + byName }}</span>
-    </span>
+    <span v-if="isShowReplyText"> 回复 </span>
+    <span v-if="byName" style="color: var(--van-blue)">{{ "@" + byName + " " }}</span>
     <!-- <span> : </span> -->
     <span class="content">{{ message }}</span>
   </div>
@@ -24,7 +22,7 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
-    // 显示 “回复” 文字时，回复的 昵称
+    // @的昵称
     byName: {
       type: String,
       default: ""

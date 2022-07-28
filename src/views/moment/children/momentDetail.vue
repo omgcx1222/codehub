@@ -38,7 +38,7 @@
                   <hqq-message
                     :name="reply.author?.nickname"
                     :byName="reply.replyAuthor?.nickname"
-                    :message="' : ' + reply.content"
+                    :message="reply.content"
                     :isShowReplyText="!!reply.replyAuthor"
                   ></hqq-message>
                 </div>
@@ -74,11 +74,7 @@
             <div class="tip">相关回复共{{ firstComment.childCount }}条</div>
             <!-- 二级评论和三级回复 -->
             <template v-for="reply in replyList" :key="reply.id">
-              <comment-item
-                :comment="reply"
-                :isShowReplyText="!!reply.replyAuthor?.nickname"
-                @focus="focus"
-              ></comment-item>
+              <comment-item :comment="reply" @focus="focus"></comment-item>
             </template>
           </van-list>
         </div>

@@ -1,14 +1,21 @@
 <template>
   <div class="chat-detail">
-    <van-nav-bar left-arrow @click-left="back" :title="title">
+    <van-nav-bar left-arrow @click-left="back" :title="chats.name">
       <!-- <template #right>
         <van-icon name="ellipsis" size="18" />
       </template> -->
     </van-nav-bar>
     <div>
-      <hqq-header name="小明" :isRightShow="false" direction="right">
+      <hqq-header
+        v-for="item in chats.chats"
+        :key="item.id"
+        :name="item.nickname"
+        :img="item.avatarUrl"
+        :isRightShow="false"
+        :direction="right"
+      >
         <template #message>
-          <hqq-message byName="小李" message="你好啊"></hqq-message>
+          <hqq-message :message="item.message" :isShowReplyText="false"></hqq-message>
         </template>
       </hqq-header>
     </div>
@@ -17,6 +24,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
+// import { useStore } from "@/store"
 import hqqHeader from "@/components/hqqHeader.vue"
 import hqqMessage from "@/components/hqqMessage.vue"
 
@@ -26,9 +34,11 @@ export default defineComponent({
     hqqMessage
   },
   props: {
-    title: {
-      type: String,
-      default: "群聊"
+    chats: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   emits: ["back"],

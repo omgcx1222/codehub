@@ -13,11 +13,10 @@
           class="content"
           :isShowReplyText="isShowReplyText"
           :byName="comment.replyAuthor?.nickname"
-          :message="' : ' + comment.content"
-          v-if="isShowReplyText"
+          :message="comment.content"
           @click="focus"
         ></hqq-message>
-        <div class="content" @click="focus" v-else>{{ comment.content }}</div>
+        <!-- <div class="content" @click="focus" v-else>{{ comment.content }}</div> -->
         <div class="menu">
           <span :class="comment.isAgree === 1 ? 'is-agree' : ''" @click="likeComment">
             <van-icon size="18" :name="comment.isAgree === 1 ? 'good-job' : 'good-job-o'" />
