@@ -12,8 +12,8 @@ const chatModule: Module<IchatState, IrootState> = {
   actions: {},
   mutations: {
     changeOnLine(state, data) {
-      const { onLineCount, touristCount } = data.onLineCount
-      state.onLineCount = onLineCount ?? 0
+      const { loginCount, touristCount } = data.onLineCount
+      state.onLineCount = loginCount ?? 0
       state.touristCount = touristCount ?? 0
     },
     changeChatRecord(state, data) {

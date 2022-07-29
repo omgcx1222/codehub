@@ -49,6 +49,7 @@ const loginModule: Module<IloginState, IrootState> = {
     loginOutAction({ commit }) {
       commit("changeUserInfo", {}, { root: true })
       removeStorage("userInfo")
+      socket.send({ type: "login" })
     }
   },
   mutations: {}

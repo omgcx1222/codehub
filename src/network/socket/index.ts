@@ -29,6 +29,9 @@ class Socket {
         case "onLine":
           store.commit("chatModule/changeOnLine", data)
           break
+        case "dropLine":
+          store.commit("chatModule/changeOnLine", data)
+          break
         case "chatRecord":
           store.commit("chatModule/changeChatRecord", data)
           break

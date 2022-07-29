@@ -16,7 +16,7 @@
       <!-- <span>
         <van-icon name="friends" size="28px" color="#ffd01e" badge="99+" />
       </span> -->
-      <span>在线用户：{{ $store.state.chatModule.onLineCount }}</span>
+      <span>登录用户：{{ $store.state.chatModule.onLineCount }}</span>
       <span>游客：{{ $store.state.chatModule.touristCount }}</span>
     </div>
   </div>

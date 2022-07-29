@@ -15,7 +15,6 @@
               @load="listLoad"
               :finished="finished"
               v-model:loading="isAddLoading"
-              :offset="0"
               :immediate-check="false"
             >
               <template v-if="momentList[index]">
@@ -150,9 +149,11 @@ export default {
     // moment-item的动画
     const beforeEnter = (el: any) => {
       const index = Number(el.dataset.index) + 1
-      el.style.transition = "all 0.3s ease-out"
-      el.style.opacity = 0
-      el.style.transform = `translateX(${100 * index}px)`
+      if (index <= 10) {
+        el.style.transition = "all 0.3s ease-out"
+        el.style.opacity = 0
+        el.style.transform = `translateX(${100 * index}px)`
+      }
     }
     const enter = (el: any, done: any) => {
       const index = Number(el.dataset.index) + 1
