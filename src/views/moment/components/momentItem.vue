@@ -5,11 +5,11 @@
         <!-- 作者信息 -->
         <hqq-header
           class="header"
-          :img="moment.author.avatarUrl ?? undefined"
-          :name="moment.author.nickname"
-          :message="moment.authorFans + ' 粉丝'"
-          :rightText="moment.isFans ? '已关注' : '关注'"
-          @clickRight="follow(moment.author.id)"
+          :img="moment?.author?.avatarUrl ?? undefined"
+          :name="moment?.author?.nickname"
+          :message="moment.fansCount + ' 粉丝'"
+          :rightText="moment.isAuthorFans ? '已关注' : '关注'"
+          @clickRight="follow(moment?.author?.id)"
         ></hqq-header>
         <!-- 文字和图片 -->
         <div class="content van-multi-ellipsis--l3" @click="momentDetail">
@@ -81,7 +81,8 @@ export default defineComponent({
       emit("momentDetail", moment.value.momentId)
     }
 
-    const follow = (id: number) => {
+    const follow = (id: number | undefined) => {
+      if (!id) return
       store.dispatch("followAction", id)
     }
 

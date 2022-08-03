@@ -31,7 +31,9 @@ const myModule: Module<ImomentState, IrootState> = {
     // 0最新，1最热，2关注
     active: 0,
     // 某条动态的详情
-    momentDetail: {},
+    momentDetail: {
+      images: []
+    },
     // 某条动态的评论列表
     commentList: [],
     // 动态某条评论的回复列表（popup弹框内）
@@ -214,6 +216,14 @@ const myModule: Module<ImomentState, IrootState> = {
     deleteComment(state, commentId: number) {
       const c = state.commentList.findIndex((item) => item.id === commentId)
       if (c != -1) state.commentList.splice(c, 1)
+    },
+    follow(state, { followId, isFollow }: { followId: number; isFollow: 0 | 1 }) {
+      for (const moment of state.momentList) {
+        const m = moment?.find((item) => item.author?.id === followId)
+        if (m) {
+          m!.isAuthorFans = isFollow
+        }
+      }
     }
   }
 }

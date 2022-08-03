@@ -20,7 +20,7 @@
               <template v-if="momentList[index]">
                 <transition-group @before-enter="beforeEnter" @enter="enter" appear>
                   <div class="item" v-for="(item, index) in momentList[index]" :key="item.momentId" :data-index="index">
-                    <moment-item :momentData="item" :row="5" @momentDetail="momentDetail($event, index)"></moment-item>
+                    <moment-item :momentData="item" :row="5" @momentDetail="momentDetail"></moment-item>
                   </div>
                 </transition-group>
               </template>
@@ -95,6 +95,7 @@ export default {
       tabActive.value = index
 
       finished.value = false
+
       if (!momentList.value[index]?.length) {
         getMoment("all")
       }
@@ -105,9 +106,9 @@ export default {
       const currentIndex = tabActive.value //记录本次执行的激活的tab，以免被快速切换tab影响
       await store.dispatch("momentModule/momentListAction", type)
       if (momentList.value[currentIndex].length === 0) {
-        setTimeout(() => {
-          isNull.value = currentIndex
-        }, 500)
+        // setTimeout(() => {
+        isNull.value = currentIndex
+        // }, 500)
       } else {
         if (isNull.value === currentIndex) {
           isNull.value = -1
@@ -124,7 +125,11 @@ export default {
     // 下拉刷新(刷新时数据恢复10条，开启上拉加载功能)
     const isRefresh = ref(false)
     const onRefresh = async () => {
+      const currentIndex = tabActive.value //记录本次执行的激活的tab，以免被快速切换tab影响
       await store.dispatch("momentModule/refreshMomentListAction")
+      if (momentList.value[currentIndex].length === 0) {
+        isNull.value = currentIndex
+      }
       isRefresh.value = false
       finished.value = false // 开启上拉加载功能
     }
@@ -135,13 +140,13 @@ export default {
     const listLoad = async () => {
       isAddLoading.value = true
       const ordL = momentList.value[tabActive.value]?.length
-      await getMoment("push").then(() => {
-        if (ordL === momentList.value[tabActive.value]?.length) {
-          // 说明已无新数据，关闭上拉加载功能
-          finished.value = true
-        }
-        isAddLoading.value = false
-      })
+      await getMoment("push")
+
+      if (ordL === momentList.value[tabActive.value]?.length) {
+        // 说明已无新数据，关闭上拉加载功能
+        finished.value = true
+      }
+      isAddLoading.value = false
     }
 
     const pubMomentShow = ref(false)
@@ -244,6 +249,9 @@ export default {
     }
     :deep(.van-pull-refresh__head) {
       line-height: 40px;
+    }
+    :deep(.van-pull-refresh) {
+      min-height: 100%;
     }
   }
   .item {

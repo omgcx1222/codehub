@@ -73,16 +73,19 @@ export interface ImomentDetail {
     avatarUrl: string | null
   }
   agree?: number
-  authorFans?: number
-  images?: string | null
+  isAuthorFans?: 0 | 1
+  fansCount?: number
+  images: string[]
   isAgree?: 0 | 1
+  commentCount?: number
 }
 
 export interface Icomment {
   isAgree: 0 | 1
   agree: number
   author: { id: number; nickname: string; avatarUrl: string | null }
-  authorFans?: number
+  fansCount?: number
+  isAuthorFans: 0 | 1
   childCount?: number
   commentId: number
   content: string
@@ -100,7 +103,7 @@ export interface IchangeMomentListOption {
   type: changeMomentType
 }
 
-export type momentOrder = 0 | 1 | 2
+export type momentOrder = 0 | 1 | 2 // 0-最新 1-最热 2-关注
 export type changeMomentType = "push" | "unshift" | "all"
 
 // export interface Ireply {
@@ -120,8 +123,8 @@ export type changeMomentType = "push" | "unshift" | "all"
  * moment
  */
 export interface IchatState {
-  onLineCount: number
-  touristCount: number
+  onLine: []
+  tourist: []
   chatRooms: IchatRoom[]
 }
 

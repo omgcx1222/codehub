@@ -16,13 +16,18 @@ const store = createStore<IrootState>({
     }
   },
   actions: {
-    async followAction(_, followId: number) {
-      await follow(followId)
+    async followAction(store, followId: number) {
+      const res = await follow(followId)
+      if (res.data === "关注成功") {
+        store.commit("momentModule/follow", { followId, isFollow: 1 })
+      } else if (res.data === "取消关注") {
+        store.commit("momentModule/follow", { followId, isFollow: 0 })
+      }
     }
   },
   mutations: {
     changeUserInfo(state, payload: IuserInfo) {
-      state.userInfo = payload
+      state.userInfo = { ...payload }
     }
   },
   modules: {
