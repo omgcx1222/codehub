@@ -113,6 +113,7 @@ const myModule: Module<ImomentState, IrootState> = {
         } else {
           commit("unShiftComment", res.data[0])
         }
+        return true
       }
     },
 
@@ -215,7 +216,9 @@ const myModule: Module<ImomentState, IrootState> = {
     },
     deleteComment(state, commentId: number) {
       const c = state.commentList.findIndex((item) => item.id === commentId)
+      const c2 = state.replyList.findIndex((item) => item.id === commentId)
       if (c != -1) state.commentList.splice(c, 1)
+      if (c2 != -1) state.replyList.splice(c, 1)
     },
     follow(state, { followId, isFollow }: { followId: number; isFollow: 0 | 1 }) {
       for (const moment of state.momentList) {

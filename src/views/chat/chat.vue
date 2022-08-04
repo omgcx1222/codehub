@@ -5,7 +5,7 @@
       <div class="item" v-for="(item, index) in chatRooms" :key="item.id" @click="chatDetail(item.id, index)">
         <hqq-header :name="item.name" :img="require('@/assets/img/chat.png')" message="小明：哈哈哈" size="50px">
           <template #right>
-            <div class="time">12:20</div>
+            <div class="time">{{ $formatDate(item.chats[0].createTime, "minute", "MM-DD") }}</div>
           </template>
         </hqq-header>
       </div>

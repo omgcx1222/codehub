@@ -38,7 +38,7 @@
                   <hqq-message
                     :name="reply.author?.nickname"
                     :byName="reply.replyAuthor?.nickname"
-                    :message="reply.content"
+                    :message="'：' + reply.content"
                     :isShowReplyText="!!reply.replyAuthor"
                   ></hqq-message>
                 </div>
@@ -208,9 +208,15 @@ export default defineComponent({
     const blur = () => {
       replyOption.tip = "发一条友善的评论"
     }
-    const submit = (value: string) => {
+    const submit = async (value: string) => {
+      if (!value) {
+        return Toast.loading("内容不能为空")
+      }
       replyOption.content = value
-      store.dispatch("momentModule/pubCommentAction", replyOption)
+      const res = await store.dispatch("momentModule/pubCommentAction", replyOption)
+      if (res) {
+        commentPopupShow.value ? popuoInput?.value?.clearMessage() : input.value?.clearMessage()
+      }
     }
 
     // 下拉刷新

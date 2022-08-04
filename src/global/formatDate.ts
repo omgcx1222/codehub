@@ -13,7 +13,11 @@ dayjs.locale("zh")
 
 export default {
   install: (app: App<Element>) => {
-    app.config.globalProperties.$formatDate = (date: string, unit: "minute" | "hour" | "day" | "year" = "day") => {
+    app.config.globalProperties.$formatDate = (
+      date: string,
+      unit: "minute" | "month" | "day" | "year" = "day",
+      type?: "YYYY-MM-DD HH:mm" | "MM-DD HH:mm" | "HH:mm" | "MM-DD"
+    ) => {
       // console.log(dayjs().diff(dayjs.utc(date).format("YYYY-MM-DD HH:mm"), "day"))
 
       const currentDate = dayjs()
@@ -23,7 +27,10 @@ export default {
         if (currentDate.diff(oldDate, "year") > 1) {
           return oldDate
         }
-        return dayjs.utc(date).format("MM-DD HH:mm")
+        // if(currentDate.diff(oldDate, "month") > 1) {
+        //   return dayjs.utc(date).format("YYYY-MM-DD HH:mm")
+        // }
+        return dayjs.utc(date).format(type ? type : "MM-DD HH:mm")
       }
       return currentDate.to(oldDate)
     }

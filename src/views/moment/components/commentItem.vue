@@ -11,9 +11,9 @@
         <div class="time">{{ $formatDate(comment.createTime) }}</div>
         <hqq-message
           class="content"
-          :isShowReplyText="isShowReplyText"
+          :isShowReplyText="!!comment.replyAuthor"
           :byName="comment.replyAuthor?.nickname"
-          :message="comment.content"
+          :message="comment.replyAuthor ? '：' + comment.content : comment.content"
           @click="focus"
         ></hqq-message>
         <!-- <div class="content" @click="focus" v-else>{{ comment.content }}</div> -->

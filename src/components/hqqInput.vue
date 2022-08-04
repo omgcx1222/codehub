@@ -52,13 +52,17 @@ export default defineComponent({
       focusState.value = false
       emit("blur")
     }
+    const clearMessage = () => {
+      message.value = ""
+    }
     return {
       input,
       message,
       submit,
       clickInput,
       blur,
-      focus
+      focus,
+      clearMessage
     }
   }
 })

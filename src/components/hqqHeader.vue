@@ -3,7 +3,7 @@
     <img class="img" :src="img" alt="" @click="clickTitle" :style="`width: ${size}; height: ${size}`" />
     <div class="title" @click="clickTitle" :style="`min-height: ${size}`">
       <div class="name" :style="{ 'text-align': direction === 'left' ? 'left' : 'right' }">{{ name }}</div>
-      <div :style="{ 'align-self': direction === 'left' ? 'flex-start' : 'flex-end' }">
+      <div :style="{ 'align-self': direction === 'left' ? 'flex-start' : 'flex-end', width }">
         <slot name="message">
           <div class="message">{{ message }}</div>
         </slot>
@@ -52,6 +52,10 @@ export default defineComponent({
     direction: {
       type: String,
       default: "left"
+    },
+    width: {
+      type: String,
+      default: "100%"
     }
   },
   setup(_, { emit }) {
