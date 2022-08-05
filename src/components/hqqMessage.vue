@@ -42,11 +42,12 @@ export default defineComponent({
 .hqq-message {
   display: -webkit-box;
   overflow: hidden;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 2; */
 }
 .content {
   word-break: break-all;
+  white-space: pre-wrap;
 }
 </style>

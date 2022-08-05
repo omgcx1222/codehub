@@ -7,7 +7,7 @@
     </van-nav-bar>
     <div class="chat-message">
       <div v-for="(item, index) in chats.chats" :key="item.id">
-        <div class="time">{{ chatTime(item.createTime, item[index - 1]?.createTime ?? 0) }}</div>
+        <div class="time">{{ chatTime(item.createTime, chats.chats[index - 1]?.createTime ?? 0) }}</div>
         <hqq-header
           class="item"
           :name="item.nickname"
@@ -28,12 +28,12 @@
       </div>
     </div>
 
-    <hqq-input></hqq-input>
+    <hqq-input @submit="submit"></hqq-input>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue"
+import { defineComponent, computed, getCurrentInstance } from "vue"
 import { useStore } from "@/store"
 
 import hqqHeader from "@/components/hqqHeader.vue"
@@ -49,13 +49,11 @@ export default defineComponent({
   props: {
     chats: {
       type: Object,
-      default() {
-        return {}
-      }
+      require: true
     }
   },
   emits: ["back"],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     const back = () => {
       emit("back")
     }
@@ -63,22 +61,28 @@ export default defineComponent({
     const userInfo = computed(() => store.state.userInfo)
     // console.log(userInfo.value.id)
 
-    // const currentInstance = getCurrentInstance()?.appContext.config.globalProperties
+    const currentInstance = getCurrentInstance()?.appContext.config.globalProperties
     const chatTime = (time: Date, preTime: Date) => {
       // const t = currentInstance?.$formatDate(time, "minute")
-      // console.log(t.getTime())
       const t1 = new Date(time).getTime()
       const t2 = new Date(preTime).getTime()
-      const t = t2 - t1
-      console.log(t)
 
-      return t > 1000 ? t1 : ""
+      // 超出一分钟
+      return t1 - t2 > 60000 ? currentInstance?.$formatDate(time, "minute") : ""
+    }
+
+    const chatId = computed(() => props.chats?.id)
+    console.log(chatId)
+
+    const submit = (message: string) => {
+      store.dispatch("chatModule/sendMessageAction", { message, chatId: chatId.value })
     }
 
     return {
       back,
       userInfo,
-      chatTime
+      chatTime,
+      submit
     }
   }
 })

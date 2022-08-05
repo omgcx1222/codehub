@@ -15,8 +15,9 @@ class Socket {
     this.socket.onopen = (s: any) => {
       if (s.target.readyState === 1) {
         this.state = 1
-        const userInfo = getStorage("userInfo")
-        this.send({ type: "login", data: { userInfo } })
+        // const userInfo = getStorage("userInfo")
+        // this.send({ type: "login", data: { userInfo } })
+        this.send({ type: "login" })
         // setTimeout(() => {
         //   this.send({ type: "sendPublicChat", data: { userInfo, chatId: 1, message: 666 } })
         // }, 2000)
@@ -52,6 +53,13 @@ class Socket {
   }
   send(data: sendDataType) {
     try {
+      const userInfo = getStorage("userInfo")
+      // 默认携带userInfo
+      if (!data.data) {
+        data.data = {}
+      }
+      data.data.userInfo = userInfo
+
       const d = JSON.stringify(data)
       this.socket.send(d)
     } catch (error) {

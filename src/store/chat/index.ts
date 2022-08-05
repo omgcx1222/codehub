@@ -1,6 +1,7 @@
 import { Module } from "vuex"
 import { IrootState } from "../types"
 import { IchatState } from "../types"
+import { socket } from "@/network"
 
 const chatModule: Module<IchatState, IrootState> = {
   namespaced: true,
@@ -9,7 +10,11 @@ const chatModule: Module<IchatState, IrootState> = {
     tourist: [],
     chatRooms: []
   },
-  actions: {},
+  actions: {
+    sendMessageAction(state, data: { message: string; chatId: number }) {
+      socket.send({ type: "sendPublicChat", data })
+    }
+  },
   mutations: {
     changeOnLine(state, data) {
       const { onLine, tourist } = data.onLineUsers

@@ -12,7 +12,7 @@
           @clickRight="follow(moment?.author?.id)"
         ></hqq-header>
         <!-- 文字和图片 -->
-        <div class="content van-multi-ellipsis--l3" @click="momentDetail">
+        <div :class="{ content: true, 'van-multi-ellipsis--l3': ellipsis }" @click="momentDetail">
           <div class="text">{{ moment.content }}</div>
           <van-grid square :column-num="3" :border="false">
             <van-grid-item v-for="(img, index) in moment.images" :key="img">
@@ -62,6 +62,11 @@ export default defineComponent({
     row: {
       type: Number,
       default: 3
+    },
+    // 三行省略号
+    ellipsis: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
@@ -123,7 +128,7 @@ export default defineComponent({
   line-height: 1.5;
   .text {
     font-size: 16px;
-
+    white-space: pre-wrap;
     margin: 10px 5px;
   }
   .img {
