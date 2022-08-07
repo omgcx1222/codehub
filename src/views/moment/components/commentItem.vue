@@ -34,13 +34,7 @@
         <van-icon name="ellipsis" size="18" />
       </template>
     </hqq-header>
-    <van-action-sheet
-      v-model:show="isMenuShow"
-      :actions="menuActions"
-      cancel-text="取消"
-      close-on-click-action
-      @select="menuSelect"
-    />
+    <van-action-sheet v-model:show="isMenuShow" :actions="menuActions" cancel-text="取消" close-on-click-action @select="menuSelect" />
   </div>
 </template>
 

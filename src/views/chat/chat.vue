@@ -12,12 +12,7 @@
     </div>
 
     <transition name="chat-detail">
-      <chat-detail
-        class="chat-detail"
-        v-if="chatRoomIndex !== -1"
-        @back="back"
-        :chats="chatRooms[chatRoomIndex]"
-      ></chat-detail>
+      <chat-detail class="chat-detail" v-if="chatRoomIndex !== -1" @back="back" :chats="chatRooms[chatRoomIndex]"></chat-detail>
     </transition>
   </div>
 </template>

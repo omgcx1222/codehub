@@ -20,12 +20,7 @@
               <template v-if="momentList[index]">
                 <transition-group @before-enter="beforeEnter" @enter="enter" appear>
                   <div class="item" v-for="(item, index) in momentList[index]" :key="item.momentId" :data-index="index">
-                    <moment-item
-                      :momentData="item"
-                      :row="5"
-                      @momentDetail="momentDetail"
-                      :ellipsis="true"
-                    ></moment-item>
+                    <moment-item :momentData="item" :row="5" @momentDetail="momentDetail" :ellipsis="true"></moment-item>
                   </div>
                 </transition-group>
               </template>
@@ -57,12 +52,7 @@
 
     <!-- 动态详情 -->
     <transition name="moment-detail">
-      <moment-detail
-        class="moment-detail"
-        v-if="momentDetailId >= 0"
-        :id="momentDetailId"
-        @back="momentDetail(-1)"
-      ></moment-detail>
+      <moment-detail class="moment-detail" v-if="momentDetailId >= 0" :id="momentDetailId" @back="momentDetail(-1)"></moment-detail>
     </transition>
   </div>
 </template>

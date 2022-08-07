@@ -58,20 +58,15 @@
     </div>
 
     <!-- 评论详情弹出框 -->
-    <van-popup
-      v-model:show="commentPopupShow"
-      round
-      position="bottom"
-      :style="{ height: '70%' }"
-      safe-area-inset-bottom
-    >
+    <van-popup v-model:show="commentPopupShow" round position="bottom" :style="{ height: '70%' }" safe-area-inset-bottom>
       <div class="popup">
         <div class="title">评论详情</div>
         <div class="list">
           <van-list finished-text="没有更多了">
             <!-- 一级评论 -->
             <comment-item :comment="firstComment" :isShowReplyText="false" @focus="focus"></comment-item>
-            <div class="tip">相关回复共{{ firstComment.childCount }}条</div>
+            <!-- <div class="tip">相关回复共{{ firstComment.childCount }}条</div> -->
+            <div class="tip">相关回复共{{ replyList.length }}条</div>
             <!-- 二级评论和三级回复 -->
             <template v-for="reply in replyList" :key="reply.id">
               <comment-item :comment="reply" @focus="focus"></comment-item>
@@ -85,13 +80,7 @@
     </van-popup>
 
     <!-- 右上角三个点操作 -->
-    <van-action-sheet
-      v-model:show="isMenuShow"
-      :actions="menuActions"
-      cancel-text="取消"
-      close-on-click-action
-      @select="menuSelect"
-    />
+    <van-action-sheet v-model:show="isMenuShow" :actions="menuActions" cancel-text="取消" close-on-click-action @select="menuSelect" />
   </div>
 </template>
 

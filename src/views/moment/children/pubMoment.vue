@@ -20,14 +20,7 @@
     </van-cell-group>
 
     <div class="upload">
-      <van-uploader
-        v-model="fileList"
-        multiple
-        :max-count="9"
-        :max-size="20 * 1024 * 1024"
-        @oversize="onOversize"
-        preview-size="92"
-      />
+      <van-uploader v-model="fileList" multiple :max-count="9" :max-size="20 * 1024 * 1024" @oversize="onOversize" preview-size="92" />
     </div>
   </div>
 </template>

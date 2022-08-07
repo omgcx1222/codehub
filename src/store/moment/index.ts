@@ -13,15 +13,7 @@ import {
 } from "@/network/moment"
 
 import { Module } from "vuex"
-import {
-  IrootState,
-  ImomentState,
-  uploadsType,
-  ImomentDetail,
-  Icomment,
-  IchangeMomentListOption,
-  changeMomentType
-} from "../types"
+import { IrootState, ImomentState, uploadsType, ImomentDetail, Icomment, IchangeMomentListOption, changeMomentType } from "../types"
 import { pubMomentBody } from "@/network/moment/types"
 
 const myModule: Module<ImomentState, IrootState> = {
@@ -78,10 +70,7 @@ const myModule: Module<ImomentState, IrootState> = {
       }
     },
 
-    async momentDetailAndCommentListAction(
-      { state, commit },
-      { momentId, type }: { momentId: string; type: changeMomentType }
-    ) {
+    async momentDetailAndCommentListAction({ state, commit }, { momentId, type }: { momentId: string; type: changeMomentType }) {
       const offset = type === "all" ? 0 : state.commentList?.length
       const limit = offset + 10
       // const res = await momentList({ order: activeTab, offset, limit })

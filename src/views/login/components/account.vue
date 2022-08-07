@@ -4,13 +4,7 @@
       <input type="text" v-model="userInfo.nickname" placeholder="昵称(1~10任意字符)" />
     </label>
     <label>
-      <input
-        type="text"
-        v-model="userInfo.username"
-        placeholder="账号(4~16, 英文或数字)"
-        @focus="isShow(true)"
-        @blur="isShow(false)"
-      />
+      <input type="text" v-model="userInfo.username" placeholder="账号(4~16, 英文或数字)" @focus="isShow(true)" @blur="isShow(false)" />
       <span class="icon" @click="clear">
         <van-icon class="icon" name="clear" size="20px" color="#bbb" v-show="clearIconShow" />
       </span>
