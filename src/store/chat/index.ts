@@ -21,9 +21,8 @@ const chatModule: Module<IchatState, IrootState> = {
       state.onLine = onLine ?? []
       state.tourist = tourist ?? []
     },
-    changeChatRecord(state, data) {
-      const { chatRooms = [] } = data
-      state.chatRooms = chatRooms
+    changeChatRecord(state, chatList = []) {
+      state.chatRooms.push(...chatList)
     }
   }
 }

@@ -1,8 +1,10 @@
 <template>
-  <router-view v-slot="{ Component }">
+  <router-view v-slot="{ Component, route }">
     <!-- <keep-alive :exclude="['pubMoment', 'momentDetail']"> -->
     <keep-alive>
-      <component :is="Component" />
+      <transition :name="route.path === '/chatDetail' ? 'chat-detail' : ''" mode="in-out">
+        <component :is="Component" />
+      </transition>
     </keep-alive>
   </router-view>
   <van-tabbar route :style="{ display: $route.meta.tabbarHidden ? 'none' : '' }">
@@ -24,4 +26,12 @@ export default defineComponent({
 @import url("@/assets/base.css");
 // @import url("vant/lib/index.css");
 // @import url("vant/lib/toast/index.less");
+.chat-detail-enter-active,
+.chat-detail-leave-active {
+  transition: transform 0.3s ease;
+}
+.chat-detail-enter-from,
+.chat-detail-leave-to {
+  transform: translateX(100%);
+}
 </style>

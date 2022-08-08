@@ -10,6 +10,7 @@
           :message="moment.fansCount + ' 粉丝'"
           :rightText="moment.isAuthorFans ? '已关注' : '关注'"
           @clickRight="follow(moment?.author?.id)"
+          :isPopoverShow="userInfo.id == moment?.author?.id ? false : true"
         ></hqq-header>
         <!-- 文字和图片 -->
         <div :class="{ content: true, 'van-multi-ellipsis--l3': ellipsis }" @click="momentDetail">
@@ -96,12 +97,14 @@ export default defineComponent({
       store.dispatch("momentModule/likeMomentAction", moment.value.momentId)
     }
 
+    const userInfo = computed(() => store.state.userInfo)
     return {
       moment,
       clickImg,
       momentDetail,
       follow,
-      likeMoment
+      likeMoment,
+      userInfo
     }
   }
 })
@@ -117,7 +120,7 @@ export default defineComponent({
 .header,
 .content,
 .time {
-  padding: 15px 15px 0;
+  margin: 15px 15px 0;
 }
 // .moment-info {
 //   padding: 15px 15px 0;

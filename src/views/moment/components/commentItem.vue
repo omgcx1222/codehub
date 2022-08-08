@@ -6,6 +6,7 @@
       :img="comment.author.avatarUrl ?? undefined"
       :name="comment.author.nickname"
       @clickRight="menuShow"
+      :isPopoverShow="userInfo.id == comment.author.id ? false : true"
     >
       <template #message>
         <div class="time">{{ $formatDate(comment.createTime) }}</div>
@@ -109,7 +110,8 @@ export default defineComponent({
       menuShow,
       menuActions,
       menuSelect,
-      likeComment
+      likeComment,
+      userInfo
     }
   }
 })

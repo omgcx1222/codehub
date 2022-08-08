@@ -3,7 +3,7 @@
     <chat-header></chat-header>
     <div class="chat-main">
       <div class="item" v-for="(item, index) in chatRooms" :key="item.id" @click="chatDetail(item.id, index)">
-        <hqq-header :name="item.name" :img="require('@/assets/img/chat.png')" message="小明：哈哈哈" size="50px">
+        <hqq-header :name="item.name" :img="require('@/assets/img/chat.png')" message="小明：哈哈哈" size="50px" :isPopoverShow="false">
           <template #right>
             <div class="time">{{ $formatDate(item.chats[0].createTime, "minute", "MM-DD") }}</div>
           </template>
@@ -11,30 +11,38 @@
       </div>
     </div>
 
-    <transition name="chat-detail">
+    <!-- <transition name="chat-detail">
       <chat-detail class="chat-detail" v-if="chatRoomIndex !== -1" @back="back" :chats="chatRooms[chatRoomIndex]"></chat-detail>
-    </transition>
+    </transition> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue"
+import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 import chatHeader from "./components/chatHeader.vue"
-import chatDetail from "./components/chatDetail.vue"
+// import chatDetail from "./components/chatDetail.vue"
 
 export default defineComponent({
   components: {
-    chatHeader,
-    chatDetail
+    chatHeader
   },
   setup() {
     const store = useStore()
     const chatRooms = computed(() => store.state.chatModule.chatRooms)
 
     const chatRoomIndex = ref(-1)
+    const router = useRouter()
     const chatDetail = (id: number, index: number) => {
-      chatRoomIndex.value = index
+      // chatRoomIndex.value = index
+      router.push({
+        path: "/chatDetail",
+        query: {
+          index,
+          id
+        }
+      })
     }
 
     const back = () => {

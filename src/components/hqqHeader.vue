@@ -1,6 +1,11 @@
 <template>
   <div class="hqq-header" :style="{ 'flex-direction': direction === 'left' ? '' : 'row-reverse' }">
-    <img class="img" :src="img" alt="" @click="clickTitle" :style="`width: ${size}; height: ${size}`" />
+    <van-popover v-if="isPopoverShow" v-model:show="showPopover" :actions="actions" placement="right-start" @select="select">
+      <template #reference>
+        <img class="img" :src="img" alt="" :style="`width: ${size}; height: ${size}`" />
+      </template>
+    </van-popover>
+    <img class="img" v-else :src="img" alt="" :style="`width: ${size}; height: ${size}`" />
     <div class="title" @click="clickTitle" :style="`min-height: ${size}`">
       <div class="name" :style="{ 'text-align': direction === 'left' ? 'left' : 'right' }">{{ name }}</div>
       <div :style="{ 'align-self': direction === 'left' ? 'flex-start' : 'flex-end', width }">
@@ -20,7 +25,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
+import type { PopoverAction } from "vant"
 
 export default defineComponent({
   name: "hqqHeader",
@@ -56,8 +62,13 @@ export default defineComponent({
     width: {
       type: String,
       default: "100%"
+    },
+    isPopoverShow: {
+      type: Boolean,
+      default: true
     }
   },
+  emits: ["clickTitle", "clickRight"],
   setup(_, { emit }) {
     const clickTitle = () => {
       emit("clickTitle")
@@ -65,9 +76,17 @@ export default defineComponent({
     const clickRight = () => {
       emit("clickRight")
     }
+    const showPopover = ref(false)
+    const actions = [{ text: "私聊" }]
+    const select = (action: PopoverAction) => {
+      console.log(action)
+    }
     return {
       clickTitle,
-      clickRight
+      clickRight,
+      showPopover,
+      actions,
+      select
     }
   }
 })

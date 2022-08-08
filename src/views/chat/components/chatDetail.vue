@@ -14,6 +14,7 @@
           :img="item.avatarUrl ?? require('@/assets/img/user.png')"
           :isRightShow="false"
           :direction="userInfo.id == item.userId ? 'right' : 'left'"
+          :isPopoverShow="userInfo.id == item.userId ? false : true"
           :width="''"
         >
           <template #message>
@@ -35,6 +36,7 @@
 <script lang="ts">
 import { defineComponent, computed, getCurrentInstance } from "vue"
 import { useStore } from "@/store"
+import { useRoute, useRouter } from "vue-router"
 
 import hqqHeader from "@/components/hqqHeader.vue"
 import hqqMessage from "@/components/hqqMessage.vue"
@@ -46,16 +48,18 @@ export default defineComponent({
     hqqMessage,
     hqqInput
   },
-  props: {
-    chats: {
-      type: Object,
-      require: true
-    }
-  },
+  // props: {
+  //   chats: {
+  //     type: Object,
+  //     require: true
+  //   }
+  // },
   emits: ["back"],
-  setup(props, { emit }) {
+  setup() {
+    const router = useRouter()
     const back = () => {
-      emit("back")
+      // emit("back")
+      router.go(-1)
     }
     const store = useStore()
     const userInfo = computed(() => store.state.userInfo)
@@ -71,14 +75,17 @@ export default defineComponent({
       return t1 - t2 > 60000 ? currentInstance?.$formatDate(time, "minute") : ""
     }
 
-    const chatId = computed(() => props.chats?.id)
-    console.log(chatId)
+    const route = useRoute()
+    // const chatId = computed(() => props.chats?.id)
+    const chatId = Number(route.query.id)
+    const chats = computed(() => store.state.chatModule.chatRooms.find((item) => item.id === chatId))
 
     const submit = (message: string) => {
-      store.dispatch("chatModule/sendMessageAction", { message, chatId: chatId.value })
+      store.dispatch("chatModule/sendMessageAction", { message, chatId: chatId })
     }
 
     return {
+      chats,
       back,
       userInfo,
       chatTime,
@@ -95,6 +102,9 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   background-color: var(--background-color);
+  position: fixed;
+  z-index: 10;
+  top: 0;
   .nav-bar {
     background-color: var(--background-color);
   }
