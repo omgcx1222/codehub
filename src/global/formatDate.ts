@@ -21,7 +21,7 @@ export default {
       // console.log(dayjs().diff(dayjs.utc(date).format("YYYY-MM-DD HH:mm"), "day"))
 
       const currentDate = dayjs()
-      const handleDate = dayjs.utc(date)
+      const handleDate = date.indexOf("T") !== -1 ? dayjs.utc(date).local() : dayjs(date)
       // const handleDate = dayjs(date)
       // console.log(date, handleDate.format("YYYY-MM-DD HH:mm"))
 

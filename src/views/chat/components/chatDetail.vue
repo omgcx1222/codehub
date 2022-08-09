@@ -71,7 +71,7 @@ export default defineComponent({
     const route = useRoute()
     // const chatId = computed(() => props.chats?.id)
     const chatId = Number(route.query.id)
-    const chats = computed(() => store.state.chatModule.chatRooms.find((item) => item.id === chatId) ?? [])
+    const chats = computed(() => store.state.chatModule.chatRooms.find((item) => item.id === chatId))
     // console.log(store.state.chatModule.chatRooms)
 
     const message = ref("")
