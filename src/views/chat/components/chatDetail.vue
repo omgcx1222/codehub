@@ -5,7 +5,7 @@
         <van-icon name="ellipsis" size="18" />
       </template> -->
     </van-nav-bar>
-    <div class="chat-message">
+    <div class="chat-message" ref="chatList">
       <div v-for="(item, index) in chats.chats" :key="item.id">
         <div class="time">{{ chatTime(item.createTime, chats.chats[index - 1]?.createTime ?? 0) }}</div>
         <hqq-header
@@ -29,12 +29,12 @@
       </div>
     </div>
 
-    <hqq-input @submit="submit"></hqq-input>
+    <hqq-input @submit="submit" v-model:message="message"></hqq-input>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, getCurrentInstance } from "vue"
+import { defineComponent, computed, getCurrentInstance, ref, nextTick } from "vue"
 import { useStore } from "@/store"
 import { useRoute, useRouter } from "vue-router"
 
@@ -43,53 +43,56 @@ import hqqMessage from "@/components/hqqMessage.vue"
 import hqqInput from "@/components/hqqInput.vue"
 
 export default defineComponent({
+  name: "chatDetail",
   components: {
     hqqHeader,
     hqqMessage,
     hqqInput
   },
-  // props: {
-  //   chats: {
-  //     type: Object,
-  //     require: true
-  //   }
-  // },
-  emits: ["back"],
   setup() {
     const router = useRouter()
     const back = () => {
       // emit("back")
-      router.go(-1)
+      router.back()
     }
     const store = useStore()
     const userInfo = computed(() => store.state.userInfo)
-    // console.log(userInfo.value.id)
 
+    // 信息时间是否显示
     const currentInstance = getCurrentInstance()?.appContext.config.globalProperties
     const chatTime = (time: Date, preTime: Date) => {
-      // const t = currentInstance?.$formatDate(time, "minute")
       const t1 = new Date(time).getTime()
       const t2 = new Date(preTime).getTime()
 
       // 超出一分钟
-      return t1 - t2 > 60000 ? currentInstance?.$formatDate(time, "minute") : ""
+      return t1 - t2 > 60000 ? currentInstance?.$formatDate(time, true) : ""
     }
 
     const route = useRoute()
     // const chatId = computed(() => props.chats?.id)
     const chatId = Number(route.query.id)
-    const chats = computed(() => store.state.chatModule.chatRooms.find((item) => item.id === chatId))
+    const chats = computed(() => store.state.chatModule.chatRooms.find((item) => item.id === chatId) ?? [])
+    // console.log(store.state.chatModule.chatRooms)
 
-    const submit = (message: string) => {
-      store.dispatch("chatModule/sendMessageAction", { message, chatId: chatId })
+    const message = ref("")
+    const submit = () => {
+      store.dispatch("chatModule/sendMessageAction", { message: message.value, chatId: chatId })
+      message.value = ""
+      nextTick(() => {
+        chatList.value.scrollTop = chatList.value.scrollHeight
+      })
     }
+
+    const chatList = ref()
 
     return {
       chats,
       back,
       userInfo,
       chatTime,
-      submit
+      submit,
+      message,
+      chatList
     }
   }
 })

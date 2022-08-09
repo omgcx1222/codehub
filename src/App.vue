@@ -1,11 +1,11 @@
 <template>
-  <router-view v-slot="{ Component, route }">
+  <router-view v-slot="{ Component }">
     <!-- <keep-alive :exclude="['pubMoment', 'momentDetail']"> -->
-    <keep-alive>
-      <transition :name="route.path === '/chatDetail' ? 'chat-detail' : ''" mode="in-out">
-        <component :is="Component" />
-      </transition>
+    <!-- <transition :name="animationName" :mode="mode"> -->
+    <keep-alive :exclude="['momentDetail', 'chatDetail']">
+      <component :is="Component" />
     </keep-alive>
+    <!-- </transition> -->
   </router-view>
   <van-tabbar route :style="{ display: $route.meta.tabbarHidden ? 'none' : '' }">
     <van-tabbar-item icon="smile" replace to="/moment">动态</van-tabbar-item>
@@ -15,10 +15,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
+import { useRouter } from "vue-router"
 
 export default defineComponent({
-  name: "App"
+  name: "App",
+  setup() {
+    const animationName = ref("")
+    const mode = ref("")
+    const router = useRouter()
+    router.beforeEach((to, from) => {
+      // route.path === '/chatDetail' ? 'chat-detail' : ''
+      if (to.path === "/chatDetail" || to.path === "/momentDetail") {
+        animationName.value = "chat-detail"
+        mode.value = "in-out"
+      } else if (from.path === "/chatDetail" || from.path === "/momentDetail") {
+        animationName.value = "chat-detail2"
+        mode.value = "in-out"
+      } else {
+        animationName.value = ""
+      }
+    })
+
+    return {
+      animationName,
+      mode
+    }
+  }
 })
 </script>
 
@@ -27,11 +50,14 @@ export default defineComponent({
 // @import url("vant/lib/index.css");
 // @import url("vant/lib/toast/index.less");
 .chat-detail-enter-active,
-.chat-detail-leave-active {
+.chat-detail2-leave-active {
   transition: transform 0.3s ease;
 }
-.chat-detail-enter-from,
-.chat-detail-leave-to {
+.chat-detail-enter-from {
+  transform: translateX(100%);
+}
+
+.chat-detail2-leave-to {
   transform: translateX(100%);
 }
 </style>

@@ -51,28 +51,27 @@
     </div>
 
     <!-- 动态详情 -->
-    <transition name="moment-detail">
+    <!-- <transition name="moment-detail">
       <moment-detail class="moment-detail" v-if="momentDetailId >= 0" :id="momentDetailId" @back="momentDetail(-1)"></moment-detail>
-    </transition>
+    </transition> -->
   </div>
 </template>
 
 <script lang="ts">
 import { ref, onMounted, computed } from "vue"
-// import { useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 
 import pubMoment from "./children/pubMoment.vue"
 import momentItem from "./components/momentItem.vue"
-import momentDetail from "./children/momentDetail.vue"
+// import momentDetail from "./children/momentDetail.vue"
 // import { useRect } from "@vant/use"
 
 export default {
   name: "moment",
   components: {
     momentItem,
-    pubMoment,
-    momentDetail
+    pubMoment
   },
   setup() {
     onMounted(() => {
@@ -113,8 +112,15 @@ export default {
 
     // 动态详情
     const momentDetailId = ref(-1)
+    const router = useRouter()
     const momentDetail = (id: number) => {
-      momentDetailId.value = id
+      // momentDetailId.value = id
+      router.push({
+        path: "/momentDetail",
+        query: {
+          id
+        }
+      })
     }
 
     // 下拉刷新(刷新时数据恢复10条，开启上拉加载功能)
@@ -288,19 +294,19 @@ export default {
     transform: scale(0);
   }
 }
-.moment-detail {
-  position: fixed;
-  top: 0%;
-  // left: 0%;
-  z-index: 10;
-  transform: translateX(0);
-}
-.moment-detail-enter-active,
-.moment-detail-leave-active {
-  transition: transform 0.3s ease;
-}
-.moment-detail-enter-from,
-.moment-detail-leave-to {
-  transform: translateX(100%);
-}
+// .moment-detail {
+//   position: fixed;
+//   top: 0%;
+//   // left: 0%;
+//   z-index: 10;
+//   transform: translateX(0);
+// }
+// .moment-detail-enter-active,
+// .moment-detail-leave-active {
+//   transition: transform 0.3s ease;
+// }
+// .moment-detail-enter-from,
+// .moment-detail-leave-to {
+//   transform: translateX(100%);
+// }
 </style>

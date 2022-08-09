@@ -7,6 +7,7 @@ const routes = [
   },
   {
     path: "/moment",
+    name: "moment",
     component: () => import("@/views/moment/moment.vue")
     // beforeEnter: (to, from) => {
     //   if(to.path === "/")
@@ -20,27 +21,32 @@ const routes = [
   //     tabbarHidden: true
   //   }
   // },
-  // {
-  //   path: "/momentDetail",
-  //   component: () => import("@/views/moment/children/momentDetail.vue"),
-  //   meta: {
-  //     tabbarHidden: true
-  //   }
-  // },
+  {
+    path: "/momentDetail",
+    name: "momentDetail",
+    component: () => import("@/views/moment/children/momentDetail.vue")
+    // meta: {
+    //   tabbarHidden: true
+    // }
+  },
   {
     path: "/chat",
+    name: "chat",
     component: () => import("@/views/chat/chat.vue")
   },
   {
     path: "/chatDetail",
+    name: "chatDetail",
     component: () => import("@/views/chat/components/chatDetail.vue")
   },
   {
     path: "/my",
+    name: "my",
     component: () => import("@/views/my/my.vue")
   },
   {
     path: "/login",
+    name: "login",
     component: () => import("@/views/login/login.vue"),
     meta: {
       tabbarHidden: true

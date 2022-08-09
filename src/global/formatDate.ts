@@ -15,24 +15,30 @@ export default {
   install: (app: App<Element>) => {
     app.config.globalProperties.$formatDate = (
       date: string,
-      unit: "minute" | "month" | "day" | "year" = "day",
+      detail?: boolean,
       type?: "YYYY-MM-DD HH:mm" | "MM-DD HH:mm" | "HH:mm" | "MM-DD"
     ) => {
       // console.log(dayjs().diff(dayjs.utc(date).format("YYYY-MM-DD HH:mm"), "day"))
 
       const currentDate = dayjs()
-      const oldDate = dayjs.utc(date).format("YYYY-MM-DD HH:mm")
+      const handleDate = dayjs.utc(date)
+      // const handleDate = dayjs(date)
+      // console.log(date, handleDate.format("YYYY-MM-DD HH:mm"))
 
-      if (currentDate.diff(oldDate, unit) > 1) {
-        if (currentDate.diff(oldDate, "year") > 1) {
-          return oldDate
-        }
-        // if(currentDate.diff(oldDate, "month") > 1) {
-        //   return dayjs.utc(date).format("YYYY-MM-DD HH:mm")
-        // }
-        return dayjs.utc(date).format(type ? type : "MM-DD HH:mm")
+      if (type) {
+        return handleDate.format(type)
       }
-      return currentDate.to(oldDate)
+
+      if (currentDate.year() - handleDate.year() < 1) {
+        if (currentDate.month() - handleDate.month() < 1 && currentDate.date() - handleDate.date() <= 2) {
+          if (currentDate.day() - handleDate.day() === 0) {
+            return handleDate.format("HH:mm")
+          }
+          return "昨天 " + handleDate.format("HH:mm")
+        }
+        return handleDate.format(detail ? "MM-DD HH:mm" : "MM-DD")
+      }
+      return handleDate.format(detail ? "YYYY-MM-DD HH:mm" : "YYYY-MM-DD")
     }
   }
 }

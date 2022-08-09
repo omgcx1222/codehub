@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue"
+import type { PropType } from "vue"
 import type { PopoverAction } from "vant"
 
 export default defineComponent({
@@ -66,9 +67,12 @@ export default defineComponent({
     isPopoverShow: {
       type: Boolean,
       default: true
+    },
+    actions: {
+      type: Array as PropType<PopoverAction[]>
     }
   },
-  emits: ["clickTitle", "clickRight"],
+  emits: ["clickTitle", "clickRight", "select"],
   setup(_, { emit }) {
     const clickTitle = () => {
       emit("clickTitle")
@@ -77,15 +81,13 @@ export default defineComponent({
       emit("clickRight")
     }
     const showPopover = ref(false)
-    const actions = [{ text: "私聊" }]
     const select = (action: PopoverAction) => {
-      console.log(action)
+      emit("select", action)
     }
     return {
       clickTitle,
       clickRight,
       showPopover,
-      actions,
       select
     }
   }

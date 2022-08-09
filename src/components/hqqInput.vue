@@ -2,7 +2,7 @@
   <van-cell-group class="hqq-input" :border="false">
     <van-field
       class="input"
-      v-model="message"
+      v-model="message2"
       :rows="1"
       :autosize="{ maxHeight: 120 }"
       type="textarea"
@@ -20,23 +20,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue"
+import { defineComponent, ref, computed } from "vue"
 import type { FieldInstance } from "vant"
 
 export default defineComponent({
-  emits: ["submit", "focus", "blur"],
+  emits: ["submit", "focus", "blur", "update:message"],
   props: {
     tip: {
       type: String,
       default: ""
+    },
+    message: {
+      type: String,
+      default: ""
     }
   },
-  setup(_, { emit }) {
-    const message = ref("")
+  setup(props, { emit }) {
+    const message2 = computed({
+      set(value) {
+        emit("update:message", value)
+      },
+      get() {
+        return props.message
+      }
+    })
+
     const input = ref<FieldInstance>()
     const focusState = ref(false)
     const submit = () => {
-      emit("submit", message.value)
+      emit("submit")
     }
     const clickInput = () => {
       if (!focusState.value) {
@@ -52,17 +64,14 @@ export default defineComponent({
       focusState.value = false
       emit("blur")
     }
-    const clearMessage = () => {
-      message.value = ""
-    }
+
     return {
       input,
-      message,
       submit,
       clickInput,
       blur,
       focus,
-      clearMessage
+      message2
     }
   }
 })

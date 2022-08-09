@@ -54,7 +54,7 @@
     </van-pull-refresh>
 
     <div class="comment-input">
-      <hqq-input ref="input" @submit="submit" @focus="focus" @blur="blur" :tip="replyOption.tip"></hqq-input>
+      <hqq-input ref="input" @submit="submit" @focus="focus" @blur="blur" :tip="replyOption.tip" v-model:message="inputValue"></hqq-input>
     </div>
 
     <!-- 评论详情弹出框 -->
@@ -74,7 +74,14 @@
           </van-list>
         </div>
         <div class="comment-input">
-          <hqq-input ref="popuoInput" @submit="submit" @focus="focus" @blur="blur" :tip="replyOption.tip"></hqq-input>
+          <hqq-input
+            ref="popuoInput"
+            @submit="submit"
+            @focus="focus"
+            @blur="blur"
+            :tip="replyOption.tip"
+            v-model:message="popuoInputValue"
+          ></hqq-input>
         </div>
       </div>
     </van-popup>
@@ -86,6 +93,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, computed, onMounted } from "vue"
+import { useRouter, useRoute } from "vue-router"
 import { useStore } from "@/store"
 import { Icomment, ImomentDetail } from "@/store/types"
 
@@ -108,12 +116,14 @@ export default defineComponent({
       type: Number
     }
   },
-  emits: ["back"],
-  setup(props, { emit }) {
+  setup() {
     const store = useStore()
 
-    // const momentId = route.query.id
-    const momentId = computed(() => props.id)
+    const route = useRoute()
+
+    // const chatId = computed(() => props.chats?.id)
+    const momentId = Number(route.query.id)
+    // const momentId = computed(() => props.id)
 
     onMounted(() => {
       // setTimeout(() => {
@@ -124,11 +134,13 @@ export default defineComponent({
     const moment = computed(() => store.state.momentModule.momentDetail)
     const commentList = computed(() => store.state.momentModule.commentList)
     const getMomentDetail = async (type: "all" | "unshift" | "push") => {
-      await store.dispatch("momentModule/momentDetailAndCommentListAction", { momentId: momentId.value, type })
+      await store.dispatch("momentModule/momentDetailAndCommentListAction", { momentId: momentId, type })
     }
 
+    const router = useRouter()
     const back = () => {
-      emit("back")
+      router.back()
+      // emit("back")
       setTimeout(() => {
         // 关闭的动画完成再清空数据
         store.commit("momentModule/changeMomentDetail", [])
@@ -157,7 +169,7 @@ export default defineComponent({
           Toast.success("已举报")
         }, 500)
       } else if (select.name === "删除") {
-        store.dispatch("momentModule/deleteMomentAction", momentId.value)
+        store.dispatch("momentModule/deleteMomentAction", momentId)
       }
     }
 
@@ -182,7 +194,7 @@ export default defineComponent({
     })
     const focus = (mId: any, cId: any, rId: any, name: any) => {
       // console.log(mId, cId, rId, name)
-      replyOption.momentId = momentId.value ?? 0
+      replyOption.momentId = momentId ?? 0
       replyOption.commentId = cId
       replyOption.replyId = rId
       replyOption.tip = name ? `回复 @${name} : ` : "评论动态"
@@ -197,14 +209,18 @@ export default defineComponent({
     const blur = () => {
       replyOption.tip = "发一条友善的评论"
     }
-    const submit = async (value: string) => {
+
+    const popuoInputValue = ref("")
+    const inputValue = ref("")
+    const submit = async () => {
+      const value = commentPopupShow.value ? popuoInputValue.value : inputValue.value
       if (!value) {
-        return Toast.loading("内容不能为空")
+        return Toast.fail("内容不能为空")
       }
       replyOption.content = value
       const res = await store.dispatch("momentModule/pubCommentAction", replyOption)
       if (res) {
-        commentPopupShow.value ? popuoInput?.value?.clearMessage() : input.value?.clearMessage()
+        commentPopupShow.value ? (popuoInputValue.value = "") : (inputValue.value = "")
       }
     }
 
@@ -232,23 +248,9 @@ export default defineComponent({
     }
 
     const likeMoment = () => {
-      store.dispatch("momentModule/likeMomentAction", momentId.value)
+      store.dispatch("momentModule/likeMomentAction", momentId)
     }
 
-    // watch(
-    //   props,
-    //   (props) => {
-    //     if (props.id && props.id >= 0) {
-    //       setTimeout(() => {
-    //         // 动画完成再请求数据
-    //         getMomentDetail("all")
-    //       }, 300)
-    //     }
-    //   },
-    //   {
-    //     immediate: true
-    //   }
-    // )
     return {
       moment,
       commentList,
@@ -272,7 +274,9 @@ export default defineComponent({
       isAddLoading,
       finished,
       listLoad,
-      likeMoment
+      likeMoment,
+      popuoInputValue,
+      inputValue
     }
   }
 })
@@ -286,6 +290,9 @@ export default defineComponent({
   background-color: var(--white-background-color);
   display: flex;
   flex-direction: column;
+  position: fixed;
+  z-index: 10;
+  top: 0;
 }
 .main {
   flex: 1;

@@ -11,6 +11,8 @@
           :rightText="moment.isAuthorFans ? '已关注' : '关注'"
           @clickRight="follow(moment?.author?.id)"
           :isPopoverShow="userInfo.id == moment?.author?.id ? false : true"
+          :actions="[{ text: '私聊' }]"
+          @select="select"
         ></hqq-header>
         <!-- 文字和图片 -->
         <div :class="{ content: true, 'van-multi-ellipsis--l3': ellipsis }" @click="momentDetail">
@@ -22,7 +24,7 @@
           </van-grid>
         </div>
         <!-- 时间 -->
-        <div class="time" @click="momentDetail">{{ $formatDate(moment.createTime) }}</div>
+        <div class="time" @click="momentDetail">{{ $formatDate(moment.createTime, true) }}</div>
         <!-- 插槽：默认转发评论点赞 -->
         <div class="menu">
           <slot :moment="moment">
@@ -46,7 +48,8 @@
 <script lang="ts">
 import { defineComponent, computed, getCurrentInstance, PropType } from "vue"
 import { useStore } from "@/store"
-import { ImomentDetail } from "@/store/types"
+import type { ImomentDetail } from "@/store/types"
+import type { PopoverAction } from "vant"
 
 import hqqHeader from "@/components/hqqHeader.vue"
 
@@ -98,13 +101,19 @@ export default defineComponent({
     }
 
     const userInfo = computed(() => store.state.userInfo)
+
+    const select = (action: PopoverAction[]) => {
+      console.log(action)
+    }
+
     return {
       moment,
       clickImg,
       momentDetail,
       follow,
       likeMoment,
-      userInfo
+      userInfo,
+      select
     }
   }
 })
@@ -118,9 +127,8 @@ export default defineComponent({
   margin: 0;
 }
 .header,
-.content,
-.time {
-  margin: 15px 15px 0;
+.content {
+  margin: 15px 15px 5px;
 }
 // .moment-info {
 //   padding: 15px 15px 0;
@@ -132,7 +140,8 @@ export default defineComponent({
   .text {
     font-size: 16px;
     white-space: pre-wrap;
-    margin: 10px 5px;
+    // margin: 10px 5px;
+    margin-bottom: 10px;
   }
   .img {
     width: 100%;

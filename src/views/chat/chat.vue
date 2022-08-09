@@ -2,10 +2,16 @@
   <div class="chat">
     <chat-header></chat-header>
     <div class="chat-main">
-      <div class="item" v-for="(item, index) in chatRooms" :key="item.id" @click="chatDetail(item.id, index)">
-        <hqq-header :name="item.name" :img="require('@/assets/img/chat.png')" message="小明：哈哈哈" size="50px" :isPopoverShow="false">
+      <div class="item" v-for="item in chatRooms" :key="item.id" @click="chatDetail(item.id)">
+        <hqq-header
+          :name="item.name"
+          :img="require('@/assets/img/chat.png')"
+          :message="item.chats[item.chats.length - 1].nickname + '：' + item.chats[item.chats.length - 1].message"
+          size="50px"
+          :isPopoverShow="false"
+        >
           <template #right>
-            <div class="time">{{ $formatDate(item.chats[0].createTime, "minute", "MM-DD") }}</div>
+            <div class="time">{{ $formatDate(item.chats[item.chats.length - 1].createTime) }}</div>
           </template>
         </hqq-header>
       </div>
@@ -25,6 +31,7 @@ import chatHeader from "./components/chatHeader.vue"
 // import chatDetail from "./components/chatDetail.vue"
 
 export default defineComponent({
+  name: "chat",
   components: {
     chatHeader
   },
@@ -34,25 +41,19 @@ export default defineComponent({
 
     const chatRoomIndex = ref(-1)
     const router = useRouter()
-    const chatDetail = (id: number, index: number) => {
+    const chatDetail = (id: number) => {
       // chatRoomIndex.value = index
       router.push({
         path: "/chatDetail",
         query: {
-          index,
           id
         }
       })
     }
 
-    const back = () => {
-      chatRoomIndex.value = -1
-    }
-
     return {
       chatRoomIndex,
       chatDetail,
-      back,
       chatRooms
     }
   }
@@ -78,17 +79,17 @@ export default defineComponent({
     }
   }
 }
-.chat-detail {
-  position: fixed;
-  top: 0;
-  z-index: 10;
-}
-.chat-detail-enter-active,
-.chat-detail-leave-active {
-  transition: transform 0.3s ease;
-}
-.chat-detail-enter-from,
-.chat-detail-leave-to {
-  transform: translateX(100%);
-}
+// .chat-detail {
+//   position: fixed;
+//   top: 0;
+//   z-index: 10;
+// }
+// .chat-detail-enter-active,
+// .chat-detail-leave-active {
+//   transition: transform 0.3s ease;
+// }
+// .chat-detail-enter-from,
+// .chat-detail-leave-to {
+//   transform: translateX(100%);
+// }
 </style>

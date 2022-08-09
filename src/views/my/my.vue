@@ -30,6 +30,7 @@ import menuHeader from "./components/menuHeader.vue"
 import menuOption from "./components/menuOption.vue"
 
 export default defineComponent({
+  name: "my",
   components: {
     hqqHeader,
     menuHeader,
