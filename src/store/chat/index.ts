@@ -13,10 +13,6 @@ const chatModule: Module<IchatState, IrootState> = {
   actions: {
     sendMessageAction(store, data: { message: string; chatId: number }) {
       socket.send({ type: "sendPublicChat", data })
-    },
-    chatRoomsAction(store, data) {
-      const room = store.state.chatRooms.find((item) => item.id === data.roomId)
-      room && room.chats.push(data)
     }
   },
   mutations: {
@@ -25,8 +21,12 @@ const chatModule: Module<IchatState, IrootState> = {
       state.onLine = onLine ?? []
       state.tourist = tourist ?? []
     },
-    changeChatRecord(state, rooms = []) {
-      state.chatRooms.push(...rooms)
+    changeChatRooms(state, rooms = []) {
+      state.chatRooms = rooms
+    },
+    addChatMessage(state, data) {
+      const room = state.chatRooms.find((item) => item.id === data.roomId)
+      room && room.chats.push(data)
     }
   }
 }

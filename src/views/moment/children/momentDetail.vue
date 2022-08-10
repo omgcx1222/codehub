@@ -16,7 +16,7 @@
         :immediate-check="false"
       >
         <!-- 动态详情 -->
-        <moment-item :momentData="moment" :row="15" @momentDetail="focus">
+        <moment-item :momentData="moment" :row="15" @momentDetail="focus" :time="$formatDate(moment?.createTime, true, 'YYYY-MM-DD HH:mm')">
           <template #default="{ moment }">
             <div class="moment-menu">
               <span style="flex: 1">全部评论（{{ commentList.length }}）</span>

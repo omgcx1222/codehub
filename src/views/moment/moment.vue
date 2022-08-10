@@ -20,7 +20,13 @@
               <template v-if="momentList[index]">
                 <transition-group @before-enter="beforeEnter" @enter="enter" appear>
                   <div class="item" v-for="(item, index) in momentList[index]" :key="item.momentId" :data-index="index">
-                    <moment-item :momentData="item" :row="5" @momentDetail="momentDetail" :ellipsis="true"></moment-item>
+                    <moment-item
+                      :momentData="item"
+                      :row="5"
+                      @momentDetail="momentDetail"
+                      :ellipsis="true"
+                      :time="$formatDate(item.createTime, true)"
+                    ></moment-item>
                   </div>
                 </transition-group>
               </template>

@@ -1,31 +1,33 @@
 <template>
   <div class="chat-detail">
-    <van-nav-bar left-arrow @click-left="back" :title="chats.name" class="nav-bar">
+    <van-nav-bar left-arrow @click-left="back" :title="chats?.name" class="nav-bar">
       <!-- <template #right>
         <van-icon name="ellipsis" size="18" />
       </template> -->
     </van-nav-bar>
     <div class="chat-message" ref="chatList">
-      <div v-for="(item, index) in chats.chats" :key="item.id">
-        <div class="time">{{ chatTime(item.createTime, chats.chats[index - 1]?.createTime ?? 0) }}</div>
-        <hqq-header
-          class="item"
-          :name="item.nickname"
-          :img="item.avatarUrl ?? require('@/assets/img/user.png')"
-          :isRightShow="false"
-          :direction="userInfo.id == item.userId ? 'right' : 'left'"
-          :isPopoverShow="userInfo.id == item.userId ? false : true"
-          :width="''"
-        >
-          <template #message>
-            <hqq-message
-              class="message"
-              :style="{ 'background-color': userInfo.id == item.userId ? 'var(--chat-message)' : 'var(--van-white)' }"
-              :message="item.message"
-              :isShowReplyText="false"
-            ></hqq-message>
-          </template>
-        </hqq-header>
+      <div v-if="chats?.chats?.length">
+        <template v-for="(item, index) in chats.chats" :key="item.id">
+          <div class="time">{{ chatTime(item.createTime, chats.chats[index - 1]?.createTime ?? 0) }}</div>
+          <hqq-header
+            class="item"
+            :name="item.nickname"
+            :img="item.avatarUrl ?? require('@/assets/img/user.png')"
+            :isRightShow="false"
+            :direction="userInfo.id == item.userId ? 'right' : 'left'"
+            :isPopoverShow="userInfo.id == item.userId ? false : true"
+            :width="''"
+          >
+            <template #message>
+              <hqq-message
+                class="message"
+                :style="{ 'background-color': userInfo.id == item.userId ? 'var(--chat-message)' : 'var(--van-white)' }"
+                :message="item.message"
+                :isShowReplyText="false"
+              ></hqq-message>
+            </template>
+          </hqq-header>
+        </template>
       </div>
     </div>
 
@@ -80,6 +82,7 @@ export default defineComponent({
       message.value = ""
       nextTick(() => {
         chatList.value.scrollTop = chatList.value.scrollHeight
+        //  = { top: 0, behavior: 'smooth' }chatList.value.scrollHeight
       })
     }
 
@@ -116,6 +119,7 @@ export default defineComponent({
   // height: calc(100% - 46px - 50px);
   flex: 1;
   overflow: scroll;
+  scroll-behavior: smooth;
   .item {
     margin: 0 15px 20px 15px;
     .message {

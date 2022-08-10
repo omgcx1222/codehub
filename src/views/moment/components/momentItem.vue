@@ -12,7 +12,7 @@
           @clickRight="follow(moment?.author?.id)"
           :isPopoverShow="userInfo.id == moment?.author?.id ? false : true"
           :actions="[{ text: '私聊' }]"
-          @select="select"
+          @select="select($event, moment?.author?.id)"
         ></hqq-header>
         <!-- 文字和图片 -->
         <div :class="{ content: true, 'van-multi-ellipsis--l3': ellipsis }" @click="momentDetail">
@@ -24,7 +24,7 @@
           </van-grid>
         </div>
         <!-- 时间 -->
-        <div class="time" @click="momentDetail">{{ $formatDate(moment.createTime, true) }}</div>
+        <div class="time" @click="momentDetail">{{ time }}</div>
         <!-- 插槽：默认转发评论点赞 -->
         <div class="menu">
           <slot :moment="moment">
@@ -47,6 +47,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, getCurrentInstance, PropType } from "vue"
+import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 import type { ImomentDetail } from "@/store/types"
 import type { PopoverAction } from "vant"
@@ -71,6 +72,11 @@ export default defineComponent({
     ellipsis: {
       type: Boolean,
       default: false
+    },
+    // 动态时间
+    time: {
+      type: String,
+      default: ""
     }
   },
   setup(props, { emit }) {
@@ -102,8 +108,14 @@ export default defineComponent({
 
     const userInfo = computed(() => store.state.userInfo)
 
-    const select = (action: PopoverAction[]) => {
-      console.log(action)
+    const router = useRouter()
+    const select = (action: PopoverAction[], id: number) => {
+      router.push({
+        path: "/chatDetail",
+        query: {
+          id
+        }
+      })
     }
 
     return {

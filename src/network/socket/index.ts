@@ -34,10 +34,11 @@ class Socket {
           store.commit("chatModule/changeOnLine", data)
           break
         case "chatRecord":
-          store.commit("chatModule/changeChatRecord", data.chatRooms ?? [])
+          store.commit("chatModule/changeChatRooms", data.chatRooms ?? [])
           break
         case "publicChat":
-          store.dispatch("chatModule/chatRoomsAction", data)
+          // store.dispatch("chatModule/addChatMessage", data)
+          store.commit("chatModule/addChatMessage", data)
           break
 
         default:

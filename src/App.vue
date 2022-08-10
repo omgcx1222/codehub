@@ -1,11 +1,11 @@
 <template>
   <router-view v-slot="{ Component }">
     <!-- <keep-alive :exclude="['pubMoment', 'momentDetail']"> -->
-    <!-- <transition :name="animationName" :mode="mode"> -->
-    <keep-alive :exclude="['momentDetail', 'chatDetail']">
-      <component :is="Component" />
-    </keep-alive>
-    <!-- </transition> -->
+    <transition :name="animationName" mode="in-out">
+      <keep-alive :exclude="['momentDetail', 'chatDetail']">
+        <component :is="Component" />
+      </keep-alive>
+    </transition>
   </router-view>
   <van-tabbar route :style="{ display: $route.meta.tabbarHidden ? 'none' : '' }">
     <van-tabbar-item icon="smile" replace to="/moment">动态</van-tabbar-item>
@@ -22,24 +22,20 @@ export default defineComponent({
   name: "App",
   setup() {
     const animationName = ref("")
-    const mode = ref("")
     const router = useRouter()
     router.beforeEach((to, from) => {
       // route.path === '/chatDetail' ? 'chat-detail' : ''
       if (to.path === "/chatDetail" || to.path === "/momentDetail") {
         animationName.value = "chat-detail"
-        mode.value = "in-out"
       } else if (from.path === "/chatDetail" || from.path === "/momentDetail") {
         animationName.value = "chat-detail2"
-        mode.value = "in-out"
       } else {
         animationName.value = ""
       }
     })
 
     return {
-      animationName,
-      mode
+      animationName
     }
   }
 })

@@ -18,6 +18,7 @@ export default {
       detail?: boolean,
       type?: "YYYY-MM-DD HH:mm" | "MM-DD HH:mm" | "HH:mm" | "MM-DD"
     ) => {
+      if (!date) return
       // console.log(dayjs().diff(dayjs.utc(date).format("YYYY-MM-DD HH:mm"), "day"))
 
       const currentDate = dayjs()
@@ -31,10 +32,13 @@ export default {
 
       if (currentDate.year() - handleDate.year() < 1) {
         if (currentDate.month() - handleDate.month() < 1 && currentDate.date() - handleDate.date() <= 2) {
-          if (currentDate.day() - handleDate.day() === 0) {
-            return handleDate.format("HH:mm")
+          if (currentDate.day() - handleDate.day() <= 1) {
+            if (currentDate.day() - handleDate.day() === 0) {
+              return handleDate.format("HH:mm")
+            }
+            return "昨天 " + handleDate.format("HH:mm")
           }
-          return "昨天 " + handleDate.format("HH:mm")
+          return "前天 " + handleDate.format("HH:mm")
         }
         return handleDate.format(detail ? "MM-DD HH:mm" : "MM-DD")
       }
