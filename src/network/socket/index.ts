@@ -19,7 +19,7 @@ class Socket {
         // this.send({ type: "login", data: { userInfo } })
         this.send({ type: "login" })
         // setTimeout(() => {
-        //   this.send({ type: "sendPublicChat", data: { userInfo, chatId: 1, message: 666 } })
+        //   this.send({ type: "sendPublicChat", data: { userInfo, roomId: 1, message: 666 } })
         // }, 2000)
       }
     }
@@ -33,12 +33,15 @@ class Socket {
         case "offLine":
           store.commit("chatModule/changeOnLine", data)
           break
-        case "chatRecord":
-          store.commit("chatModule/changeChatRooms", data.chatRooms ?? [])
+        case "chatRooms":
+          store.commit("chatModule/changeChatRooms", data)
+          break
+        case "getChatList":
+          store.commit("chatModule/addChatMessage", { data, type: "all" })
           break
         case "publicChat":
           // store.dispatch("chatModule/addChatMessage", data)
-          store.commit("chatModule/addChatMessage", data)
+          store.commit("chatModule/addChatMessage", { data, type: "push" })
           break
 
         default:
@@ -55,16 +58,13 @@ class Socket {
   onMessage(cb: (data: object) => void) {
     this.messageCb = cb
   }
-  send(data: sendDataType) {
+  send({ type, data = {} }: sendDataType) {
     try {
       const userInfo = getStorage("userInfo")
       // 默认携带userInfo
-      if (!data.data) {
-        data.data = {}
-      }
-      data.data.userInfo = userInfo
+      data.userInfo = userInfo
 
-      const d = JSON.stringify(data)
+      const d = JSON.stringify({ type, data })
       this.socket.send(d)
     } catch (error) {
       console.log(error)

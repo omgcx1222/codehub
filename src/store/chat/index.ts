@@ -11,8 +11,11 @@ const chatModule: Module<IchatState, IrootState> = {
     chatRooms: []
   },
   actions: {
-    sendMessageAction(store, data: { message: string; chatId: number }) {
+    sendMessageAction(store, data: { message: string; roomId: number }) {
       socket.send({ type: "sendPublicChat", data })
+    },
+    getChatListAction(store, roomId: number) {
+      socket.send({ type: "getChatList", data: { roomId } })
     }
   },
   mutations: {
@@ -21,13 +24,24 @@ const chatModule: Module<IchatState, IrootState> = {
       state.onLine = onLine ?? []
       state.tourist = tourist ?? []
     },
-    changeChatRooms(state, rooms = []) {
+    changeChatRooms(state, rooms) {
       state.chatRooms = rooms
     },
-    addChatMessage(state, data) {
+    addChatMessage(state, { data, type }) {
       const room = state.chatRooms.find((item) => item.id === data.roomId)
-      room && room.chats.push(data)
+      if (room) {
+        console.log(room)
+        if (type === "push") {
+          room.chats.push(data.list)
+        } else if (type === "all") {
+          room.chats = data.list
+        }
+      }
+      // room && room.chats.push(data)
     }
+    // changeChatList(state, data) {
+    //   const room = state.chatRooms.find((item) => item.id === data.roomId)
+    // }
   }
 }
 

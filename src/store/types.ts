@@ -131,13 +131,18 @@ export interface IchatState {
 export interface IchatRoom {
   id: number
   name: string
-  chats: Ichat[]
+  chats: IchatMessage[]
 }
 
-export interface Ichat {
+export interface IchatMessage {
   avatarUrl: string | null
-  id: string
+  // id: string
+  // message: string
+  // nickname: string
+  // userId: number
+  // createTime: Date
+  author: { userId: number; nickname: string; avatarUrl: string | null }
+  createTime: Date
+  id: number
   message: string
-  nickname: string
-  userId: number
 }

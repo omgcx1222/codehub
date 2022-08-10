@@ -121,7 +121,7 @@ export default defineComponent({
 
     const route = useRoute()
 
-    // const chatId = computed(() => props.chats?.id)
+    // const roomId = computed(() => props.chats?.id)
     const momentId = Number(route.query.id)
     // const momentId = computed(() => props.id)
 

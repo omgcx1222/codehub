@@ -1,4 +1,4 @@
-export type messageType = "login" | "chat" | "system" | "sendPublicChat"
+export type messageType = "login" | "system" | "sendPublicChat" | "getChatList"
 export type sendDataType = {
   type: messageType
   data?: any

@@ -5,23 +5,23 @@
         <van-icon name="ellipsis" size="18" />
       </template> -->
     </van-nav-bar>
-    <div class="chat-message" ref="chatList">
+    <div class="chat-message" ref="chatListRef">
       <div v-if="chats?.chats?.length">
         <template v-for="(item, index) in chats.chats" :key="item.id">
-          <div class="time">{{ chatTime(item.createTime, chats.chats[index - 1]?.createTime ?? 0) }}</div>
+          <div class="time">{{ chatTime(item.createTime, chats?.chats[index - 1]?.createTime ?? 0) }}</div>
           <hqq-header
             class="item"
-            :name="item.nickname"
+            :name="item.author.nickname"
             :img="item.avatarUrl ?? require('@/assets/img/user.png')"
             :isRightShow="false"
-            :direction="userInfo.id == item.userId ? 'right' : 'left'"
-            :isPopoverShow="userInfo.id == item.userId ? false : true"
+            :direction="userInfo.id == item.author.userId ? 'right' : 'left'"
+            :isPopoverShow="userInfo.id == item.author.userId ? false : true"
             :width="''"
           >
             <template #message>
               <hqq-message
                 class="message"
-                :style="{ 'background-color': userInfo.id == item.userId ? 'var(--chat-message)' : 'var(--van-white)' }"
+                :style="{ 'background-color': userInfo.id == item.author.userId ? 'var(--chat-message)' : 'var(--van-white)' }"
                 :message="item.message"
                 :isShowReplyText="false"
               ></hqq-message>
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, getCurrentInstance, ref, nextTick } from "vue"
+import { defineComponent, computed, getCurrentInstance, ref, nextTick, onMounted, watch } from "vue"
 import { useStore } from "@/store"
 import { useRoute, useRouter } from "vue-router"
 
@@ -52,6 +52,10 @@ export default defineComponent({
     hqqInput
   },
   setup() {
+    onMounted(() => {
+      store.dispatch("chatModule/getChatListAction", roomId)
+    })
+
     const router = useRouter()
     const back = () => {
       // emit("back")
@@ -62,7 +66,7 @@ export default defineComponent({
 
     // 信息时间是否显示
     const currentInstance = getCurrentInstance()?.appContext.config.globalProperties
-    const chatTime = (time: Date, preTime: Date) => {
+    const chatTime = (time: Date, preTime: Date | 0) => {
       const t1 = new Date(time).getTime()
       const t2 = new Date(preTime).getTime()
 
@@ -71,22 +75,27 @@ export default defineComponent({
     }
 
     const route = useRoute()
-    // const chatId = computed(() => props.chats?.id)
-    const chatId = Number(route.query.id)
-    const chats = computed(() => store.state.chatModule.chatRooms.find((item) => item.id === chatId))
+    const roomId = Number(route.query.id)
+    const chats = computed(() => store.state.chatModule.chatRooms.find((item) => item.id === roomId))
     // console.log(store.state.chatModule.chatRooms)
 
+    // 发送消息
     const message = ref("")
+    const chatListRef = ref()
     const submit = () => {
-      store.dispatch("chatModule/sendMessageAction", { message: message.value, chatId: chatId })
+      store.dispatch("chatModule/sendMessageAction", { message: message.value, roomId })
       message.value = ""
-      nextTick(() => {
-        chatList.value.scrollTop = chatList.value.scrollHeight
-        //  = { top: 0, behavior: 'smooth' }chatList.value.scrollHeight
-      })
     }
 
-    const chatList = ref()
+    watch(
+      () => chats.value,
+      () => {
+        nextTick(() => {
+          chatListRef.value.scrollTop = chatListRef.value.scrollHeight
+        })
+      },
+      { deep: true }
+    )
 
     return {
       chats,
@@ -95,7 +104,7 @@ export default defineComponent({
       chatTime,
       submit,
       message,
-      chatList
+      chatListRef
     }
   }
 })

@@ -6,7 +6,7 @@
         <hqq-header
           :name="item.name"
           :img="require('@/assets/img/chat.png')"
-          :message="item.chats[item.chats.length - 1].nickname + '：' + item.chats[item.chats.length - 1].message"
+          :message="item.chats[item.chats.length - 1].author.nickname + '：' + item.chats[item.chats.length - 1].message"
           size="50px"
           :isPopoverShow="false"
         >
