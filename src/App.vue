@@ -25,9 +25,9 @@ export default defineComponent({
     const router = useRouter()
     router.beforeEach((to, from) => {
       // route.path === '/chatDetail' ? 'chat-detail' : ''
-      if (to.path === "/chatDetail" || to.path === "/momentDetail") {
+      if (to.path === "/chatDetail" || to.path === "/momentDetail" || to.path === "/changeInfo") {
         animationName.value = "chat-detail"
-      } else if (from.path === "/chatDetail" || from.path === "/momentDetail") {
+      } else if (from.path === "/chatDetail" || from.path === "/momentDetail" || from.path === "/changeInfo") {
         animationName.value = "chat-detail2"
       } else {
         animationName.value = ""

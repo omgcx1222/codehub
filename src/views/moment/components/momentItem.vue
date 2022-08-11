@@ -5,7 +5,7 @@
         <!-- 作者信息 -->
         <hqq-header
           class="header"
-          :img="moment?.author?.avatarUrl ?? undefined"
+          :img="moment?.author?.avatarUrl"
           :name="moment?.author?.nickname"
           :message="moment.fansCount + ' 粉丝'"
           :rightText="moment.isAuthorFans ? '已关注' : '关注'"

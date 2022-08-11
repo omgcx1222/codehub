@@ -1,11 +1,12 @@
 <template>
   <div class="hqq-header" :style="{ 'flex-direction': direction === 'left' ? '' : 'row-reverse' }">
+    <!-- 气泡弹出框 -->
     <van-popover v-if="isPopoverShow" v-model:show="showPopover" :actions="actions" placement="right-start" @select="select">
       <template #reference>
-        <img class="img" :src="img" alt="" :style="`width: ${size}; height: ${size}`" />
+        <img class="img" :src="img ?? require('@/assets/img/user.png')" alt="" :style="`width: ${size}; height: ${size}`" />
       </template>
     </van-popover>
-    <img class="img" v-else :src="img" alt="" :style="`width: ${size}; height: ${size}`" />
+    <img class="img" v-else :src="img ?? require('@/assets/img/user.png')" alt="" :style="`width: ${size}; height: ${size}`" />
     <div class="title" @click="clickTitle" :style="`min-height: ${size}`">
       <div class="name" :style="{ 'text-align': direction === 'left' ? 'left' : 'right' }">{{ name }}</div>
       <div :style="{ 'align-self': direction === 'left' ? 'flex-start' : 'flex-end', width }">
@@ -33,8 +34,7 @@ export default defineComponent({
   name: "hqqHeader",
   props: {
     img: {
-      type: String,
-      default: require("@/assets/img/user.png")
+      type: String
     },
     name: {
       type: String,

@@ -12,7 +12,7 @@
           <hqq-header
             class="item"
             :name="item.author.nickname"
-            :img="item.avatarUrl ?? require('@/assets/img/user.png')"
+            :img="item.author.avatarUrl"
             :isRightShow="false"
             :direction="userInfo.id == item.author.userId ? 'right' : 'left'"
             :isPopoverShow="userInfo.id == item.author.userId ? false : true"

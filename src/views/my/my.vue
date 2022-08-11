@@ -2,7 +2,7 @@
   <div class="my">
     <div class="header">
       <hqq-header
-        :img="userInfo.avatarUrl ?? undefined"
+        :img="userInfo.avatarUrl"
         :name="userInfo.nickname ?? '未登录'"
         :message="userInfo.signature ?? '因为个性所以没签名'"
         :rightText="userInfo.id ? '退出登录' : '去登录'"

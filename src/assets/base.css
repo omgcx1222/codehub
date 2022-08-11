@@ -4,6 +4,10 @@ body {
   background-color: var(--background-color);
 }
 
+.van-image {
+  vertical-align: middle;
+}
+
 .is-agree {
   color: var(--agree-color);
 }

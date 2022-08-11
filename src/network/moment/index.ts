@@ -17,7 +17,7 @@ export function pubMoment(data: pubMomentBody) {
     data
   })
 }
-export function uploads(momentId: number, formData: any) {
+export function uploads(momentId: number, formData: FormData) {
   return hqqRequest.request({
     method: "post",
     url: `/upload/${momentId}/picture`,
