@@ -8,6 +8,7 @@
         :rightText="userInfo.id ? '退出登录' : '去登录'"
         size="60px"
         @clickRight="login"
+        @clickImg="viewImg"
         :isPopoverShow="false"
       ></hqq-header>
     </div>

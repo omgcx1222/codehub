@@ -6,7 +6,7 @@
         <img class="img" :src="img ?? require('@/assets/img/user.png')" alt="" :style="`width: ${size}; height: ${size}`" />
       </template>
     </van-popover>
-    <img class="img" v-else :src="img ?? require('@/assets/img/user.png')" alt="" :style="`width: ${size}; height: ${size}`" />
+    <img class="img" v-else :src="img ?? require('@/assets/img/user.png')" :style="`width: ${size}; height: ${size}`" @click="clickImg" />
     <div class="title" @click="clickTitle" :style="`min-height: ${size}`">
       <div class="name" :style="{ 'text-align': direction === 'left' ? 'left' : 'right' }">{{ name }}</div>
       <div :style="{ 'align-self': direction === 'left' ? 'flex-start' : 'flex-end', width }">
@@ -72,13 +72,16 @@ export default defineComponent({
       type: Array as PropType<PopoverAction[]>
     }
   },
-  emits: ["clickTitle", "clickRight", "select"],
-  setup(_, { emit }) {
+  emits: ["clickTitle", "clickRight", "clickImg", "select"],
+  setup(props, { emit }) {
     const clickTitle = () => {
       emit("clickTitle")
     }
     const clickRight = () => {
       emit("clickRight")
+    }
+    const clickImg = () => {
+      emit("clickImg", props.img)
     }
     const showPopover = ref(false)
     const select = (action: PopoverAction) => {
@@ -87,6 +90,7 @@ export default defineComponent({
     return {
       clickTitle,
       clickRight,
+      clickImg,
       showPopover,
       select
     }

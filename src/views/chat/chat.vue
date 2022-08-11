@@ -5,8 +5,10 @@
       <div class="item" v-for="item in chatRooms" :key="item.id" @click="chatDetail(item.id)">
         <hqq-header
           :name="item.name"
-          :img="require('@/assets/img/chat.png')"
-          :message="item.chats[item.chats.length - 1].author.nickname + '：' + item.chats[item.chats.length - 1].message"
+          :img="item.avatarUrl ?? require('@/assets/img/chat.png')"
+          :message="`${item.avatarUrl ? '' : item.chats[item.chats.length - 1].author.nickname + ': '}${
+            item.chats[item.chats.length - 1].message
+          }`"
           size="50px"
           :isPopoverShow="false"
         >
