@@ -13,7 +13,16 @@ import {
 } from "@/network/moment"
 
 import { Module } from "vuex"
-import { IrootState, ImomentState, uploadsType, ImomentDetail, Icomment, IchangeMomentListOption, changeMomentType } from "../types"
+import {
+  IrootState,
+  ImomentState,
+  uploadsType,
+  ImomentDetail,
+  Icomment,
+  IchangeMomentListOption,
+  changeMomentType,
+  momentOrder
+} from "../types"
 import { pubMomentBody } from "@/network/moment/types"
 
 const myModule: Module<ImomentState, IrootState> = {
@@ -135,7 +144,7 @@ const myModule: Module<ImomentState, IrootState> = {
     }
   },
   mutations: {
-    changeActive(state, index: 0 | 1 | 2) {
+    changeActive(state, index: momentOrder) {
       state.active = index
     },
     changeMomentList(state, payload: IchangeMomentListOption) {

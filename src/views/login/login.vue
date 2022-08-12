@@ -26,6 +26,8 @@ export default defineComponent({
 
     const router = useRouter()
     const back = () => {
+      console.log(router)
+
       router.go(-1)
     }
 

@@ -54,12 +54,13 @@ export default defineComponent({
   setup() {
     onMounted(() => {
       store.dispatch("chatModule/getChatListAction", roomId)
+      store.commit("chatModule/changeTips", roomId)
     })
 
     const router = useRouter()
     const back = () => {
       // emit("back")
-      router.back()
+      router.go(-1)
     }
     const store = useStore()
     const userInfo = computed(() => store.state.userInfo)

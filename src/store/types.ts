@@ -132,6 +132,7 @@ export interface IchatRoom {
   id: number
   name: string
   chats: IchatMessage[]
+  tips?: number
 }
 
 export interface IchatMessage {

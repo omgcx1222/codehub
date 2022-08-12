@@ -36,12 +36,12 @@ export default defineComponent({
   name: "changeInfo",
   setup() {
     onMounted(() => {
-      info.img[info.img.length - 1].url = store.state.userInfo?.avatarUrl ?? ""
+      info.img[info.img.length - 1].url = store.state.userInfo?.avatarUrl ?? require("@/assets/img/user.png")
     })
 
     const router = useRouter()
     const back = () => {
-      router.back()
+      router.go(-1)
     }
 
     const info = reactive({
@@ -57,7 +57,10 @@ export default defineComponent({
 
     const currentInstance = getCurrentInstance()?.appContext.config.globalProperties
     const imgView = () => {
-      currentInstance?.$imgView([currentImg.value])
+      currentInstance?.$imgView({
+        images: [currentImg.value],
+        closeable: true
+      })
     }
 
     const store = useStore()

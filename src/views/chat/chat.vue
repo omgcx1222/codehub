@@ -5,15 +5,17 @@
       <div class="item" v-for="item in chatRooms" :key="item.id" @click="chatDetail(item.id)">
         <hqq-header
           :name="item.name"
-          :img="item.avatarUrl ?? require('@/assets/img/chat.png')"
-          :message="`${item.avatarUrl ? '' : item.chats[item.chats.length - 1].author.nickname + ': '}${
-            item.chats[item.chats.length - 1].message
-          }`"
+          :img="item.img ?? require('@/assets/img/chat.png')"
+          :message="roomItemMessage(item)"
           size="50px"
           :isPopoverShow="false"
         >
           <template #right>
-            <div class="time">{{ $formatDate(item.chats[item.chats.length - 1].createTime) }}</div>
+            <div class="date">
+              <div>{{ $formatDate(item.chats[item.chats.length - 1].createTime) }}</div>
+              <!-- <van-badge :content="item.tips" max="99" v-show="item.tips" /> -->
+              <div v-show="item.tips" class="tips">{{ item.tips <= 99 ? item.tips : "99+" }}</div>
+            </div>
           </template>
         </hqq-header>
       </div>
@@ -53,10 +55,18 @@ export default defineComponent({
       })
     }
 
+    const roomItemMessage = (item: any) => {
+      return `
+        ${item.img ? "" : item.chats[item.chats.length - 1].author.nickname + ": "}
+        ${item.chats[item.chats.length - 1].message}
+      `
+    }
+
     return {
       chatRoomIndex,
       chatDetail,
-      chatRooms
+      chatRooms,
+      roomItemMessage
     }
   }
 })
@@ -78,6 +88,18 @@ export default defineComponent({
     .date {
       font-size: 12px;
       color: var(--dark-color2);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: flex-end;
+      .tips {
+        display: inline-block;
+        background-color: var(--van-danger-color);
+        color: var(--van-white);
+        padding: 0 3px;
+        border-radius: 999px;
+      }
     }
   }
 }

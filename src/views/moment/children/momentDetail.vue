@@ -139,7 +139,7 @@ export default defineComponent({
 
     const router = useRouter()
     const back = () => {
-      router.back()
+      router.go(-1)
       // emit("back")
       setTimeout(() => {
         // 关闭的动画完成再清空数据

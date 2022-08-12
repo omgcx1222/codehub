@@ -8,7 +8,7 @@
         :rightText="userInfo.id ? '退出登录' : '去登录'"
         size="60px"
         @clickRight="login"
-        @clickImg="viewImg"
+        @clickImg="imgView"
         :isPopoverShow="false"
       ></hqq-header>
     </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue"
+import { defineComponent, computed, getCurrentInstance } from "vue"
 import { useStore } from "@/store"
 import { useRouter } from "vue-router"
 import { Dialog } from "vant"
@@ -55,9 +55,20 @@ export default defineComponent({
         })
       }
     }
+
+    const currentInstance = getCurrentInstance()?.appContext.config.globalProperties
+    const imgView = () => {
+      const url = userInfo.value.avatarUrl ?? require("@/assets/img/user.png")
+      currentInstance?.$imgView({
+        images: [url],
+        closeable: true
+      })
+    }
+
     return {
       login,
-      userInfo
+      userInfo,
+      imgView
     }
   }
 })

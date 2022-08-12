@@ -87,7 +87,8 @@ export default defineComponent({
     const clickImg = (index: number) => {
       currentInstance?.$imgView({
         images: moment.value.images,
-        startPosition: index
+        startPosition: index,
+        closeable: true
       })
     }
 

@@ -15,13 +15,13 @@
         </slot>
       </div>
     </div>
-    <div class="right" v-if="isRightShow">
-      <div @click="clickRight">
-        <slot name="right">
-          <hqq-tag :value="rightText" class="follow"></hqq-tag>
-        </slot>
-      </div>
+    <!-- <div class="right" v-if="isRightShow"> -->
+    <div @click="clickRight" v-if="isRightShow" :style="`height: ${size}`">
+      <slot name="right">
+        <hqq-tag :value="rightText" class="follow" :style="`line-height: ${size}`"></hqq-tag>
+      </slot>
     </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -120,9 +120,9 @@ export default defineComponent({
       color: var(--dark-color2);
     }
   }
-  .right {
-    height: 40px;
-    line-height: 40px;
-  }
+  // .right {
+  //   height: 40px;
+  //   line-height: 40px;
+  // }
 }
 </style>

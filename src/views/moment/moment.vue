@@ -1,8 +1,8 @@
 <template>
   <div class="moment">
     <van-tabs class="vant-tabs" v-model:active="tabActive" swipeable animated @change="tabChange">
-      <van-tab v-for="(tab, index) in tabs" :title="tab" :key="tab">
-        <div class="list">
+      <van-tab v-for="(tab, index) in tabs" :title="tab.name" :key="tab.name">
+        <div class="list" ref="listRef">
           <van-pull-refresh
             v-model="isRefresh"
             @refresh="onRefresh"
@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted, computed } from "vue"
+import { ref, onMounted, computed, onDeactivated, onActivated } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 
@@ -84,7 +84,11 @@ export default {
       getMoment("all")
     })
 
-    const tabs = ["最新", "最热", "关注"]
+    const tabs = [
+      { name: "最新", scrollTop: 0 },
+      { name: "最热", scrollTop: 0 },
+      { name: "关注", scrollTop: 0 }
+    ]
     const tabActive = ref(0)
     const store = useStore()
     const momentList = computed(() => store.state.momentModule.momentList)
@@ -92,6 +96,7 @@ export default {
 
     const tabChange = async (index: number) => {
       await store.commit("momentModule/changeActive", index)
+
       tabActive.value = index
 
       finished.value = false
@@ -176,6 +181,19 @@ export default {
       }, index * 100)
     }
 
+    const listRef = ref<Element[]>([])
+    onDeactivated(() => {
+      for (let i = 0; i < listRef.value?.length; i++) {
+        tabs[i].scrollTop = listRef.value[i].scrollTop
+      }
+    })
+    onActivated(() => {
+      for (let i = 0; i < tabs.length; i++) {
+        if (!listRef.value[i]) return
+        listRef.value[i].scrollTop = tabs[i].scrollTop
+      }
+    })
+
     return {
       isNull,
       tabs,
@@ -192,7 +210,8 @@ export default {
       pubMomentShow,
       momentDetailId,
       beforeEnter,
-      enter
+      enter,
+      listRef
     }
   }
 }

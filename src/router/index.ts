@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router"
+import { Dialog } from "vant"
+import { getStorage } from "@/utils/localStorage"
 
 const routes = [
   {
@@ -62,6 +64,29 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach(async (to) => {
+  if (to.path === "/changeInfo") {
+    const userInfo = getStorage("userInfo")
+    if (!userInfo.id) {
+      const res = await Dialog.confirm({ message: "未登录，是否前往登录页面？" })
+      if (res) {
+        return "login"
+      }
+      return false
+    }
+  }
+  if (to.path === "/login") {
+    const userInfo = getStorage("userInfo")
+    if (userInfo.token) {
+      return false
+    }
+  }
+})
+
+router.onError(() => {
+  router.go(-1)
 })
 
 export default router
