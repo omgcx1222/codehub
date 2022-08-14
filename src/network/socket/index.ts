@@ -15,12 +15,7 @@ class Socket {
     this.socket.onopen = (s: any) => {
       if (s.target.readyState === 1) {
         this.state = 1
-        // const userInfo = getStorage("userInfo")
-        // this.send({ type: "login", data: { userInfo } })
         this.send({ type: "login" })
-        // setTimeout(() => {
-        //   this.send({ type: "sendPublicChat", data: { userInfo, roomId: 1, message: 666 } })
-        // }, 2000)
       }
     }
     this.socket.onmessage = (msg) => {
@@ -36,12 +31,14 @@ class Socket {
         case "chatRooms":
           store.commit("chatModule/changeChatRooms", data)
           break
-        case "getChatList":
-          store.commit("chatModule/addChatMessage", { data, type: "all" })
-          break
+        // case "getChatList":
+        //   store.commit("chatModule/addChatMessage", { data, type: "all" })
+        //   break
         case "publicChat":
-          // store.dispatch("chatModule/addChatMessage", data)
-          store.commit("chatModule/addChatMessage", { data, type: "push" })
+          store.commit("chatModule/addChatMessage", data)
+          break
+        case "createRoom":
+          store.commit("chatModule/roomDetail", data)
           break
 
         default:

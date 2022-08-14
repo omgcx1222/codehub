@@ -18,7 +18,8 @@ const loginModule: Module<IloginState, IrootState> = {
       if (res.status === 200) {
         store.commit("changeUserInfo", res.data, { root: true })
         setStorage("userInfo", res.data)
-        socket.send({ type: "login", data: { userInfo: res.data } })
+        socket.send({ type: "login" })
+        store.dispatch("getlocalRoomsAction", null, { root: true })
         // 返回登录成功，让路由跳转
         return true
       }
@@ -30,15 +31,16 @@ const loginModule: Module<IloginState, IrootState> = {
     },
 
     // 根据本地缓存登录
-    async localLoginAction({ commit }) {
+    async localLoginAction({ dispatch, commit }) {
       const userInfo = getStorage<IuserInfo>("userInfo")
 
-      if (userInfo.token) {
+      if (userInfo?.token) {
         const res = await verifyToken()
 
         if (res.status === 200) {
           commit("changeUserInfo", res.data, { root: true })
           setStorage("userInfo", res.data)
+          dispatch("getlocalRoomsAction", null, { root: true })
         } else {
           removeStorage("userInfo")
         }

@@ -132,7 +132,9 @@ export interface IchatRoom {
   id: number
   name: string
   chats: IchatMessage[]
-  tips?: number
+  img?: string
+  count?: number
+  tips: number
 }
 
 export interface IchatMessage {
@@ -146,4 +148,5 @@ export interface IchatMessage {
   createTime: Date
   id: number
   message: string
+  isRead: 0 | 1
 }

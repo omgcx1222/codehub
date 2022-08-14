@@ -3,7 +3,7 @@
     <!-- 气泡弹出框 -->
     <van-popover v-if="isPopoverShow" v-model:show="showPopover" :actions="actions" placement="right-start" @select="select">
       <template #reference>
-        <img class="img" :src="img ?? require('@/assets/img/user.png')" alt="" :style="`width: ${size}; height: ${size}`" />
+        <img class="img" :src="img || require('@/assets/img/user.png')" alt="" :style="`width: ${size}; height: ${size}`" />
       </template>
     </van-popover>
     <img class="img" v-else :src="img ?? require('@/assets/img/user.png')" :style="`width: ${size}; height: ${size}`" @click="clickImg" />

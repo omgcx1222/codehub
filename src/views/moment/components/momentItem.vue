@@ -47,7 +47,6 @@
 
 <script lang="ts">
 import { defineComponent, computed, getCurrentInstance, PropType } from "vue"
-import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 import type { ImomentDetail } from "@/store/types"
 import type { PopoverAction } from "vant"
@@ -109,14 +108,8 @@ export default defineComponent({
 
     const userInfo = computed(() => store.state.userInfo)
 
-    const router = useRouter()
-    const select = (action: PopoverAction[], id: number) => {
-      router.push({
-        path: "/chatDetail",
-        query: {
-          id
-        }
-      })
+    const select = (action: PopoverAction[], id: number | undefined) => {
+      store.dispatch("chatModule/createRoomAction", { userId: id })
     }
 
     return {

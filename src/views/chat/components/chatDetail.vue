@@ -1,6 +1,6 @@
 <template>
   <div class="chat-detail">
-    <van-nav-bar left-arrow @click-left="back" :title="chats?.name" class="nav-bar">
+    <van-nav-bar left-arrow @click-left="back" :title="title" class="nav-bar">
       <!-- <template #right>
         <van-icon name="ellipsis" size="18" />
       </template> -->
@@ -43,6 +43,7 @@ import { useRoute, useRouter } from "vue-router"
 import hqqHeader from "@/components/hqqHeader.vue"
 import hqqMessage from "@/components/hqqMessage.vue"
 import hqqInput from "@/components/hqqInput.vue"
+import { Toast } from "vant"
 
 export default defineComponent({
   name: "chatDetail",
@@ -53,8 +54,9 @@ export default defineComponent({
   },
   setup() {
     onMounted(() => {
-      store.dispatch("chatModule/getChatListAction", roomId)
-      store.commit("chatModule/changeTips", roomId)
+      chatListRef.value.scrollTop = chatListRef.value.scrollHeight
+      // store.dispatch("chatModule/getChatListAction", roomId)
+      store.commit("chatModule/changeIsRead", roomId)
     })
 
     const router = useRouter()
@@ -78,19 +80,24 @@ export default defineComponent({
     const route = useRoute()
     const roomId = Number(route.query.id)
     const chats = computed(() => store.state.chatModule.chatRooms.find((item) => item.id === roomId))
-    // console.log(store.state.chatModule.chatRooms)
+    const title = computed(() => {
+      return route.query.name ?? chats.value?.name + (chats.value?.count ? `(${chats.value?.count})` : "")
+    })
 
     // 发送消息
     const message = ref("")
     const chatListRef = ref()
-    const submit = () => {
-      store.dispatch("chatModule/sendMessageAction", { message: message.value, roomId })
-      message.value = ""
+    const submit = async () => {
+      if (!userInfo?.value?.token) {
+        Toast.fail("请先登录！")
+      }
+      store.dispatch("chatModule/sendchatMessageAction", { message: message.value, roomId })
     }
 
     watch(
       () => chats.value,
       () => {
+        message.value = ""
         nextTick(() => {
           chatListRef.value.scrollTop = chatListRef.value.scrollHeight
         })
@@ -100,6 +107,7 @@ export default defineComponent({
 
     return {
       chats,
+      title,
       back,
       userInfo,
       chatTime,

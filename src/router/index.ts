@@ -69,7 +69,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   if (to.path === "/changeInfo") {
     const userInfo = getStorage("userInfo")
-    if (!userInfo.id) {
+    if (!userInfo?.id) {
       const res = await Dialog.confirm({ message: "未登录，是否前往登录页面？" })
       if (res) {
         return "login"
@@ -79,7 +79,7 @@ router.beforeEach(async (to) => {
   }
   if (to.path === "/login") {
     const userInfo = getStorage("userInfo")
-    if (userInfo.token) {
+    if (userInfo?.token) {
       return false
     }
   }

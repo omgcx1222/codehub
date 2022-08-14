@@ -34,16 +34,8 @@ export default defineComponent({
         animationName.value = ""
       }
     })
-
     const store = useStore()
-    const rooms = computed(() => store.state.chatModule.chatRooms)
-    const tips = computed(() => {
-      return (
-        rooms.value.reduce((pre, cur) => {
-          return pre + (cur.tips ?? 0)
-        }, 0) || ""
-      )
-    })
+    const tips = computed(() => store.getters["chatModule/tips"])
 
     return {
       animationName,

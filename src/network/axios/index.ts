@@ -27,7 +27,7 @@ class HqqRequest {
         if (config.isToken) {
           config.headers = config.headers ?? {}
 
-          const token = getStorage<IuserInfo>("userInfo").token
+          const token = getStorage<IuserInfo>("userInfo")?.token
           if (token) {
             config.headers.Authorization = `Bearer ${token}`
             // config.headers["content-type"] = ""

@@ -64,12 +64,17 @@ export default defineComponent({
     }
 
     const store = useStore()
+    info.nickname = store.state.userInfo.nickname ?? ""
+    info.signature = store.state.userInfo.signature ?? ""
     const upload = async (file: any) => {
       store.dispatch("myModule/uploadAvatarAction", file)
     }
 
-    const submit = () => {
-      store.dispatch("myModule/changeInfoAction", info)
+    const submit = async () => {
+      const res = await store.dispatch("myModule/changeInfoAction", info)
+      if (res) {
+        router.go(-1)
+      }
     }
 
     return {

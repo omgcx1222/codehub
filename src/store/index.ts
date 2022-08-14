@@ -23,11 +23,15 @@ const store = createStore<IrootState>({
       } else if (res.data === "取消关注") {
         store.commit("momentModule/follow", { followId, isFollow: 0 })
       }
+    },
+
+    getlocalRoomsAction(store) {
+      store.commit("chatModule/getlocalRoomsAction")
     }
   },
   mutations: {
-    changeUserInfo(state, payload: IuserInfo) {
-      state.userInfo = { ...payload }
+    changeUserInfo(state, userInfo: IuserInfo) {
+      state.userInfo = { ...userInfo }
     }
   },
   modules: {
