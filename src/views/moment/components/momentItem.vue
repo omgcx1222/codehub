@@ -50,6 +50,7 @@ import { defineComponent, computed, getCurrentInstance, PropType } from "vue"
 import { useStore } from "@/store"
 import type { ImomentDetail } from "@/store/types"
 import type { PopoverAction } from "vant"
+import { Toast } from "vant"
 
 import hqqHeader from "@/components/hqqHeader.vue"
 
@@ -109,6 +110,9 @@ export default defineComponent({
     const userInfo = computed(() => store.state.userInfo)
 
     const select = (action: PopoverAction[], id: number | undefined) => {
+      if (!userInfo?.value?.token) {
+        return Toast.fail("请先登录！")
+      }
       store.dispatch("chatModule/createRoomAction", { userId: id })
     }
 
