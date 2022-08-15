@@ -21,7 +21,10 @@
             <template #message>
               <hqq-message
                 class="message"
-                :style="{ 'background-color': userInfo.id == item.author.userId ? 'var(--chat-message)' : 'var(--van-white)' }"
+                :style="{
+                  'background-color': userInfo.id == item.author.userId ? 'var(--chat-bg-message)' : 'var(--chat-bg-message2)',
+                  color: userInfo.id == item.author.userId ? 'var(--chat-message)' : 'var(--chat-message2)'
+                }"
                 :message="item.message"
                 :isShowReplyText="false"
               ></hqq-message>
@@ -156,6 +159,7 @@ export default defineComponent({
   .time {
     text-align: center;
     font-size: 12px;
+    padding-top: 10px;
     color: var(--dark-color2);
   }
 }

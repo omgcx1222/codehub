@@ -1,6 +1,6 @@
 body {
   font-size: 15px;
-  color: var(--color);
+  color: var(--text-color);
   background-color: var(--background-color);
 }
 
@@ -12,8 +12,9 @@ body {
   color: var(--agree-color);
 }
 
-:root {
+:root[theme="light"] {
   --color: #000;
+  --text-color: #000;
   --dark-color1: #f5f5f5;
   --dark-color2: #969799;
   --dark-color3: #646566;
@@ -27,15 +28,70 @@ body {
   /* 背景色 */
   /* --van-background-color: #f2f3f5; */
 
+  --line-bg-color: var(--dark-color1);
+
   /* moment title */
   --moment-title-font-siez: 16px;
   --moment-title-color: var(--dark-color2);
-  --moment-title-active-color: var(--color);
-  --moment-line-color: var(--color);
-
-  --menu-option-background-color: #fff;
+  --moment-title-active-color: var(--text-color);
+  --moment-line-color: var(--text-color);
 
   --agree-color: #fb7299;
 
-  --chat-message: #95ec69;
+  --chat-bg-message: #95ec69;
+  --chat-bg-message2: #fff;
+  --chat-message: #000;
+  --chat-message2: #000;
+}
+
+:root[theme="dark"] {
+  --color: #000;
+  --text-color: #fff;
+  --dark-color1: #dadada;
+  --dark-color2: #959596;
+  --dark-color3: #646566;
+  --background-color: #000;
+  /* --background-color: #000; */
+  --white-background-color: #3c3c3d;
+
+  /* tabbar未选中文字颜色 */
+  --van-tabbar-item-text-color: var(--dark-color2);
+  /* 主题色 */
+  --van-primary-color: var(--color);
+  /* 背景色 */
+  /* --van-background-color: #f2f3f5; */
+
+  --line-bg-color: var(--dark-color3);
+
+  /* moment title */
+  --moment-title-font-siez: 16px;
+  --moment-title-color: var(--dark-color2);
+  --moment-title-active-color: var(--text-color);
+  --moment-line-color: var(--text-color);
+
+  --van-tabs-nav-background-color: var(--white-background-color) !important;
+  --van-cell-group-background-color: var(--white-background-color) !important;
+  --van-grid-item-content-background-color: var(--white-background-color) !important;
+
+  --van-background-color-light: var(--white-background-color);
+  --van-background-color-light: var(--white-background-color);
+  --van-tabbar-item-active-color: var(--text-color);
+
+  --van-nav-bar-icon-color: var(--dark-color1) !important;
+
+  --van-cell-text-color: var(--dark-color1) !important;
+
+  --van-nav-bar-title-text-color: var(--dark-color1) !important;
+
+  --agree-color: #fb7299;
+
+  --chat-bg-message: #95ec69;
+  --chat-bg-message2: var(--white-background-color);
+  --chat-message: #000;
+  --chat-message2: var(--dark-color1);
+
+  --van-dialog-confirm-button-text-color: var(--text-color) !important;
+  --van-button-default-color: var(--dark-color1) !important;
+
+  --van-cell-active-color: #545555 !important;
 }

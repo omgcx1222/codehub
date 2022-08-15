@@ -92,7 +92,7 @@ export default defineComponent({
   background-color: var(--white-background-color);
 }
 .pull {
-  border-top: 8px solid var(--dark-color1);
+  border-top: 8px solid var(--line-bg-color);
   height: calc(100vh - 80px - 50px - 8px);
   overflow: scroll;
 }

@@ -126,9 +126,9 @@ export default defineComponent({
     // const momentId = computed(() => props.id)
 
     onMounted(() => {
-      // setTimeout(() => {
-      getMomentDetail("all")
-      // }, 300)
+      setTimeout(() => {
+        getMomentDetail("all")
+      }, 300)
     })
 
     const moment = computed(() => store.state.momentModule.momentDetail)
@@ -301,15 +301,15 @@ export default defineComponent({
 .moment-menu {
   padding: 10px 15px;
   display: flex;
-  border-top: 8px solid var(--dark-color1);
-  border-bottom: 2px solid var(--dark-color1);
+  border-top: 8px solid var(--line-bg-color);
+  border-bottom: 2px solid var(--line-bg-color);
   background-color: var(--white-background-color);
 }
 
 .comment-item {
-  border-bottom: 1px solid var(--dark-color1);
+  border-bottom: 1px solid var(--line-bg-color);
   font-size: 13px;
-  color: var(--dark-color3);
+  // color: var(--dark-color3);
   .child-comment {
     font-size: 15px;
     line-height: 28px;

@@ -96,11 +96,10 @@ export default defineComponent({
   position: fixed;
   top: 0;
   z-index: 10;
-  background: var(--background-color);
+  background: var(--white-background-color);
   // background: #fff;
   .nav-bar {
-    background-color: var(--background-color);
-    background-color: #fff;
+    background-color: var(--white-background-color);
     .nav-bar-right {
       padding: 12px 12px;
       border-radius: 5px;
@@ -115,7 +114,7 @@ export default defineComponent({
       flex-grow: 3;
     }
     :deep(.van-field__control--right) {
-      color: var(--dark-color2);
+      color: var(--text-color);
     }
     :deep(.van-cell--clickable) {
       padding-right: 0;

@@ -3,7 +3,7 @@ import App from "./App.vue"
 
 import router from "./router"
 import store from "./store"
-import { initLogin } from "./store"
+import { initLogin, initTheme } from "./store"
 import formatDate from "./global/formatDate"
 import imgView from "./global/imgView"
 import { Lazyload } from "vant"
@@ -17,9 +17,11 @@ const app = createApp(App)
 
 app.use(router)
 app.use(store)
+initTheme()
+initLogin()
+
 app.use(formatDate)
 app.use(imgView)
 app.use(Lazyload)
-initLogin()
 
 app.mount("#app")

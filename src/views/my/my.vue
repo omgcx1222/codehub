@@ -99,7 +99,7 @@ export default defineComponent({
 }
 .menu {
   flex: 1;
-  background-color: var(--menu-option-background-color);
+  background-color: var(--white-background-color);
   border-radius: 20px 20px 0 0;
   padding: 20px 15px 0;
 }

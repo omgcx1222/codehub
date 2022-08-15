@@ -129,7 +129,7 @@ export default defineComponent({
 }
 .content {
   font-size: 16px;
-  color: var(--color);
+  // color: var(--color);
   word-break: break-all;
 }
 .menu {

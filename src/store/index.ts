@@ -8,11 +8,17 @@ import chatModule from "./chat"
 
 import { follow } from "@/network/common"
 import { IrootState, storeType, IuserInfo } from "./types"
+import { getStorage, setStorage } from "@/utils/localStorage"
 
 const store = createStore<IrootState>({
   state() {
     return {
-      userInfo: {}
+      userInfo: {},
+      theme: [
+        { name: "light", svg: require("@/assets/img/light.svg") },
+        { name: "dark", svg: require("@/assets/img/dark.svg") }
+      ],
+      currentTheme: 0
     }
   },
   actions: {
@@ -27,11 +33,26 @@ const store = createStore<IrootState>({
 
     getlocalRoomsAction(store) {
       store.commit("chatModule/getlocalRoomsAction")
+    },
+    initTheme(store) {
+      const i = getStorage("theme")
+      const index = Number(i)
+      if (index < store.state.theme.length) {
+        return store.commit("changeTheme", index)
+      }
+      store.commit("changeTheme", 0)
     }
   },
   mutations: {
     changeUserInfo(state, userInfo: IuserInfo) {
       state.userInfo = { ...userInfo }
+    },
+
+    changeTheme(state, index: number) {
+      const documentDOM = document.documentElement
+      documentDOM.setAttribute("theme", state.theme[index].name)
+      state.currentTheme = index
+      setStorage("theme", index)
     }
   },
   modules: {
@@ -49,6 +70,10 @@ export function useStore() {
 // main.ts中调用初始化（根据本地缓存登录）
 export function initLogin() {
   store.dispatch("loginModule/localLoginAction")
+}
+
+export function initTheme() {
+  store.dispatch("initTheme")
 }
 
 export default store

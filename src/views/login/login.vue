@@ -26,8 +26,6 @@ export default defineComponent({
 
     const router = useRouter()
     const back = () => {
-      console.log(router)
-
       router.go(-1)
     }
 
@@ -52,7 +50,7 @@ export default defineComponent({
   padding: 0 20px;
   height: 135px;
   .app-name {
-    color: #000;
+    color: var(--text-color);
     font-size: 45px;
     font-weight: 600;
   }

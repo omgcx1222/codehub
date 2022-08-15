@@ -138,14 +138,17 @@ export default defineComponent({
     flex-wrap: wrap;
     border-radius: 5px;
     margin-bottom: 15px;
+    background-color: #ededed;
     input {
       flex: 1;
       height: 36px;
       font-size: 18px;
       background-color: #ededed;
+      // background-color: var(--derk-color1);
       padding: 5px 0 5px 10px;
       border-radius: 5px 0 0 5px;
       border: none;
+      color: #000;
     }
     .icon {
       width: 30px;

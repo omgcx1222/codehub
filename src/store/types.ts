@@ -3,6 +3,13 @@
  */
 export interface IrootState {
   userInfo: IuserInfo
+  theme: theme[]
+  currentTheme: number
+}
+
+export interface theme {
+  name: string
+  svg: string
 }
 
 export interface IstoreModuel {
