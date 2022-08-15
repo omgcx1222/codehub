@@ -94,4 +94,6 @@ body {
   --van-button-default-color: var(--dark-color1) !important;
 
   --van-cell-active-color: #545555 !important;
+
+  --van-popover-light-background-color: #fff;
 }

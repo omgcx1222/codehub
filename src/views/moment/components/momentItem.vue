@@ -109,9 +109,10 @@ export default defineComponent({
 
     const userInfo = computed(() => store.state.userInfo)
 
+    // 私聊
     const select = (action: PopoverAction[], id: number | undefined) => {
       if (!userInfo?.value?.token) {
-        return Toast.fail("请先登录！")
+        return Toast.fail("请先登录")
       }
       store.dispatch("chatModule/createRoomAction", { userId: id })
     }
