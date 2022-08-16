@@ -12,6 +12,7 @@ body {
   color: var(--agree-color);
 }
 
+
 :root[theme="light"] {
   --color: #000;
   --text-color: #000;
@@ -96,4 +97,6 @@ body {
   --van-cell-active-color: #545555 !important;
 
   --van-popover-light-background-color: #fff;
+
+  --van-action-sheet-cancel-padding-color: var(--dark-color3);
 }

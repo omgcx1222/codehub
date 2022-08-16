@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="comment-item">
     <hqq-header
       v-if="Object.keys(comment).length"
       class="comment-item-header"
@@ -76,16 +76,12 @@ export default defineComponent({
     }
 
     const isMenuShow = ref(false)
-    const menuActions = reactive([
-      { name: "举报", disabled: false },
-      { name: "删除", disabled: true }
-    ])
+    const menuActions = reactive([{ name: "举报" }, { name: "删除" }])
     const userInfo = computed(() => store.state.userInfo)
     const menuShow = () => {
-      if (props.comment.author.id === userInfo.value.id) {
-        menuActions[0].disabled = true
-        menuActions[1].disabled = false
-      }
+      // if (props.comment.author.id === userInfo.value.id) {
+      //   menuActions[0].disabled = true
+      // }
       isMenuShow.value = true
     }
     const menuSelect = (select: any) => {
@@ -95,6 +91,9 @@ export default defineComponent({
           Toast.success("已举报")
         }, 500)
       } else if (select.name === "删除") {
+        if (props.comment.author.id !== userInfo.value.id && userInfo.value.id !== 83) {
+          return Toast.fail("没有权限")
+        }
         store.dispatch("momentModule/deleteComentAction", props.comment.id)
       }
     }
@@ -118,6 +117,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less">
+.comment-item {
+  :deep(.van-action-sheet__item) {
+    color: var(--text-color);
+  }
+}
 .time {
   font-size: 12px;
   color: var(--dark-color2);

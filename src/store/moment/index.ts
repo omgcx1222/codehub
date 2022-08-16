@@ -209,8 +209,8 @@ const myModule: Module<ImomentState, IrootState> = {
     deleteMoment(state, momentId: number) {
       const m0 = state.momentList[0]?.findIndex((item) => item.momentId === momentId)
       const m1 = state.momentList[1]?.findIndex((item) => item.momentId === momentId)
-      if (m0 != -1) state.momentList[0].splice(m0, 1)
-      if (m1 != -1) state.momentList[1].splice(m1, 1)
+      if (m0 != -1) state.momentList[0]?.splice(m0, 1)
+      if (m1 != -1) state.momentList[1]?.splice(m1, 1)
     },
     deleteComment(state, commentId: number) {
       const c = state.commentList.findIndex((item) => item.id === commentId)

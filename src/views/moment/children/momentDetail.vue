@@ -150,16 +150,9 @@ export default defineComponent({
 
     // 右上角三个点操作
     const isMenuShow = ref(false)
-    const menuActions = reactive([
-      { name: "举报", disabled: false },
-      { name: "删除", disabled: true }
-    ])
+    const menuActions = reactive([{ name: "举报" }, { name: "删除" }])
     const userInfo = computed(() => store.state.userInfo)
     const menuShow = () => {
-      if ((moment.value as ImomentDetail)?.author?.id === userInfo.value.id) {
-        menuActions[0].disabled = true
-        menuActions[1].disabled = false
-      }
       isMenuShow.value = true
     }
     const menuSelect = (select: any) => {
@@ -169,6 +162,9 @@ export default defineComponent({
           Toast.success("已举报")
         }, 500)
       } else if (select.name === "删除") {
+        if ((moment.value as ImomentDetail)?.author?.id !== userInfo.value.id && userInfo.value.id !== 83) {
+          return Toast.fail("没有权限")
+        }
         store.dispatch("momentModule/deleteMomentAction", momentId)
       }
     }
@@ -293,6 +289,9 @@ export default defineComponent({
   position: fixed;
   z-index: 10;
   top: 0;
+  :deep(.van-action-sheet__item) {
+    color: var(--text-color);
+  }
 }
 .main {
   flex: 1;
