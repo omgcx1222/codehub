@@ -286,7 +286,7 @@ export default defineComponent({
 <style scoped lang="less">
 .moment-detail {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   background-color: var(--white-background-color);
   display: flex;

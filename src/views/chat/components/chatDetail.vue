@@ -13,7 +13,6 @@
             class="item"
             :name="item.author.nickname"
             :img="item.author.avatarUrl"
-            :isRightShow="false"
             :direction="userInfo.id == item.author.userId ? 'right' : 'left'"
             :isPopoverShow="userInfo.id == item.author.userId ? false : true"
             :width="''"
@@ -28,6 +27,9 @@
                 :message="item.message"
                 :isShowReplyText="false"
               ></hqq-message>
+            </template>
+            <template #right>
+              <div style="width: 40px"></div>
             </template>
           </hqq-header>
         </template>
@@ -126,7 +128,7 @@ export default defineComponent({
 <style scoped lang="less">
 .chat-detail {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: var(--background-color);
@@ -138,7 +140,7 @@ export default defineComponent({
   }
 }
 .chat-message {
-  // height: calc(100% - 46px - 50px);
+  // height: calc(100vh - 46px - 50px);
   flex: 1;
   overflow: scroll;
   scroll-behavior: smooth;
