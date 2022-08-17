@@ -99,6 +99,8 @@ const chatModule: Module<IchatState, IrootState> = {
     },
 
     roomDetail(state, data) {
+      console.log(router)
+
       router.push({
         path: "/chatDetail",
         query: {

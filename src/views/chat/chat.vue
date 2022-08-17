@@ -103,6 +103,14 @@ export default defineComponent({
   }
   .item {
     margin: 25px 20px 0;
+    :deep(.title) {
+      overflow: hidden;
+    }
+    :deep(.message) {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
     .date {
       font-size: 12px;
       color: var(--dark-color2);

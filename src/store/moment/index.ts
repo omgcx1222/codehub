@@ -220,9 +220,10 @@ const myModule: Module<ImomentState, IrootState> = {
     },
     follow(state, { followId, isFollow }: { followId: number; isFollow: 0 | 1 }) {
       for (const moment of state.momentList) {
-        const m = moment?.find((item) => item.author?.id === followId)
-        if (m) {
-          m!.isAuthorFans = isFollow
+        for (const m of moment) {
+          if (m.author?.id === followId) {
+            m!.isAuthorFans = isFollow
+          }
         }
       }
     }

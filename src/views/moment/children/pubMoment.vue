@@ -71,8 +71,8 @@ export default defineComponent({
           momentId,
           files: fileList.value,
           process: (progress: number) => {
-            const p = Number(progress.toFixed(2))
-            toast.message = `正在上传图片${p * 100}%`
+            const p = (progress * 100).toFixed(2)
+            toast.message = `正在上传图片${p}%`
             if (progress === 1) toast.clear()
             if (progress === -1) {
               toast.clear()
