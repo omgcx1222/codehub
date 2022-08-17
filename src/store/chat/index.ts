@@ -98,13 +98,11 @@ const chatModule: Module<IchatState, IrootState> = {
       setStorage("rooms", state.chatRooms)
     },
 
-    roomDetail(state, data) {
-      console.log(router)
-
+    roomDetail(state, id) {
       router.push({
         path: "/chatDetail",
         query: {
-          id: data.roomId
+          id
         }
       })
       socket.send({ type: "login" })

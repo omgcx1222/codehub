@@ -7,6 +7,8 @@
       :name="comment.author.nickname"
       @clickRight="menuShow"
       :isPopoverShow="userInfo.id == comment.author.id ? false : true"
+      :actions="[{ text: '私聊' }]"
+      @select="select($event, comment.author.id)"
     >
       <template #message>
         <div class="time">{{ $formatDate(comment.createTime) }}</div>
@@ -103,6 +105,14 @@ export default defineComponent({
       console.log(store.state.momentModule.commentList)
     }
 
+    // 私聊
+    const select = (action: any, id: number | undefined) => {
+      if (!userInfo?.value?.token) {
+        return Toast.fail("请先登录")
+      }
+      store.dispatch("chatModule/createRoomAction", { userId: id })
+    }
+
     return {
       focus,
       isMenuShow,
@@ -110,7 +120,8 @@ export default defineComponent({
       menuActions,
       menuSelect,
       likeComment,
-      userInfo
+      userInfo,
+      select
     }
   }
 })

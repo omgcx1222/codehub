@@ -38,7 +38,7 @@ class Socket {
           store.commit("chatModule/addChatMessage", data)
           break
         case "createRoom":
-          store.commit("chatModule/roomDetail", data)
+          store.commit("chatModule/roomDetail", data.roomId)
           break
 
         default:

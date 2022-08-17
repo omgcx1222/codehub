@@ -17,8 +17,6 @@
             :direction="userInfo.id == item.author.userId ? 'right' : 'left'"
             :isPopoverShow="userInfo.id == item.author.userId ? false : true"
             :width="''"
-            :actions="[{ text: '私聊' }]"
-            @select="select($event, item?.author?.userId)"
           >
             <template #message>
               <hqq-message
@@ -66,7 +64,6 @@ export default defineComponent({
 
     const router = useRouter()
     const back = () => {
-      // emit("back")
       router.go(-1)
     }
     const store = useStore()
@@ -99,18 +96,10 @@ export default defineComponent({
       store.dispatch("chatModule/sendchatMessageAction", { message: message.value, roomId })
     }
 
-    // 私聊
-    const select = (action: any, id: number | undefined) => {
-      if (!userInfo?.value?.token) {
-        return Toast.fail("请先登录")
-      }
-      store.dispatch("chatModule/createRoomAction", { userId: id })
-    }
-
     watch(
       () => chats.value,
       (n) => {
-        if (n?.chats[n?.chats.length - 1].author.userId === userInfo.value.id) {
+        if (n?.chats[n?.chats.length - 1]?.author?.userId === userInfo.value.id) {
           message.value = ""
         }
         nextTick(() => {
@@ -128,8 +117,7 @@ export default defineComponent({
       chatTime,
       submit,
       message,
-      chatListRef,
-      select
+      chatListRef
     }
   }
 })

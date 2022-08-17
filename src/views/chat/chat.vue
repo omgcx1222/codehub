@@ -1,5 +1,6 @@
 <template>
   <div class="chat">
+    <router-view></router-view>
     <chat-header></chat-header>
     <van-pull-refresh v-model="loading" @refresh="onRefresh" class="pull">
       <van-list class="chat-main" :loading="false" :finished="true" v-if="chatRooms.length">
