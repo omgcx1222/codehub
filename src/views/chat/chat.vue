@@ -8,7 +8,7 @@
             <template #right>
               <div class="date">
                 <div>{{ $formatDate(item.chats[item.chats.length - 1]?.createTime) }}</div>
-                <div v-show="item.tips" class="tips">{{ item.tips ?? 0 <= 99 ? item.tips : "99+" }}</div>
+                <div v-show="item.tips" class="tips">{{ item.tips <= 99 ? item.tips : "99+" }}</div>
               </div>
             </template>
           </hqq-header>

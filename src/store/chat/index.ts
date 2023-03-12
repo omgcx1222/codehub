@@ -120,7 +120,7 @@ const chatModule: Module<IchatState, IrootState> = {
         num += n
       })
 
-      return num || ""
+      return (num <= 99 ? num : "99+") || ""
     }
   }
 }

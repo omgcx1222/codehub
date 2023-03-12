@@ -19,19 +19,31 @@ import { defineComponent, ref, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 
+import { setStorage } from "@/utils/localStorage"
+
 export default defineComponent({
   name: "App",
   setup() {
     const animationName = ref("")
     const router = useRouter()
+
     router.beforeEach((to, from) => {
-      // route.path === '/chatDetail' ? 'chat-detail' : ''
+      // 进入样式
       if (to.path === "/chatDetail" || to.path === "/momentDetail" || to.path === "/changeInfo") {
-        animationName.value = "chat-detail"
+        animationName.value = "chat-detail-enter"
       } else if (from.path === "/chatDetail" || from.path === "/momentDetail" || from.path === "/changeInfo") {
-        animationName.value = "chat-detail2"
+        // 退出样式
+        animationName.value = "chat-detail-leave"
       } else {
         animationName.value = ""
+      }
+
+      if (to.path === "/monent" || to.path === "/chat" || to.path === "/my") {
+        // 在主页面
+        setStorage("quit", 1)
+      } else {
+        // 在子页面
+        setStorage("quit", 0)
       }
     })
     const store = useStore()
@@ -53,11 +65,11 @@ export default defineComponent({
 .chat-detail2-leave-active {
   transition: transform 0.3s ease;
 }
-.chat-detail-enter-from {
+.chat-detail-enter-enter-from {
   transform: translateX(100%);
 }
 
-.chat-detail2-leave-to {
+.chat-detail-leave-leave-to {
   transform: translateX(100%);
 }
 </style>

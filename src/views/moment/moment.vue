@@ -225,8 +225,8 @@ export default {
   position: relative;
 }
 .suspension {
-  position: absolute;
-  top: 88%;
+  position: fixed;
+  bottom: 70px;
   right: 20px;
   box-shadow: 0 0 8px #000;
   border-radius: 50%;
@@ -313,6 +313,7 @@ export default {
     width: 45px;
     height: 45px;
     border-radius: 50%;
+    position: absolute;
     top: 88%;
     right: 20px;
     box-shadow: 0 0 5px #fff;
