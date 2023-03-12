@@ -34,8 +34,9 @@ export default {
         if (currentDate.month() - handleDate.month() < 1 && currentDate.date() - handleDate.date() <= 2) {
           // console.log(currentDate.day(), handleDate.day())
           const curDay = currentDate.day() === 0 ? 7 : currentDate.day() // 周日为0，改为7
-          if (curDay - handleDate.day() <= 1) {
-            if (curDay - handleDate.day() === 0) {
+          const handDay = handleDate.day() === 0 ? 7 : handleDate.day()
+          if (curDay - handDay <= 1) {
+            if (curDay - handDay === 0) {
               return handleDate.format("HH:mm")
             }
             return "昨天 " + handleDate.format("HH:mm")
