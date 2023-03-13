@@ -61,8 +61,8 @@ export default defineComponent({
 @import url("@/assets/base.css");
 // @import url("vant/lib/index.css");
 // @import url("vant/lib/toast/index.less");
-.chat-detail-enter-active,
-.chat-detail2-leave-active {
+.chat-detail-enter-enter-active,
+.chat-detail-leave-leave-active {
   transition: transform 0.3s ease;
 }
 .chat-detail-enter-enter-from {

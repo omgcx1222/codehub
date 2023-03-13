@@ -27,6 +27,8 @@ export type storeType = IrootState & IstoreModuel
 export interface IuserInfo {
   avatarUrl?: string
   id?: number
+  ip?: string
+  address?: string
   nickname?: string
   token?: string
   username?: string

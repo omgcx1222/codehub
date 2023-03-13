@@ -6,7 +6,7 @@ import myModule from "./my"
 import momentModule from "./moment"
 import chatModule from "./chat"
 
-import { follow } from "@/network/common"
+import { follow, getIp } from "@/network/common"
 import { IrootState, storeType, IuserInfo } from "./types"
 import { getStorage, setStorage } from "@/utils/localStorage"
 
@@ -41,11 +41,20 @@ const store = createStore<IrootState>({
         return store.commit("changeTheme", index)
       }
       store.commit("changeTheme", 0)
+    },
+
+    async initIp(store) {
+      const res = await getIp()
+      if (res.status === 200) {
+        const { ip, address } = res.data
+        store.commit("changeUserInfo", { ...store.state.userInfo, ip, address })
+      }
     }
   },
   mutations: {
     changeUserInfo(state, userInfo: IuserInfo) {
       state.userInfo = { ...userInfo }
+      setStorage("userInfo", userInfo)
     },
 
     changeTheme(state, index: number) {
@@ -74,6 +83,10 @@ export function initLogin() {
 
 export function initTheme() {
   store.dispatch("initTheme")
+}
+
+export function initIp() {
+  store.dispatch("initIp")
 }
 
 export default store

@@ -14,3 +14,10 @@ export function follow(followId: number) {
     }
   })
 }
+
+export function getIp() {
+  return hqqRequest.request({
+    method: "post",
+    url: "/user/ip"
+  })
+}

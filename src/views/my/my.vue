@@ -13,6 +13,8 @@
       ></hqq-header>
     </div>
 
+    <div class="ip">ip属地：{{ userInfo.address || "未知" }}</div>
+
     <div class="menu">
       <menu-header></menu-header>
       <menu-option></menu-option>
@@ -85,7 +87,7 @@ export default defineComponent({
 }
 .header {
   font-size: 15px;
-  padding: 50px 15px 30px;
+  padding: 50px 15px 0;
   // :deep(.img) {
   //   width: 60px;
   //   height: 60px;
@@ -96,6 +98,11 @@ export default defineComponent({
   :deep(.name) {
     font-weight: 600;
   }
+}
+.ip {
+  padding: 20px;
+  font-size: 12px;
+  color: var(--dark-color);
 }
 .menu {
   flex: 1;

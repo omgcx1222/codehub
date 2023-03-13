@@ -3,6 +3,17 @@
     <chat-header></chat-header>
     <van-pull-refresh v-model="loading" @refresh="onRefresh" class="pull">
       <van-list class="chat-main" :loading="false" :finished="true" v-if="chatRooms.length">
+        <div class="item" @click="chatgpt">
+          <hqq-header
+            name="ChatGPT"
+            :img="require('@/assets/img/chatgpt.jpg')"
+            message=""
+            size="50px"
+            :isPopoverShow="false"
+            :isRightShow="false"
+          >
+          </hqq-header>
+        </div>
         <div class="item" v-for="item in chatRooms" :key="item.id" @click="chatDetail(item)">
           <hqq-header :name="item.name" :img="roomItemImg(item)" :message="roomItemMessage(item)" size="50px" :isPopoverShow="false">
             <template #right>
@@ -26,6 +37,7 @@ import { defineComponent, ref, computed, nextTick } from "vue"
 import { useRouter } from "vue-router"
 import { useStore } from "@/store"
 import chatHeader from "./components/chatHeader.vue"
+import { Dialog } from "vant"
 // import chatDetail from "./components/chatDetail.vue"
 
 export default defineComponent({
@@ -71,6 +83,12 @@ export default defineComponent({
       })
     }
 
+    const chatgpt = () => {
+      Dialog.alert({
+        message: "正在学习接入openai的接口，敬请期待！"
+      })
+    }
+
     return {
       chatRoomIndex,
       chatDetail,
@@ -78,7 +96,8 @@ export default defineComponent({
       roomItemMessage,
       roomItemImg,
       loading,
-      onRefresh
+      onRefresh,
+      chatgpt
     }
   }
 })
